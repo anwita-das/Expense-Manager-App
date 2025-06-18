@@ -18,9 +18,9 @@ function Login() {
                         <Label htmlFor="password" className={"dark:text-neutral-900"}>Password</Label>
                         <Input id="password" type="password" placeholder="Enter your password" className={"bg-neutral-200 dark:bg-neutral-100"}/>
                     </div>
-
+                    <Link to="/books" className="w-full">
                     <Button className="w-full mt-4 dark:bg-neutral-400">Login</Button>
-
+                    </Link>
                     <p className="text-sm text-center text-gray-600">
                     Don’t have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
                     </p>
