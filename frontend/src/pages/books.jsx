@@ -51,21 +51,21 @@ function Books() {
                       <Button
                         type="button"
                         variant="default"
-                        className="text-black w-[32%] hover:bg-green-300 hover:cursor-pointer"
+                        className="text-black w-[32%] bg-neutral-400 dark:bg-neutral-300 hover:bg-green-300 hover:cursor-pointer"
                       >
                         Daily Expenses
                       </Button>
                       <Button
                         type="button"
                         variant="default"
-                        className="text-black w-[32%] hover:bg-orange-300 hover:cursor-pointer"
+                        className="text-black w-[32%] bg-neutral-400 dark:bg-neutral-300 hover:bg-orange-300 hover:cursor-pointer"
                       >
                         Loan Status
                       </Button>
                       <Button
                         type="button"
                         variant="default"
-                        className="text-black w-[32%] hover:bg-blue-300 hover:cursor-pointer"
+                        className="text-black w-[32%] bg-neutral-400 dark:bg-neutral-300 hover:bg-blue-300 hover:cursor-pointer"
                       >
                         Savings
                       </Button>

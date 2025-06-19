@@ -49,7 +49,9 @@ function BookDetails2() {
             <div className='mt-3'>
                 <div className='flex flex-row justify-between mt-5'>
                     <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Payment History</div>
+                    <Link to="/entryls">
                     <Button className="bg-purple-900 mr-4 dark:text-neutral-50 hover:bg-purple-400">+ Add Payment</Button>
+                    </Link>
                 </div>
                 <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
                     <FontAwesomeIcon icon={faCheck} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
