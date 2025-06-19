@@ -2,8 +2,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faMinus, faPlus, faArrowRight, faMoneyBills } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 function BookDetails() {
+    const navigate = useNavigate();
+
+    const handleCashInClick = () => {
+        navigate("/entryde", { state: { type: "cashin" } });
+    };
+
+    const handleCashOutClick = () => {
+        navigate("/entryde", { state: { type: "cashout" } });
+    };
     return(
         <>
         <div className="bg-neutral-800 min-h-screen pb-20 dark:bg-neutral-200 dark:text-neutral-900">
@@ -82,10 +92,10 @@ function BookDetails() {
                 </div>
             </div>
             <div className="flex flex-row justify-center fixed bottom-4 z-50 w-full">
-                <Button className="bg-green-500 text-white rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
+                <Button onClick={handleCashInClick} className="bg-green-500 text-white rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
                 + Cash IN
                 </Button>
-                <Button className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
+                <Button onClick={handleCashOutClick} className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
                 - Cash OUT
                 </Button>
             </div>
