@@ -4,6 +4,13 @@ import { faChevronLeft, faBuildingColumns } from '@fortawesome/free-solid-svg-ic
 import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 function AddEntryLS() {
     const now = dayjs(); // current date & time
@@ -31,6 +38,25 @@ function AddEntryLS() {
                 <div className='mt-3 w-full'>
                     <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description</div>
                     <Input className={"dark:bg-neutral-100"} placeholder={"Enter a brief description"} />
+                </div>
+                <div className="mt-3 w-full">
+                <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
+                    Payment Mode
+                </div>
+                <Select>
+                    <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
+                    <SelectValue placeholder="Select payment mode" />
+                    </SelectTrigger>
+                    <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
+                    <SelectItem value="auto-debit">Auto-debit</SelectItem>
+                    <SelectItem value="upi">UPI</SelectItem>
+                    <SelectItem value="netbanking">Net Banking</SelectItem>
+                    <SelectItem value="credit-card">Credit Card</SelectItem>
+                    <SelectItem value="debit-card">Debit Card</SelectItem>
+                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="others">Others</SelectItem>
+                    </SelectContent>
+                </Select>
                 </div>
                 <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
                     <Button type="submit" className="w-[40%] bg-purple-950 dark:text-neutral-50">
