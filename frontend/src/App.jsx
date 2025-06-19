@@ -7,10 +7,11 @@ import BookDetails from "./pages/bookDetails";
 import BookDetails2 from "./pages/bookDetails2";
 import BookDetails3 from "./pages/bookDetails3";
 import AddEntryLS from "./pages/addentryLS";
+import AddEntryS from "./pages/addentryS";
 
 function Navbar() {
   const location = useLocation();
-  const hideNavbarRoutes = ["/detailsde","/detailsls","/detailss","/", "/signup", "/entryls"];
+  const hideNavbarRoutes = ["/detailsde","/detailsls","/detailss","/", "/signup","/entryde", "/entryls", "/entrys"];
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
   if (!shouldShowNavbar) return null;
@@ -51,6 +52,7 @@ function AppContent() {
         <Route path="/detailsls" element={<BookDetails2 />} />
         <Route path="/detailss" element={<BookDetails3 />} />
         <Route path="/entryls" element={<AddEntryLS />} />
+        <Route path="/entrys" element={<AddEntryS />} />
       </Routes>
       <Navbar />
     </>

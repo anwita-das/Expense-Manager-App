@@ -1,9 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faMinus, faPlus, faArrowRight, faPiggyBank } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
 
 function BookDetails3() {
+    const navigate = useNavigate();
+
+    const handleDepositClick = () => {
+        navigate("/entrys", { state: { type: "deposit" } });
+    };
+
+    const handleWithdrawalClick = () => {
+        navigate("/entrys", { state: { type: "withdrawal" } });
+    };
     return(
         <>
         <div className="bg-neutral-800 min-h-screen pb-20 dark:bg-neutral-200 dark:text-neutral-900">
@@ -74,10 +83,10 @@ function BookDetails3() {
                 </div>
             </div>
             <div className="flex flex-row justify-center fixed bottom-4 z-50 w-full">
-                <Button className="bg-green-500 text-white rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
+                <Button onClick={handleDepositClick} className="bg-green-500 text-white rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
                 + Deposit
                 </Button>
-                <Button className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
+                <Button onClick={handleWithdrawalClick} className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
                 - Withdrawal
                 </Button>
             </div>
