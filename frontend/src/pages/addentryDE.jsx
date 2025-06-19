@@ -72,7 +72,7 @@ function AddEntryDE() {
           <Input className={"dark:bg-neutral-100"} placeholder={"Enter a brief description"} />
         </div>
 
-        {entryType === "cashin" && (
+        {entryType === "cashout" && (
           <>
             <div className="mt-3 w-full">
               <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
