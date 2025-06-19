@@ -89,6 +89,18 @@ function Books() {
                       <Input id="loanAmount" name="loanAmount" className="dark:bg-neutral-300" />
                     </div>
                   )}
+                  {selectedType === "loanstatus" && (
+                    <div className="grid gap-3">
+                      <Label htmlFor="interestRate">Interest Rate (%)</Label>
+                      <Input
+                        id="interestRate"
+                        name="interestRate"
+                        type="number"
+                        step="0.01"
+                        className="dark:bg-neutral-300"
+                      />
+                    </div>
+                  )}
                   <div className="grid gap-3">
                     <Label htmlFor="description">Book Description</Label>
                     <Input id="description" name="username" className={"dark:bg-neutral-300"}/>
