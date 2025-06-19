@@ -5,6 +5,6 @@ export function setTheme(theme) {
 
 export function initTheme() {
   const stored = localStorage.getItem("theme");
-  const theme = stored || "dark"; // default is dark
+  const theme = stored || "dark"; //default dark
   setTheme(theme);
 }
