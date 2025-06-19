@@ -6,7 +6,7 @@ import Profile from "@/pages/profile";
 import BookDetails from "./pages/bookDetails";
 import BookDetails2 from "./pages/bookDetails2";
 import BookDetails3 from "./pages/bookDetails3";
-import EntryLS from "./pages/entryLS";
+import AddEntryLS from "./pages/addentryLS";
 
 function Navbar() {
   const location = useLocation();
@@ -50,7 +50,7 @@ function AppContent() {
         <Route path="/detailsde" element={<BookDetails />} />
         <Route path="/detailsls" element={<BookDetails2 />} />
         <Route path="/detailss" element={<BookDetails3 />} />
-        <Route path="/entryls" element={<EntryLS />} />
+        <Route path="/entryls" element={<AddEntryLS />} />
       </Routes>
       <Navbar />
     </>

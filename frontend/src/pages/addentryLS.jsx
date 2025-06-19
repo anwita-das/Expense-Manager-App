@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-function EntryLS() {
+function AddEntryLS() {
     const now = dayjs(); // current date & time
     const formatted = now.format("DD MMM YYYY, hh:mm A");
     return(
@@ -10,4 +10,4 @@ function EntryLS() {
     );
 }
 
-export default EntryLS;
+export default AddEntryLS;
