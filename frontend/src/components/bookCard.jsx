@@ -2,6 +2,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { MoreVertical } from "lucide-react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBuildingColumns, faMoneyBills, faPiggyBank } from '@fortawesome/free-solid-svg-icons'
+import { Link } from "react-router-dom";
 
 function BookCard() {
     return (
@@ -10,7 +11,7 @@ function BookCard() {
             <FontAwesomeIcon icon={faMoneyBills} className="text-2xl mr-3"/>
             <div className="flex flex-col justify-center space-y-1 w-full">
                 <div className="flex flex-row justify-between">
-                    <div className="font-medium text-xl mt-1">Trip to Manali</div>
+                    <Link to="/detailsde"><div className="font-medium text-xl mt-1">Trip to Manali</div></Link>
                     <div className="text-md mt-1">Daily Expense</div>
                 </div>
                 <div className="flex flex-row justify-between">
@@ -34,7 +35,7 @@ function BookCard() {
             <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl mr-3"/>
             <div className="flex flex-col justify-center space-y-1 w-full">
                 <div className="flex flex-row justify-between">
-                    <div className="font-medium text-xl mt-1">Education Loan</div>
+                    <Link to="/detailsls"><div className="font-medium text-xl mt-1">Education Loan</div></Link>
                     <div className="text-md mt-1">Loan Status</div>
                 </div>
                 <div className="flex flex-row justify-between">
@@ -58,7 +59,7 @@ function BookCard() {
             <FontAwesomeIcon icon={faPiggyBank} className="text-2xl mr-3"/>
             <div className="flex flex-col justify-center space-y-1 w-full">
                 <div className="flex flex-row justify-between">
-                    <div className="font-medium text-xl mt-1">Savings Account</div>
+                    <Link to="/detailss"><div className="font-medium text-xl mt-1">Savings Account</div></Link>
                     <div className="text-md mt-1">Savings</div>
                 </div>
                 <div className="flex flex-row justify-between">
