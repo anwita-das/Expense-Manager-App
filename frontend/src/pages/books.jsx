@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,6 +22,8 @@ import {
 import { Label } from "@/components/ui/label";
 
 function Books() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
   return (
     <>
       <div className="bg-neutral-800 dark:bg-neutral-300 min-h-screen">
@@ -28,7 +31,10 @@ function Books() {
           <h1 className="text-4xl font-sans font-medium text-neutral-50 dark:text-neutral-900">
             My Books
           </h1>
-          <Dialog>
+          <Dialog open={dialogOpen} onOpenChange={(open) => {
+            setDialogOpen(open);
+            if (!open) setSelectedType("");  // Reset when dialog is closed
+          }}>
             <form>
               <DialogTrigger asChild>
                 <Button className="bg-purple-900 hover:bg-purple-300 dark:text-neutral-50">+ Create New Book</Button>
@@ -51,26 +57,38 @@ function Books() {
                       <Button
                         type="button"
                         variant="default"
-                        className="text-black w-[32%] bg-neutral-400 dark:bg-neutral-300 hover:bg-green-300 hover:cursor-pointer"
-                      >
-                        Daily Expenses
+                        onClick={() => setSelectedType("dailyexpense")}
+                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer hover:bg-green-300 ${
+                          selectedType === "dailyexpense" ? "bg-green-300" : "bg-neutral-400"
+                        }`}>
+                        Daily Expense
                       </Button>
                       <Button
                         type="button"
                         variant="default"
-                        className="text-black w-[32%] bg-neutral-400 dark:bg-neutral-300 hover:bg-orange-300 hover:cursor-pointer"
-                      >
+                        onClick={() => setSelectedType("loanstatus")}
+                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer hover:bg-orange-300 ${
+                          selectedType === "loanstatus" ? "bg-orange-300" : "bg-neutral-400"
+                        }`}>
                         Loan Status
                       </Button>
                       <Button
                         type="button"
                         variant="default"
-                        className="text-black w-[32%] bg-neutral-400 dark:bg-neutral-300 hover:bg-blue-300 hover:cursor-pointer"
-                      >
+                        onClick={() => setSelectedType("savings")}
+                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer hover:bg-blue-300 ${
+                          selectedType === "savings" ? "bg-blue-300" : "bg-neutral-400"
+                        }`}>
                         Savings
                       </Button>
                     </div>
                   </div>
+                  {selectedType === "loanstatus" && (
+                    <div className="grid gap-3">
+                      <Label htmlFor="loanAmount">Loan Amount</Label>
+                      <Input id="loanAmount" name="loanAmount" className="dark:bg-neutral-300" />
+                    </div>
+                  )}
                   <div className="grid gap-3">
                     <Label htmlFor="description">Book Description</Label>
                     <Input id="description" name="username" className={"dark:bg-neutral-300"}/>
