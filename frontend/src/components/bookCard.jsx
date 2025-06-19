@@ -7,12 +7,12 @@ import { Link } from "react-router-dom";
 function BookCard() {
     return (
         <>
-        <div className="flex flex-row items-center w-[95%] bg-green-300 text-neutral-800 h-auto m-1 p-4 rounded-4xl space-x-2">
+        <div className="flex flex-row items-center w-[95%] bg-green-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
             <FontAwesomeIcon icon={faMoneyBills} className="text-2xl mr-3"/>
-            <div className="flex flex-col justify-center space-y-1 w-full">
+            <div className="flex flex-col justify-center w-full">
                 <div className="flex flex-row justify-between">
-                    <Link to="/detailsde"><div className="font-medium text-xl mt-1">Trip to Manali</div></Link>
-                    <div className="text-md mt-1">Daily Expense</div>
+                    <Link to="/detailsde"><div className="font-medium text-xl mt-2">Trip to Manali</div></Link>
+                    <div className="text-md mt-2">Daily Expense</div>
                 </div>
                 <div className="flex flex-row justify-between">
                     <div className="text-sm mt-1">Updated on: June 16, 2025</div>
@@ -31,12 +31,12 @@ function BookCard() {
                 </div>
             </div>
         </div>
-        <div className="flex flex-row items-center w-[95%] bg-orange-300 text-neutral-800 h-auto m-1 p-4 rounded-4xl space-x-2">
+        <div className="flex flex-row items-center w-[95%] bg-orange-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
             <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl mr-3"/>
-            <div className="flex flex-col justify-center space-y-1 w-full">
+            <div className="flex flex-col justify-center w-full">
                 <div className="flex flex-row justify-between">
-                    <Link to="/detailsls"><div className="font-medium text-xl mt-1">Education Loan</div></Link>
-                    <div className="text-md mt-1">Loan Status</div>
+                    <Link to="/detailsls"><div className="font-medium text-xl mt-2">Education Loan</div></Link>
+                    <div className="text-md mt-2">Loan Status</div>
                 </div>
                 <div className="flex flex-row justify-between">
                     <div className="text-sm mt-1">Updated on: June 17, 2025</div>
@@ -55,12 +55,12 @@ function BookCard() {
                 </div>
             </div>
         </div>
-        <div className="flex flex-row items-center w-[95%] bg-blue-300 text-neutral-800 h-auto m-1 p-4 rounded-4xl space-x-2">
+        <div className="flex flex-row items-center w-[95%] bg-blue-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
             <FontAwesomeIcon icon={faPiggyBank} className="text-2xl mr-3"/>
-            <div className="flex flex-col justify-center space-y-1 w-full">
+            <div className="flex flex-col justify-center w-full">
                 <div className="flex flex-row justify-between">
-                    <Link to="/detailss"><div className="font-medium text-xl mt-1">Savings Account</div></Link>
-                    <div className="text-md mt-1">Savings</div>
+                    <Link to="/detailss"><div className="font-medium text-xl mt-2">Savings Account</div></Link>
+                    <div className="text-md mt-2">Savings</div>
                 </div>
                 <div className="flex flex-row justify-between">
                     <div className="text-sm mt-1">Updated on: June 17, 2025</div>
