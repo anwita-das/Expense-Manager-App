@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
 
 function BookDetails2() {
+
     return (
         <>
         <div className="bg-neutral-800 min-h-screen pb-2 dark:bg-neutral-200 dark:text-neutral-900">
@@ -50,6 +51,7 @@ function BookDetails2() {
                     <Button className="bg-purple-900 mr-4 dark:text-neutral-50 hover:bg-purple-400">+ Add Payment</Button>
                     </Link>
                 </div>
+                <Link to="/edetailsls">
                 <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
                     <FontAwesomeIcon icon={faCheck} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
                     <div className='flex flex-row justify-between w-full ml-2'>
@@ -58,6 +60,7 @@ function BookDetails2() {
                         <div className='font-medium'>05/03/2025</div>
                     </div>
                 </div>
+                </Link>
                 <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
                     <FontAwesomeIcon icon={faCheck} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
                     <div className='flex flex-row justify-between w-full ml-2'>

@@ -54,13 +54,13 @@ function BookDetails3() {
             </div>
             <div className='mt-3'>
                     <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Entries</div>
-                <div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
+                <Link to="/edetailss"><div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
                     <FontAwesomeIcon icon={faPlus} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
                     <div className='flex flex-row justify-between w-full ml-2'>
                         <div className='font-bold'>Rs. 3000</div>
                         <div className='font-medium'>Monthly Savings</div>
                     </div>
-                </div>
+                </div></Link>
                 <div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
                     <FontAwesomeIcon icon={faPlus} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
                     <div className='flex flex-row justify-between w-full ml-2'>
