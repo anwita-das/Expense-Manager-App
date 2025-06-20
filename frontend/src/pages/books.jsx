@@ -58,8 +58,8 @@ function Books() {
                         type="button"
                         variant="default"
                         onClick={() => setSelectedType("dailyexpense")}
-                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer hover:bg-green-300 ${
-                          selectedType === "dailyexpense" ? "bg-green-300" : "bg-neutral-400"
+                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer dark:hover:bg-green-300 hover:bg-green-300 ${
+                          selectedType === "dailyexpense" ? "bg-green-300 dark:bg-green-300" : "bg-neutral-400"
                         }`}>
                         Daily Expense
                       </Button>
@@ -67,8 +67,8 @@ function Books() {
                         type="button"
                         variant="default"
                         onClick={() => setSelectedType("loanstatus")}
-                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer hover:bg-orange-300 ${
-                          selectedType === "loanstatus" ? "bg-orange-300" : "bg-neutral-400"
+                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer dark:hover:bg-orange-300 hover:bg-orange-300 ${
+                          selectedType === "loanstatus" ? "bg-orange-300 dark:bg-orange-300" : "bg-neutral-400"
                         }`}>
                         Loan Status
                       </Button>
@@ -76,8 +76,8 @@ function Books() {
                         type="button"
                         variant="default"
                         onClick={() => setSelectedType("savings")}
-                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer hover:bg-blue-300 ${
-                          selectedType === "savings" ? "bg-blue-300" : "bg-neutral-400"
+                        className={`text-black w-[32%] dark:bg-neutral-300 hover:cursor-pointer dark:hover:bg-blue-300 hover:bg-blue-300 ${
+                          selectedType === "savings" ? "bg-blue-300 dark:bg-blue-300" : "bg-neutral-400"
                         }`}>
                         Savings
                       </Button>

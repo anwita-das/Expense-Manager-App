@@ -18,7 +18,7 @@ function Navbar() {
 
   return (
     <nav>
-      <div className="flex flex-row justify-evenly fixed bottom-0 left-0 bg-neutral-900 dark:bg-neutral-500 dark:text-neutral-900 w-full h-10 text-neutral-50 text-lg font-medium">
+      <div className="flex flex-row justify-evenly fixed bottom-0 left-0 bg-neutral-900 dark:bg-neutral-500 w-full h-10 text-neutral-50 text-lg font-medium">
         <Link
           to="/books"
           className={`flex justify-center items-center w-full hover:bg-purple-950 dark:hover:bg-purple-300 hover:cursor-pointer ${
