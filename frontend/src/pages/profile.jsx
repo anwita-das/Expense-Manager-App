@@ -10,7 +10,7 @@ function Profile() {
 
     useEffect(() => {
     const stored = localStorage.getItem("theme");
-    setIsLightMode(stored === "light"); // true only if theme is light
+    setIsLightMode(stored === "light");
     }, []);
 
     const handleToggle = (checked) => {
