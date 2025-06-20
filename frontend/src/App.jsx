@@ -6,6 +6,7 @@ import Profile from "@/pages/profile";
 import BookDetails from "./pages/bookDetails";
 import BookDetails2 from "./pages/bookDetails2";
 import BookDetails3 from "./pages/bookDetails3";
+import AddEntryDE from "./pages/addentryDE";
 import AddEntryLS from "./pages/addentryLS";
 import AddEntryS from "./pages/addentryS";
 
@@ -51,6 +52,7 @@ function AppContent() {
         <Route path="/detailsde" element={<BookDetails />} />
         <Route path="/detailsls" element={<BookDetails2 />} />
         <Route path="/detailss" element={<BookDetails3 />} />
+        <Route path="/entryde" element={<AddEntryDE />} />
         <Route path="/entryls" element={<AddEntryLS />} />
         <Route path="/entrys" element={<AddEntryS />} />
       </Routes>
