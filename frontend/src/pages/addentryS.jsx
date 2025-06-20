@@ -124,8 +124,7 @@ function AddEntryS() {
           </>
         )}
 
-        {/* Submit Buttons */}
-        <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
+       <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
           <Button type="submit" className="w-[40%] bg-purple-950 dark:text-neutral-50">
             Add Entry
           </Button>

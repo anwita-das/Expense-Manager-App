@@ -36,10 +36,12 @@ function BookDetails() {
                         <div>Net Balance:</div>
                         <div>-Rs. 18000</div>
                     </div>
-                    <Button className='flex flex-row justify-center space-x-1 bg-neutral-800 dark:bg-neutral-400 text-neutral-50 dark:text-neutral-900 rounded-2xl p-2'>
+                    <Link to = "/summaryde">
+                    <Button className='flex flex-row justify-center w-full space-x-1 bg-neutral-800 dark:bg-neutral-400 text-neutral-50 dark:text-neutral-900 rounded-2xl p-2'>
                     <p>View Detailed Summary</p>
                     <FontAwesomeIcon icon={faArrowRight} className='text-xl mt-1' />  
-                    </Button> 
+                    </Button>
+                    </Link>
                 </div>
             </div>
             <div className='mt-3'>
