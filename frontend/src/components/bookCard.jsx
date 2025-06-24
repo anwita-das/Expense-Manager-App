@@ -25,7 +25,6 @@ function BookCard() {
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                         <DropdownMenuItem>Delete</DropdownMenuItem>
-                        <DropdownMenuItem>Share</DropdownMenuItem>
                     </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
@@ -35,7 +34,7 @@ function BookCard() {
             <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl mr-3"/>
             <div className="flex flex-col justify-center w-full">
                 <div className="flex flex-row justify-between">
-                    <Link to="/detailsls"><div className="font-medium text-xl mt-2">Education Loan</div></Link>
+                    <Link to="/detailsls"><div className="font-medium text-xl mt-2">Loans</div></Link>
                     <div className="text-md mt-2">Loan Status</div>
                 </div>
                 <div className="flex flex-row justify-between">
@@ -49,7 +48,6 @@ function BookCard() {
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                         <DropdownMenuItem>Delete</DropdownMenuItem>
-                        <DropdownMenuItem>Share</DropdownMenuItem>
                     </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
@@ -73,7 +71,6 @@ function BookCard() {
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                         <DropdownMenuItem>Delete</DropdownMenuItem>
-                        <DropdownMenuItem>Share</DropdownMenuItem>
                     </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

@@ -30,8 +30,8 @@ function SummaryDE() {
                     <div>-Rs. 18000</div>
                 </div>
                 <div className='flex flex-row justify-between'>   
-                    <div>Average Monthly Spending:</div>
-                    <div>Rs. 17750</div>
+                    <div>Average Daily Spending:</div>
+                    <div>Rs. 750</div>
                 </div>
             </div>
             <div className='flex flex-col items-center bg-neutral-700 dark:bg-neutral-300 p-5 m-3 rounded-2xl font-medium text-neutral-50 dark:text-neutral-800 space-y-2'>

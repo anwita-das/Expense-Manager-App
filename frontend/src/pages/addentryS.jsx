@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { Calendar24 } from "@/components/Calendar24"
 
 function AddEntryS() {
   const now = dayjs();
@@ -42,11 +43,10 @@ function AddEntryS() {
         </div>
 
         <div className="flex flex-row justify-between w-full items-center">
-          <div>Date: {dateOnly}</div>
-          <div>Time: {timeOnly}</div>
+            <Calendar24 />
         </div>
 
-        <div className="flex flex-row justify-center gap-3 mt-3 w-full">
+        {/* <div className="flex flex-row justify-center gap-3 mt-3 w-full">
           <Button
             type="button"
             className={`w-[45%] ${entryType === "deposit" ? "bg-green-400 dark:bg-green-600" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-green-300"} text-black`}
@@ -61,9 +61,9 @@ function AddEntryS() {
           >
             Withdrawal
           </Button>
-        </div>
+        </div> */}
 
-        {entryType === "withdrawal" && (
+        {/* {entryType === "withdrawal" && (
           <>
             <div className="mt-3 w-full">
               <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Amount</div>
@@ -74,21 +74,28 @@ function AddEntryS() {
               <Input type="text" placeholder="Reason for withdrawal" className="dark:bg-neutral-100" />
             </div>
           </>
-        )}
+        )} */}
 
         {entryType === "deposit" && (
           <>
             <div className="mt-3 w-full">
               <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Type</div>
-              <Select onValueChange={(value) => setDepositMode(value)} >
-                <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
-                  <SelectItem value="onetime">One Time</SelectItem>
-                  <SelectItem value="recurring">Recurring</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-row justify-center gap-3 mt-3 w-full">
+                <Button
+                  type="button"
+                  className={`w-[45%] ${depositMode === "onetime" ? "bg-purple-700 dark:bg-purple-800 text-neutral-50" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-purple-300 text-neutral-800"}`}
+                  onClick={() => setDepositMode("onetime")}
+                >
+                  One-Time
+                </Button>
+                <Button
+                  type="button"
+                  className={`w-[45%] ${depositMode === "recurring" ? "bg-purple-700 dark:bg-purple-800 text-neutral-50" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-purple-300 text-neutral-800"}`}
+                  onClick={() => setDepositMode("recurring")}
+                >
+                  Recurring
+                </Button>
+              </div>
             </div>
 
             <div className="mt-3 w-full">

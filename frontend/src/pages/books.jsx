@@ -26,7 +26,7 @@ function Books() {
   const [selectedType, setSelectedType] = useState("");
   return (
     <>
-      <div className="bg-neutral-800 dark:bg-neutral-300 min-h-screen">
+      <div className="bg-neutral-800 dark:bg-neutral-300 min-h-screen pb-10">
         <div className="flex flex-row justify-between items-center p-3">
           <h1 className="text-4xl font-sans font-medium text-neutral-50 dark:text-neutral-900">
             My Books
@@ -82,25 +82,7 @@ function Books() {
                         Savings
                       </Button>
                     </div>
-                  </div>
-                  {selectedType === "loanstatus" && (
-                    <div className="grid gap-3">
-                      <Label htmlFor="loanAmount">Loan Amount</Label>
-                      <Input id="loanAmount" name="loanAmount" className="dark:bg-neutral-300" />
-                    </div>
-                  )}
-                  {selectedType === "loanstatus" && (
-                    <div className="grid gap-3">
-                      <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                      <Input
-                        id="interestRate"
-                        name="interestRate"
-                        type="number"
-                        step="0.01"
-                        className="dark:bg-neutral-300"
-                      />
-                    </div>
-                  )}
+                  </div>  
                   <div className="grid gap-3">
                     <Label htmlFor="description">Book Description</Label>
                     <Input id="description" name="username" className={"dark:bg-neutral-300"}/>
@@ -123,7 +105,8 @@ function Books() {
             </form>
           </Dialog>
         </div>
-
+        
+        <div className="sticky top-0 z-40 bg-transparent flex flex-row justify-between items-center w-full">
         <div className="w-full px-4 py-2">
           <Input
             type="text"
@@ -131,17 +114,14 @@ function Books() {
             className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-200 dark:text-neutral-900"
           />
         </div>
-
-        <BookList />
-
-        <div className="fixed bottom-15 right-4 z-50">
+        <div className="mr-3 mt-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="bg-neutral-700 dark:bg-neutral-300 p-4 rounded-full shadow-lg">
-                <Filter className="w-20 h-20 text-white dark:text-black" />
+              <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
+                <Filter className="w-6 h-6 text-white dark:text-black" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40 bg-neutral-300 dark:bg-neutral-100 text-black">
+            <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
               <DropdownMenuItem>All</DropdownMenuItem>
               <DropdownMenuItem>Daily Expense</DropdownMenuItem>
               <DropdownMenuItem>Loan Status</DropdownMenuItem>
@@ -149,6 +129,9 @@ function Books() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+        </div>
+
+        <BookList />
       </div>
     </>
   );

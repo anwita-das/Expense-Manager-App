@@ -37,7 +37,7 @@ function EntryDetailsDE() {
                 </div>
                 <div className='mt-2 w-full'>
                     <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Payment Mode</div>
-                    <div className='bg-neutral-700 p-3 rounded-2xl font-medium text-neutral-50 dark:bg-neutral-200 dark:text-neutral-800'>UPI</div>
+                    <div className='bg-neutral-700 p-3 rounded-2xl font-medium text-neutral-50 dark:bg-neutral-200 dark:text-neutral-800'>Online</div>
                 </div>
                 <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
                 <Button type="submit" className="w-[40%] bg-purple-950 hover:bg-purple-400 dark:text-neutral-50">

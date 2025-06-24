@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faBuildingColumns } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,11 +12,23 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { Calendar24 } from "@/components/Calendar24"
 
 function AddEntryLS() {
     const now = dayjs(); // current date & time
     const dateOnly = now.format("DD MMM YYYY");
     const timeOnly = now.format("HH:mm:ss");
+
+    const location = useLocation();
+    const initialType = location.state?.type || "emipayment";
+    const [entryType, setEntryType] = useState(initialType);
+
+    useEffect(() => {
+        if (location.state?.type) {
+        setEntryType(location.state.type);
+        }
+    }, [location.state]);
+
     return(
         <>
         <div className="flex justify-center items-center bg-neutral-800 min-h-screen pb-2 dark:bg-neutral-200 dark:text-neutral-900">
@@ -24,37 +37,61 @@ function AddEntryLS() {
                     <Link to="/detailsls">
                     <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" />
                     </Link>
-                    <div className="font-bold text-3xl">EMI payment</div>
+                    <div className="font-bold text-3xl">New Entry</div>
                     <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl"/>
                 </div>
                 <div className="flex flex-row justify-between w-full items-center">
-                    <div>Date: {dateOnly}</div>
-                    <div>Time: {timeOnly}</div>
+                    <Calendar24 />
+                </div>
+                <div className="flex flex-row justify-center gap-3 mt-3 w-full">
+                    <Button
+                        type="button"
+                        className={`w-[45%] ${entryType === "newloan" ? "bg-green-400 dark:bg-green-00" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-green-300"} text-black`}
+                        onClick={() => setEntryType("newloan")}
+                    >
+                        New Loan
+                    </Button>
+                    <Button
+                        type="button"
+                        className={`w-[45%] ${entryType === "emipayment" ? "bg-red-400 dark:bg-red-600" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-red-300"} text-black`}
+                        onClick={() => setEntryType("emipayment")}
+                    >
+                        EMI Payment
+                    </Button>
                 </div>
                 <div className='mt-3 w-full'>
                     <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount</div>
                     <Input className={"dark:bg-neutral-100"} placeholder={"Enter the amount paid"} />
                 </div>
+                {entryType === "newloan" && (
+                  <div className='mt-3 w-full'>
+                    <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>
+                      Interest Rate (%)
+                    </div>
+                    <Input
+                      className="dark:bg-neutral-100"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="e.g. 8.5"
+                    />
+                  </div>
+                )}
                 <div className='mt-3 w-full'>
                     <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description</div>
                     <Input className={"dark:bg-neutral-100"} placeholder={"Enter a brief description"} />
                 </div>
                 <div className="mt-3 w-full">
                 <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
-                    Payment Mode
+                    Transaction Mode
                 </div>
                 <Select>
                     <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
-                    <SelectValue placeholder="Select payment mode" />
+                    <SelectValue placeholder="Select transaction mode" />
                     </SelectTrigger>
                     <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
-                    <SelectItem value="auto-debit">Auto-debit</SelectItem>
-                    <SelectItem value="upi">UPI</SelectItem>
-                    <SelectItem value="netbanking">Net Banking</SelectItem>
-                    <SelectItem value="credit-card">Credit Card</SelectItem>
-                    <SelectItem value="debit-card">Debit Card</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="others">Others</SelectItem>
+                    <SelectItem value="auto-debit">Online</SelectItem>
+                    <SelectItem value="upi">Offline</SelectItem>
                     </SelectContent>
                 </Select>
                 </div>
