@@ -9,8 +9,7 @@ coloredlogs.install(level='DEBUG', logger = logger)
 def csv():
         global data
         try:
-            file_path = '/Users/mac/allfiles/EXPMANAGER/users.csv'
-            data = pd.read_csv(file_path)
+            data = pd.read_csv("users.csv")
             print(data.to_string())
         except Exception as e:
             logger.error(f"ERROR IN FILE PATH: {str(e)}")
@@ -25,7 +24,7 @@ def mysql():
         db_config = {
         'host': 'localhost',
         'user': 'root',
-        'password': 'new_password',
+        'password': '',
         'database': 'expmanager'
          }
         conn = mysql.connector.connect(**db_config)

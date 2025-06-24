@@ -1,13 +1,13 @@
 ID,name,email,hashed_password,Created_time
-1,John Doe,john.doe@example.com,password123,2024-06-01 10:23:45
-2,Jane Smith,jane.smith@example.com,helloWorld!,2024-06-02 14:56:12
-3,Alex Johnson,alex.j@example.com,pass@word1,2024-06-03 09:34:27
-4,Emily Davis,emily.d@example.com,letmein123,2024-06-04 11:11:11
-5,Michael Brown,michael.b@example.com,qwerty789,2024-06-05 08:22:33
-6,Linda Wilson,linda.w@example.com,welcome123,2024-06-06 15:45:00
-7,Chris Taylor,chris.t@example.com,myPass2024,2024-06-07 17:00:59
-8,Sarah Miller,sarah.m@example.com,summer2024,2024-06-08 12:12:12
-9,David Anderson,david.a@example.com,secure*pass,2024-06-09 06:30:30
-10,Laura Thomas,laura.t@example.com,test1234,2024-06-10 19:45:45
+1,John Doe,john.doe@example.com,$2b$12$Dxg5nKRjn5DHyPCUbR0DvOLNSd0Yp6Sz848Xv2cKeld70y070d8Aq,2024-06-01 10:23:45
+2,Jane Smith,jane.smith@example.com,$2b$12$WGWgUUN2DGaLI1s/i7jGrusy.6wdS52pEr7ljzJiLqS2aIkLE7ZIK,2024-06-02 14:56:12
+3,Alex Johnson,alex.j@example.com,$2b$12$yiD7V6nBHBQtADkeeTJlNed4m5gtBaoZKeEn5IHQPHERLsSPKotT.,2024-06-03 09:34:27
+4,Emily Davis,emily.d@example.com,letmein123$2b$12$eR0zBds2aqYCnvxXTeiw5OM5PCIHT65Kdfx2PpDO9iJeBoEk3XblS,2024-06-04 11:11:11
+5,Michael Brown,michael.b@example.com,$2b$12$aE2l0OkJyrLxEDW4epgOjeJrmzltKWa5EQsR8E9pXqZahos8OSCUy,2024-06-05 08:22:33
+6,Linda Wilson,linda.w@example.com,$2b$12$2CLPL3p3I5EZFI/obC203.48xwv2wZGoAf0ZMu3VooubmkC3kX/F6,2024-06-06 15:45:00
+7,Chris Taylor,chris.t@example.com,$2b$12$dMY3oOxPURMRcdlfdpgAy.VPL3Mii0HX.CkXBy86ozmF3rDeFgIQO,2024-06-07 17:00:59
+8,Sarah Miller,sarah.m@example.com,$2b$12$qwSLvL7IBm6HIbOMFV6/s./v9NctgeKVg3tjAunikdG61VEimgeQq,2024-06-08 12:12:12
+9,David Anderson,david.a@example.com,$2b$12$B1WIclAeZYtQlld.syqsKumW7D6vH65.5cXhduewmOLdO9SJOzpqO,2024-06-09 06:30:30
+10,Laura Thomas,laura.t@example.com,$2b$12$k47zZ/joztfaqfCX.M1FKek45kmBTa6WFEA2bGumLHwlC52rpDT72,2024-06-10 19:45:45
 
 

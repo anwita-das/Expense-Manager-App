@@ -44,3 +44,11 @@ def protected_route(current_user: User = Depends(verify_token)):
         "email": current_user.email
     }
 
+@router.post("/debug-hash")
+def debug_hash(email: str, password: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        return {"error": "User not found"}
+
+    result = verify_password(password, user.hashed_password)
+    return {"password_matches": result, "stored_hash": user.hashed_password}

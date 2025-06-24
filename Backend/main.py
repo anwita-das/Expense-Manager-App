@@ -8,3 +8,4 @@ app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
 @app.get("/api/protected")
 def protected_route(token_data=Depends(verify_token)):
     return {"message": f"Hello, {token_data['sub']}! This is a protected route."}
+    
