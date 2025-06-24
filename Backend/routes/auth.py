@@ -35,12 +35,13 @@ def login(form_data: schemas.UserLogin, db: Session = Depends(get_db)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/books")
+@router.get("/protection")
 def protected_route(current_user: User = Depends(verify_token)):
     """Example protected route"""
     return {
-        "message": f"Hello, {current_user.name}! This is a protected route.", # <-- Added name
+        "message": f"Hello, {current_user.name}! This is a protected route.", 
         "ID": current_user.id,
         "email": current_user.email
     }
 
+#books models crud push code daily
