@@ -12,7 +12,7 @@ function EntryDetailsDE() {
                     <Link to="/detailsde">
                         <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" />
                     </Link>
-                    <div className="font-bold text-3xl">Entry Details</div>
+                    <div className="font-bold text-3xl">Edit Entry Details</div>
                     <FontAwesomeIcon icon={faMoneyBills} className="text-2xl" />
                 </div>
                 <div className="flex flex-row items-center justify-between w-full">

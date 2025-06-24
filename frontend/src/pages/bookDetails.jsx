@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
+import { MoreVertical } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -85,12 +86,32 @@ function BookDetails() {
             <div className='mt-3'>
                 <div className='text-sm text-neutral-300 ml-6 font-medium mt-4 dark:text-neutral-800'>Entries</div>
                 <div className='text-neutral-400 dark:text-neutral-500 w-full text-center mt-2'>20 June 2025</div>
-                <Link to="/edetailsde"><div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
-                    <div className='flex flex-row justify-between w-full ml-2'>
+                <div className='flex flex-col space-y-2 bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-xl text-neutral-50 dark:text-neutral-800'>
+                    <div className='flex flex-row justify-between w-full'>
                         <div className='text-red-400 font-bold'>Rs. 4500</div>
-                        <div className='font-medium'>Hotel Booking</div>
+                        <div className='flex flex-row space-x-2'>
+                            <div className='font-medium'>Hotel Booking</div>
+                            <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className="">
+                                <MoreVertical className="h-4 w-4 hover:cursor-pointer" />
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <Link to="/edetailsde"><DropdownMenuItem className={"hover:cursor-pointer"}>Edit</DropdownMenuItem></Link>
+                                <DropdownMenuItem className={"hover:cursor-pointer"}>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
                     </div>
-                </div></Link>
+                    <div className='flex flex-row justify-between w-full'>
+                        <div className='flex flex-row space-x-1 text-xs'>
+                            <div className='bg-neutral-800 pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Online</div>
+                            <div className='bg-neutral-800 pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Travel</div>
+                        </div>
+                        <div className='text-sm'>Time: 11:19:29</div>
+                    </div>
+                </div>
                 <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
                     <div className='flex flex-row justify-between w-full ml-2'>
                         <div className='text-green-400 dark:text-green-600 font-bold'>Rs. 5000</div>
