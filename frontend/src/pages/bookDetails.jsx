@@ -41,7 +41,7 @@ function BookDetails() {
           <Input
             type="text"
             placeholder="Search entries..."
-            className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-200 dark:text-neutral-900"
+            className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-300 dark:border-2 dark:border-neutral-400 dark:text-neutral-900"
           />
         </div>
         <div className="mr-3 mt-1">
@@ -106,8 +106,8 @@ function BookDetails() {
                     </div>
                     <div className='flex flex-row justify-between w-full'>
                         <div className='flex flex-row space-x-1 text-xs'>
-                            <div className='bg-neutral-800 pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Online</div>
-                            <div className='bg-neutral-800 pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Travel</div>
+                            <div className='bg-neutral-800 dark:bg-neutral-400 font-semibold pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Online</div>
+                            <div className='bg-neutral-800 dark:bg-neutral-400 font-semibold pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Travel</div>
                         </div>
                         <div className='text-sm'>Time: 11:19:29</div>
                     </div>

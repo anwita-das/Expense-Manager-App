@@ -111,7 +111,7 @@ function Books() {
           <Input
             type="text"
             placeholder="Search books..."
-            className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-200 dark:text-neutral-900"
+            className="w-full bg-neutral-300 text-neutral-800 dark:border-2 dark:border-neutral-400 dark:bg-neutral-200 dark:text-neutral-900"
           />
         </div>
         <div className="mr-3 mt-1">

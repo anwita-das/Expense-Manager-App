@@ -7,11 +7,11 @@ import { Link } from "react-router-dom";
 function BookCard() {
     return (
         <>
-        <div className="flex flex-row items-center w-[95%] bg-green-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
+        <Link to="/detailsde"><div className="flex flex-row items-center w-119 bg-green-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
             <FontAwesomeIcon icon={faMoneyBills} className="text-2xl mr-3"/>
             <div className="flex flex-col justify-center w-full">
                 <div className="flex flex-row justify-between">
-                    <Link to="/detailsde"><div className="font-medium text-xl mt-2">Trip to Manali</div></Link>
+                    <div className="font-medium text-xl mt-2">Trip to Manali</div>
                     <div className="text-md mt-2">Daily Expense</div>
                 </div>
                 <div className="flex flex-row justify-between">
@@ -29,12 +29,12 @@ function BookCard() {
                     </DropdownMenu>
                 </div>
             </div>
-        </div>
-        <div className="flex flex-row items-center w-[95%] bg-orange-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
+        </div> </Link>
+        <Link to="/detailsls"><div className="flex flex-row items-center w-119 bg-orange-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
             <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl mr-3"/>
             <div className="flex flex-col justify-center w-full">
                 <div className="flex flex-row justify-between">
-                    <Link to="/detailsls"><div className="font-medium text-xl mt-2">Loans</div></Link>
+                    <div className="font-medium text-xl mt-2">Loans</div>
                     <div className="text-md mt-2">Loan Status</div>
                 </div>
                 <div className="flex flex-row justify-between">
@@ -52,12 +52,12 @@ function BookCard() {
                     </DropdownMenu>
                 </div>
             </div>
-        </div>
-        <div className="flex flex-row items-center w-[95%] bg-blue-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
+        </div> </Link>
+        <Link to="/detailss"><div className="flex flex-row items-center w-119 bg-blue-300 text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2">
             <FontAwesomeIcon icon={faPiggyBank} className="text-2xl mr-3"/>
             <div className="flex flex-col justify-center w-full">
                 <div className="flex flex-row justify-between">
-                    <Link to="/detailss"><div className="font-medium text-xl mt-2">Savings Account</div></Link>
+                    <div className="font-medium text-xl mt-2">Savings Account</div>
                     <div className="text-md mt-2">Savings</div>
                 </div>
                 <div className="flex flex-row justify-between">
@@ -75,7 +75,7 @@ function BookCard() {
                     </DropdownMenu>
                 </div>
             </div>
-        </div>
+        </div> </Link>
         </>
     );
 }
