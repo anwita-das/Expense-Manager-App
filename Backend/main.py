@@ -1,10 +1,17 @@
 from fastapi import FastAPI, Depends
 from routes.auth import router as auth_router  
+from routes.books import router as books_router 
 from services.auth_services import verify_token
+from routes.daily_expense import router as daily_expense_router  # <-- THE FIX IS HERE
 app = FastAPI()
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])  
+app.include_router(books_router, prefix="/api/books", tags=["Books"], dependencies=[Depends(verify_token)])
+app.include_router(daily_expense_router, prefix="/api/expenses", tags=["Expenses"]) # <-- ADDED THIS LINE
+
 
 @app.get("/api/protected")
 def protected_route(token_data=Depends(verify_token)):
-    return {"message": f"Hello, {token_data['sub']}! This is a protected route."}
+    return {"message": f"Hello, {token_data.name}! This is a protected route."}
+
+

@@ -16,6 +16,5 @@ class Settings:
 
     @property
     def DATABASE_URL(self):
-        #return f"mysql://root:A@kshun12345@{self.MYSQL_HOST}:{self.MYSQL_PORT}/{self.MYSQL_DB}"
         return f"mysql://{self.MYSQL_USER}:{self.MYSQL_PASSWORD}@{self.MYSQL_HOST}:{self.MYSQL_PORT}/{self.MYSQL_DB}"
 settings = Settings()
