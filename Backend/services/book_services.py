@@ -3,7 +3,11 @@ from models.book import Book
 from schemas.book import BookCreate
 
 def create_book(db: Session, book: BookCreate):
-    db_book = Book(title=book.title, description=book.description, type=book.type,user_id = book.user_id)
+    db_book = Book(
+        title=book.title, 
+        description=book.description, 
+        type=book.type,
+        user_id = book.user_id)
     db.add(db_book)
     db.commit()
     db.refresh(db_book)
