@@ -6,12 +6,20 @@ import Profile from "@/pages/profile";
 import BookDetails from "./pages/bookDetails";
 import BookDetails2 from "./pages/bookDetails2";
 import BookDetails3 from "./pages/bookDetails3";
+import AddEntryDE from "./pages/addentryDE";
 import AddEntryLS from "./pages/addentryLS";
 import AddEntryS from "./pages/addentryS";
+import EntryDetailsDE from "./pages/entryDetailsDE";
+import EntryDetailsLS from "./pages/entryDetailsLS";
+import EntryDetailsS from "./pages/entryDetailsS";
+import SummaryDE from "./pages/summaryDE";
+import SummaryLS from "./pages/summaryLS";
+import SummaryS from "./pages/summaryS";
+import EditProfile from "./pages/editProfile";
 
 function Navbar() {
   const location = useLocation();
-  const hideNavbarRoutes = ["/detailsde","/detailsls","/detailss","/", "/signup","/entryde", "/entryls", "/entrys"];
+  const hideNavbarRoutes = ["/detailsde","/detailsls","/detailss","/", "/signup","/entryde", "/entryls", "/entrys", "/edetailsde", "/edetailsls", "/edetailss", "/summaryde", "/summaryls", "/summarys", "/editprof"];
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
   if (!shouldShowNavbar) return null;
@@ -51,8 +59,16 @@ function AppContent() {
         <Route path="/detailsde" element={<BookDetails />} />
         <Route path="/detailsls" element={<BookDetails2 />} />
         <Route path="/detailss" element={<BookDetails3 />} />
+        <Route path="/entryde" element={<AddEntryDE />} />
         <Route path="/entryls" element={<AddEntryLS />} />
         <Route path="/entrys" element={<AddEntryS />} />
+        <Route path="/edetailsde" element={<EntryDetailsDE />} />
+        <Route path="/edetailsls" element={<EntryDetailsLS />} />
+        <Route path="/edetailss" element={<EntryDetailsS />} />
+        <Route path="/summaryde" element={<SummaryDE />} />
+        <Route path="/summaryls" element={<SummaryLS />} />
+        <Route path="/summarys" element={<SummaryS />} />
+        <Route path="/editprof" element={<EditProfile />} />
       </Routes>
       <Navbar />
     </>

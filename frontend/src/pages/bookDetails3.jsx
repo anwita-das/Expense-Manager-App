@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faMinus, faPlus, faArrowRight, faPiggyBank } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 function BookDetails3() {
     const navigate = useNavigate();
@@ -45,21 +46,29 @@ function BookDetails3() {
                         <div>Last Deposit Date:</div>
                         <div>18/06/25</div>
                     </div>
-                    <Button className='flex flex-row justify-center space-x-1 bg-neutral-800 dark:bg-neutral-400 text-neutral-50 dark:text-neutral-900 rounded-2xl p-2'>
+                    <Link to="/summarys">
+                    <Button className='flex flex-row justify-center w-full space-x-1 bg-neutral-800 dark:bg-neutral-400 text-neutral-50 dark:text-neutral-900 rounded-2xl p-2'>
                     <p>View Detailed Summary</p>
                     <FontAwesomeIcon icon={faArrowRight} className='text-xl mt-1' />  
-                    </Button> 
+                    </Button> </Link>
                 </div>
             </div>
             <div className='mt-3'>
-                    <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Entries</div>
-                <div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
+                    <div className='flex flex-row justify-between'>
+                        <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Entries</div>
+                        <Input
+                            type="text"
+                            placeholder="Search entries..."
+                            className="w-70 mr-3 border-2 border-neutral-400 bg-neutral-300 dark:bg-neutral-300 text-neutral-800 dark:text-neutral-900"
+                        />
+                    </div>
+                <Link to="/edetailss"><div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
                     <FontAwesomeIcon icon={faPlus} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
                     <div className='flex flex-row justify-between w-full ml-2'>
                         <div className='font-bold'>Rs. 3000</div>
                         <div className='font-medium'>Monthly Savings</div>
                     </div>
-                </div>
+                </div></Link>
                 <div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
                     <FontAwesomeIcon icon={faPlus} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
                     <div className='flex flex-row justify-between w-full ml-2'>
@@ -74,21 +83,14 @@ function BookDetails3() {
                         <div className='font-medium'>Gift from Aunt</div>
                     </div>
                 </div>
-                <div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
-                    <FontAwesomeIcon icon={faMinus} className='mt-1 text-xl text-red-400 dark:text-red-700'/>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='font-bold'>Rs. 2500</div>
-                        <div className='font-medium'>Emergency Car Repair</div>
-                    </div>
-                </div>
             </div>
             <div className="flex flex-row justify-center fixed bottom-4 z-50 w-full">
-                <Button onClick={handleDepositClick} className="bg-green-500 text-white rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
+                <Button onClick={handleDepositClick} className="bg-green-500 text-white rounded-full h-12 w-[40%] text-xl shadow-lg p-0">
                 + Deposit
                 </Button>
-                <Button onClick={handleWithdrawalClick} className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
+                {/* <Button onClick={handleWithdrawalClick} className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
                 - Withdrawal
-                </Button>
+                </Button> */}
             </div>
         </div>
         </>

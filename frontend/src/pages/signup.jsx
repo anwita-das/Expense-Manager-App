@@ -9,17 +9,12 @@ function Signup() {
         <div className="flex justify-center items-center min-h-screen bg-neutral-800 dark:bg-neutral-200">
             <div className="flex flex-col justify-center items-center h-auto w-sm bg-neutral-300 rounded-2xl shadow-md p-5 space-y-7">
                 <h1 className="font-bold text-2xl text-neutral-800">Sign Up</h1>
-                    <div className="flex flex-row space-x-10">
+                    <div className="flex flex-row space-x-15">
                         <Label htmlFor="fullname" className={"dark:text-neutral-900"}>Name</Label>
                         <Input id="fullname" type="text" placeholder="Enter your full name" className={"bg-neutral-200 dark:bg-neutral-100"}/>
                     </div>
 
-                    <div className="flex flex-row space-x-10">
-                        <Label htmlFor="username" className={"dark:text-neutral-900"}>Username</Label>
-                        <Input id="username" type="text" placeholder="Enter your username" className={"bg-neutral-200 dark:bg-neutral-100"}/>
-                    </div>
-
-                    <div className="flex flex-row space-x-10">
+                    <div className="flex flex-row space-x-16">
                         <Label htmlFor="email" className={"dark:text-neutral-900"}>Email</Label>
                         <Input id="email" type="text" placeholder="Enter your email id" className={"bg-neutral-200 dark:bg-neutral-100"}/>
                     </div>
