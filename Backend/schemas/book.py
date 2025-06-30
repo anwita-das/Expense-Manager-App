@@ -1,10 +1,11 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class BookCreate(BaseModel):
     title: str
     description: str
     type: str
-    user_id: int
+
 
 class BookOut(BaseModel):
     id: int
@@ -12,6 +13,7 @@ class BookOut(BaseModel):
     description: str
     type: str
     user_id: int
+    updated_at: datetime
 
     class Config:
         orm_mode = True

@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String ,DateTime, ForeignKey
 from db.session import Base
+from sqlalchemy.sql import func
 
 class Book(Base):
     __tablename__ = "books"
@@ -9,3 +10,4 @@ class Book(Base):
     description = Column(String)
     type = Column(String)
     created_at = Column(DateTime)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
