@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "react-router-dom"
-import axios from"axios";
+import { signupUser, loginUser } from "@/api/auth";
 
 function Signup() {
 
@@ -14,19 +14,9 @@ function Signup() {
 
     const handleSignup = async () => {
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/signup", {
-                name,
-                email,
-                password,
-            });
-
-            const loginResponse = await axios.post("http://localhost:8000/api/auth/login", {
-                email,
-                password,
-            });
-
-            const token = loginResponse.data.access_token;
-            localStorage.setItem("token", token);
+            await signupUser(name, email, password);
+            const loginData = await loginUser(email, password);
+            localStorage.setItem("token", loginData.access_token);
             navigate("/books");
         } catch (error) {
             console.error("Signup/Login failed:", error.response?.data?.detail || error.message);
