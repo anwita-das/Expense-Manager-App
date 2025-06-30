@@ -12,7 +12,6 @@ router = APIRouter()
 
 @router.post("/create", response_model=LoanEntry)
 def add_loan_entry(entry: LoanEntryCreate, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
-    # 4. Call the correct service function
     return create_loan_entry(db=db, entry=entry)
 
 

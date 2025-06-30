@@ -3,20 +3,23 @@ from datetime import datetime
 from typing import Optional
 from decimal import Decimal
 
-class LoanEntryCreate(BaseModel):
+class savingsCreate(BaseModel):
     book_id: int
-    entry_type: str 
+    saving_type: str  
     amount: Decimal
     description: Optional[str] = None
     date: datetime
+    frequency: str
+    interest_rate: Decimal
 
-class LoanEntry(BaseModel):
+class savings(BaseModel):
     id: int
     book_id: int
-    entry_type: str
+    saving_type: str  
     amount: Decimal
     description: Optional[str] = None
     date: datetime
-
+    frequency: str
+    interest_rate: Decimal
 
     model_config = ConfigDict(from_attributes=True)
