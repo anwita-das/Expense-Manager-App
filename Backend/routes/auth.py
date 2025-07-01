@@ -1,4 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import File, UploadFile, Form
+import shutil
+import os
+from typing import Optional
 from sqlalchemy.orm import Session
 from db.session import SessionLocal
 from models.user import User
@@ -7,6 +11,7 @@ from services.auth_services import get_password_hash, verify_password, create_ac
 from datetime import timedelta
 from db.session import get_db
 from services.auth_services import verify_token
+
 router = APIRouter()
 
 
@@ -39,8 +44,55 @@ def login(form_data: schemas.UserLogin, db: Session = Depends(get_db)):
 def protected_route(current_user: User = Depends(verify_token)):
     """Example protected route"""
     return {
-        "message": f"Hello, {current_user.name}! This is a protected route.", # <-- Added name
+        "message": f"Hello, {current_user.name}! This is a protected route.",
         "ID": current_user.id,
         "email": current_user.email
     }
 
+@router.get("/profile", response_model=schemas.UserOut)
+def get_profile(current_user: User = Depends(verify_token)):
+    return current_user
+
+@router.put("/update-profile", response_model=schemas.UserOut)
+def update_profile(update_data: schemas.UserUpdate, current_user: User = Depends(verify_token), db: Session = Depends(get_db)):
+    current_user.name = update_data.name
+    current_user.email = update_data.email
+    current_user.currency_preference = update_data.currency_preference
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+@router.put("/upload-photo", response_model=schemas.UserOut)
+def upload_profile_photo(
+    file: UploadFile = File(...),
+    current_user: User = Depends(verify_token),
+    db: Session = Depends(get_db),
+):
+    uploads_dir = "uploads"
+    os.makedirs(uploads_dir, exist_ok=True)
+
+    filename = f"user_{current_user.id}_{file.filename}"
+    file_path = os.path.join(uploads_dir, filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    current_user.profile_photo_url = f"/{file_path}"
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+@router.delete("/delete-photo", response_model=schemas.UserOut)
+def delete_profile_photo(current_user: User = Depends(verify_token), db: Session = Depends(get_db)):
+    if current_user.profile_photo_url:
+        try:
+            file_path = current_user.profile_photo_url.lstrip("/")
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(f"Error deleting file: {e}")
+
+    current_user.profile_photo_url = None
+    db.commit()
+    db.refresh(current_user)
+    return current_user
