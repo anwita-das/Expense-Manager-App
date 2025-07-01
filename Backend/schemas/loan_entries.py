@@ -10,6 +10,12 @@ class LoanEntryCreate(BaseModel):
     description: Optional[str] = None
     date: datetime
 
+class LoanEntryUpdate(BaseModel):
+    entry_type: Optional[str] = None
+    amount: Optional[Decimal] = None
+    description: Optional[str] = None
+    date: Optional[datetime] = None    
+
 class LoanEntry(BaseModel):
     id: int
     book_id: int

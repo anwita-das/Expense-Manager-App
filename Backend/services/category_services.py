@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from models.category import Category
 from schemas.category import CategoryCreate
+from schemas.category import CategoryCreate, CategoryUpdate
+
 
 def create_category(db: Session, category: CategoryCreate, user_id: int | None = None):
     db_category = Category(name=category.name, user_id=user_id)
@@ -18,3 +20,16 @@ def delete_category(db: Session, category_id: int, user_id: int):
         db.delete(category)
         db.commit()
     return category
+def update_category(db: Session, category_id: int, category: CategoryUpdate, user_id: int):
+    db_category = db.query(Category).filter(Category.id == category_id, Category.user_id == user_id).first()
+
+    if db_category:
+        if category.name is not None:
+            db_category.name = category.name
+        if category.description is not None:
+            db_category.description = category.description
+        
+        db.commit()
+        db.refresh(db_category)
+
+    return db_category

@@ -12,6 +12,15 @@ class savingsCreate(BaseModel):
     frequency: str
     interest_rate: Decimal
 
+class savingsUpdate(BaseModel):
+
+    saving_type: Optional[str] = None
+    amount: Optional[Decimal] = None
+    description: Optional[str] = None
+    date: Optional[datetime] = None
+    frequency: Optional[str] = None
+    interest_rate: Optional[Decimal] = None
+
 class savings(BaseModel):
     id: int
     book_id: int

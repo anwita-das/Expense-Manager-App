@@ -13,7 +13,6 @@ app.include_router(books_router, prefix="/api/books", tags=["Books"])
 app.include_router(daily_expense_router, prefix="/api/expenses", tags=["Expenses"])
 app.include_router(loan_entry_router, prefix="/api/loans", tags=["Loans"])
 app.include_router(savings_router, prefix="/api/savings", tags=["savings"])
-app.include_router(savings_router, prefix="/api/savings", tags=["savings"])
 app.include_router(category_router,prefix="/api/categories", tags=["categories"])
 
 
