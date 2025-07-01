@@ -21,6 +21,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def log_requests(request, call_next):
+    print(f"Incoming request: {request.method} {request.url}")
+    response = await call_next(request)
+    return response
+
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])  
 app.include_router(books_router, prefix="/api/books", tags=["Books"])
 app.include_router(daily_expense_router, prefix="/api/expenses", tags=["Expenses"])
@@ -28,6 +34,9 @@ app.include_router(loan_entry_router, prefix="/api/loans", tags=["Loans"])
 app.include_router(savings_router, prefix="/api/savings", tags=["savings"])
 app.include_router(category_router,prefix="/api/categories", tags=["categories"])
 
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 @app.get("/api/protected")
 def protected_route(token_data=Depends(verify_token)):

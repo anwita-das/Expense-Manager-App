@@ -24,7 +24,7 @@ function BookCard({ book }) {
 
     return (
     <Link to={`/details/${id}`}>
-      <div className={`flex flex-row items-center w-119 ${bg} text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2`}>
+      <div className={`flex flex-row items-center w-119 ${bg} text-neutral-800 h-20 m-1 p-4 rounded-tr-4xl rounded-bl-4xl space-x-2`}>
         <FontAwesomeIcon icon={icon} className="text-2xl mr-3" />
         <div className="flex flex-col justify-center w-full">
           <div className="flex flex-row justify-between">
@@ -32,7 +32,7 @@ function BookCard({ book }) {
             <div className="text-md mt-2">{type}</div>
           </div>
           <div className="flex flex-row justify-between">
-            <div className="text-sm mt-1">Updated on: {dayjs(updated_at).format("MMMM D, YYYY")}</div>
+            <div className="text-sm mt-1">Updated on {dayjs(updated_at).format("MMMM D, YYYY")}</div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="p-2">

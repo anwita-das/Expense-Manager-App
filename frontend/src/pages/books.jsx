@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,7 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Filter } from "lucide-react";
+import { Filter, Settings } from "lucide-react";
 import BookList from "@/components/bookList";
 import {
   Dialog,
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { createBook, fetchBooks } from "@/api/books";
+import Navbar from "@/components/navbar";
 
 function Books() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -28,6 +30,9 @@ function Books() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [books, setBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("All");
+
 
   const loadBooks = async () => {
     try {
@@ -72,12 +77,21 @@ function Books() {
     }
   };
 
+  const filteredBooks = () => {
+    return books.filter((book) => {
+      const matchesSearch = book.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType = filterType === "All" || book.type === filterType;
+      return matchesSearch && matchesType;
+    });
+  };
+
   return (
     <div className="bg-neutral-800 dark:bg-neutral-300 min-h-screen pb-10">
       <div className="flex flex-row justify-between items-center p-3">
         <h1 className="text-4xl font-sans font-medium text-neutral-50 dark:text-neutral-900">
           My Books
         </h1>
+        <div className="flex items-center gap-3">
         <Dialog open={dialogOpen} onOpenChange={(open) => {
           setDialogOpen(open);
           if (!open) {
@@ -174,6 +188,14 @@ function Books() {
             </form>
           </DialogContent>
         </Dialog>
+
+        <Link to="/settings">
+          <Button className="bg-neutral-700 dark:bg-neutral-300 p-2 rounded-full" variant="default">
+            <Settings className="w-5 h-5 text-white dark:text-black" />
+          </Button>
+        </Link>
+
+        </div>
       </div>
 
       <div className="sticky top-0 z-40 bg-transparent flex flex-row justify-between items-center w-full">
@@ -181,6 +203,8 @@ function Books() {
           <Input
             type="text"
             placeholder="Search books..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-neutral-300 text-neutral-800 dark:border-2 dark:border-neutral-400 dark:bg-neutral-200 dark:text-neutral-900"
           />
         </div>
@@ -189,19 +213,22 @@ function Books() {
             <DropdownMenuTrigger asChild>
               <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
                 <Filter className="w-6 h-6 text-white dark:text-black" />
+                <span className="ml-1 text-sm">{filterType}</span>
               </Button>
+
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
-              <DropdownMenuItem>All</DropdownMenuItem>
-              <DropdownMenuItem>Daily Expense</DropdownMenuItem>
-              <DropdownMenuItem>Loan Status</DropdownMenuItem>
-              <DropdownMenuItem>Savings</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterType("All")}>All</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterType("Daily Expense")}>Daily Expense</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterType("Loan Status")}>Loan Status</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterType("Savings")}>Savings</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
 
-      <BookList books={books} />
+      <BookList books={filteredBooks()} />
+      <Navbar />
     </div>
   );
 }

@@ -16,37 +16,8 @@ import SummaryDE from "./pages/summaryDE";
 import SummaryLS from "./pages/summaryLS";
 import SummaryS from "./pages/summaryS";
 import EditProfile from "./pages/editProfile";
+import Settings from "./pages/settings";
 
-function Navbar() {
-  const location = useLocation();
-  const hideNavbarRoutes = ["/detailsde","/detailsls","/detailss","/", "/signup","/entryde", "/entryls", "/entrys", "/edetailsde", "/edetailsls", "/edetailss", "/summaryde", "/summaryls", "/summarys", "/editprof"];
-  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
-
-  if (!shouldShowNavbar) return null;
-
-  return (
-    <nav>
-      <div className="flex flex-row justify-evenly fixed bottom-0 left-0 bg-neutral-900 dark:bg-neutral-500 w-full h-10 text-neutral-50 text-lg font-medium">
-        <Link
-          to="/books"
-          className={`flex justify-center items-center w-full hover:bg-purple-950 dark:hover:bg-purple-300 hover:cursor-pointer ${
-            location.pathname === "/books" ? "border-t-4 border-purple-600 dark:border-purple-800" : ""
-          }`}
-        >
-          Books
-        </Link>
-        <Link
-          to="/profile"
-          className={`flex justify-center items-center w-full hover:bg-purple-950 dark:hover:bg-purple-300 hover:cursor-pointer ${
-            location.pathname === "/profile" ? "border-t-4 border-purple-600 dark:border-purple-800" : ""
-          }`}
-        >
-          Profile
-        </Link>
-      </div>
-    </nav>
-  );
-}
 
 function AppContent() {
   return (
@@ -69,8 +40,8 @@ function AppContent() {
         <Route path="/summaryls" element={<SummaryLS />} />
         <Route path="/summarys" element={<SummaryS />} />
         <Route path="/editprof" element={<EditProfile />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
-      <Navbar />
     </>
   );
 }
