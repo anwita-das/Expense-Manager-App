@@ -8,10 +8,10 @@ class Settings:
     SECRET_KEY: str = os.getenv("SECRET_KEY", "supersecret")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    MYSQL_USER: str = os.getenv("MYSQL_USER", "root")
-    MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD", "")
-    MYSQL_DB: str = os.getenv("MYSQL_DB", "expmanager")
-    MYSQL_HOST: str = os.getenv("MYSQL_HOST", "localhost")
+    MYSQL_USER: str = os.getenv("MYSQL_USER")
+    MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD")
+    MYSQL_DB: str = os.getenv("MYSQL_DB")
+    MYSQL_HOST: str = os.getenv("MYSQL_HOST")
     MYSQL_PORT: str = os.getenv("MYSQL_PORT", "3306")
 
     @property
