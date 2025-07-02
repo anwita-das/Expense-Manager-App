@@ -12,11 +12,16 @@ router = APIRouter()
 
 @router.post("/create", response_model=DailyExpense)
 def add_daily_expense(expense: DailyExpenseCreate, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
-    return create_daily_expense(db=db, expense=expense)
+    # Pass the user_id for the security check
+    new_expense = create_daily_expense(db=db, expense=expense, user_id=token_data.id)
+    if not new_expense:
+        raise HTTPException(status_code=404, detail="Book not found or you are not authorized to add expenses to it")
+    return new_expense
 
 @router.get("/{book_id}", response_model=List[DailyExpense])
 def read_daily_expenses(book_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
-    expenses = get_daily_expenses(db, book_id=book_id, skip=skip, limit=limit)
+    # Pass the user_id for the security check
+    expenses = get_daily_expenses(db, book_id=book_id, user_id=token_data.id, skip=skip, limit=limit)
     return expenses
 
 @router.put("/{expense_id}", response_model=DailyExpense)
