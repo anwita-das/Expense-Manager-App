@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { isValidCategoryName } from "../../utils/validation";
 import { fetchCategories, createCategory, deleteCategory } from "@/api/categories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ function Settings() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedCategoryToDelete, setSelectedCategoryToDelete] = useState(null);
+  const [categoryError, setCategoryError] = useState("");
 
   const navigate = useNavigate();
 
@@ -30,15 +32,19 @@ function Settings() {
   }, []);
 
   const handleAddCategory = async () => {
-    if (!categoryName.trim()) return;
+    if (!isValidCategoryName(categoryName)) {
+      setCategoryError("Category name must be max 30 characters and only letters, numbers, or spaces.");
+      return;
+    }
     try {
       const newCategory = await createCategory({ name: categoryName });
       setCategories((prev) => [newCategory, ...prev]); // Newest on top
       setCategoryName("");
       setIsAddDialogOpen(false);
+      setCategoryError("");
     } catch (error) {
       console.error("Add failed", error);
-      alert("Failed to add category. It may already exist.");
+      setCategoryError("Failed to add category. It may already exist.");
     }
   };
 
@@ -81,21 +87,27 @@ function Settings() {
                 + Add Category
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-neutral-800 dark:bg-white text-white dark:text-black border-none">
+            <DialogContent className="w-md bg-neutral-800 dark:bg-white text-white dark:text-black border-none">
               <DialogHeader>
                 <DialogTitle>Add New Category</DialogTitle>
                 <DialogDescription className="mt-2">
-                  <Label htmlFor="category" className="mb-2 block">
-                    Category Name
+                  <Label htmlFor="category" className="mb-3 text-neutral-200 dark:text-neutral-600">
+                    Category Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="category"
                     type="text"
                     value={categoryName}
-                    onChange={(e) => setCategoryName(e.target.value)}
+                    onChange={(e) => {
+                      setCategoryName(e.target.value);
+                      if (categoryError) setCategoryError(""); // clear error on change
+                    }}
                     placeholder="Enter new category"
                     className="bg-neutral-300 text-black"
                   />
+                  {categoryError && (
+                    <p className="text-red-500 text-sm mt-1">{categoryError}</p>
+                  )}
                 </DialogDescription>
                 <div className="mt-4">
                   <Button

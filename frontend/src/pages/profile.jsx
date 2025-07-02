@@ -57,6 +57,12 @@ function Profile() {
       }
     };
 
+    const handleLogout = () => {
+      localStorage.removeItem("token"); 
+      navigate("/"); 
+    };
+
+
   return (
     <div className="flex flex-col items-center bg-neutral-800 text-neutral-50 dark:bg-neutral-200 dark:text-neutral-900 min-h-screen">
       <div className="flex flex-col justify-center items-center p-3 space-y-4">
@@ -170,11 +176,11 @@ function Profile() {
             Update Profile
           </Button>
         </Link>
-        <Link to="/">
-          <Button variant="default" className="w-32 bg-red-500 text-white hover:cursor-pointer hover:bg-red-200">
-            Log Out
-          </Button>
-        </Link>
+        
+        <Button variant="default" onClick={handleLogout} className="w-32 bg-red-500 text-white hover:cursor-pointer hover:bg-red-200">
+          Log Out
+        </Button>
+        
         <Button variant="default" className="w-[32%] bg-red-500 text-white hover:cursor-pointer hover:bg-red-200">
           Delete Account
         </Button>
