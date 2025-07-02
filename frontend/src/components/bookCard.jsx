@@ -23,7 +23,11 @@ function BookCard({ book }) {
     const { bg, icon } = getStyle();
 
     return (
-    <Link to={`/details/${id}`}>
+    <Link to={
+    type === "Daily Expense" ? `/detailsde/${id}` :
+    type === "Loan Status" ? `/detailsls/${id}` :
+    type === "Savings" ? `/detailss/${id}` :
+    `/detailsde/${id}`}>
       <div className={`flex flex-row items-center w-119 ${bg} text-neutral-800 h-20 m-1 p-4 rounded-tr-4xl rounded-bl-4xl space-x-2`}>
         <FontAwesomeIcon icon={icon} className="text-2xl mr-3" />
         <div className="flex flex-col justify-center w-full">
