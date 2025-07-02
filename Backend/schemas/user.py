@@ -10,19 +10,17 @@ class UserOut(BaseModel):
     name: str
     email: EmailStr
     currency_preference: str
-    model_config = ConfigDict(from_attributes=True) 
+    profile_photo_url: str | None = None
+    model_config = ConfigDict(from_attributes=True)
 
 class UserUpdate(BaseModel):
     name: str
     email: EmailStr
     currency_preference: str 
 
-
 class Token(BaseModel):
     access_token: str
     token_type: str 
-
-
 
 class UserLogin(BaseModel):
     email: EmailStr

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUserProfile, uploadProfilePhoto } from "@/api/user";
+import { fetchUserProfile, uploadProfilePhoto, deleteProfilePhoto } from "@/api/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -22,6 +22,7 @@ function Profile() {
 
     const [user, setUser] = useState(null);
     const [isLightMode, setIsLightMode] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -69,7 +70,8 @@ function Profile() {
             <AvatarImage src="/placeholderPFP.jpg" alt="Placeholder" />
           )}
         </Avatar>
-        <label
+        <div className="flex justify-center gap-3 mt-2">
+          <label
             htmlFor="upload-photo"
             className="bg-purple-900 hover:bg-purple-300 text-white dark:text-white px-4 py-2 rounded-md cursor-pointer"
           >
@@ -82,6 +84,53 @@ function Profile() {
               className="hidden"
             />
           </label>
+
+          {user?.profile_photo_url && (
+            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <DialogTrigger asChild>
+              <button
+                className="bg-red-500 hover:bg-red-300 text-white dark:text-white px-4 py-2 rounded-md hover:cursor-pointer"
+              >
+                Delete Photo
+              </button>
+            </DialogTrigger>
+            <DialogContent className="w-md bg-neutral-900 dark:bg-neutral-200 text-neutral-50 dark:text-neutral-800">
+              <DialogHeader>
+                <DialogTitle>Delete Profile Photo</DialogTitle>
+                <DialogDescription className={"text-neutral-300 dark:text-neutral-600"}>
+                  Are you sure you want to delete your profile picture? This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-center gap-4 mt-4">
+                <Button
+                  variant="default"
+                  onClick={() => setIsDeleteDialogOpen(false)}
+                  className="bg-purple-800 text-white hover:bg-purple-600"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={async () => {
+                    try {
+                      const updatedUser = await deleteProfilePhoto();
+                      setUser(updatedUser);
+                      setIsDeleteDialogOpen(false);
+                    } catch (err) {
+                      console.error("Delete failed:", err);
+                      alert("Failed to delete photo");
+                    }
+                  }}
+                  className="bg-red-600 hover:bg-red-400 text-white"
+                >
+                  Confirm
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          )}
+        </div>
+
 
       </div>
 
