@@ -26,12 +26,23 @@ def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int)
     db.refresh(db_expense)
     return db_expense
 
-def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10):
+def get_daily_expenses(db: Session, user_id: int, page: int, size: int):
+    """
+    Gets a paginated list of daily expenses for a specific user.
+    """
+    offset = (page - 1) * size
 
-    return db.query(DailyExpense).join(Book).filter(
-        DailyExpense.book_id == book_id, 
-        Book.user_id == user_id
-    ).offset(skip).limit(limit).all()
+    # The query is almost identical to the one for categories,
+    # just with a different model and ordering.
+    expenses = (
+        db.query(DailyExpense)
+        .filter(DailyExpense.user_id == user_id)
+        .order_by(DailyExpense.date.desc()) # Order by date, newest first
+        .offset(offset)
+        .limit(size)
+        .all()
+    )
+    return expenses
 
 
 def update_daily_expense(db: Session, expense_id: int, expense: DailyExpenseUpdate, user_id: int):
