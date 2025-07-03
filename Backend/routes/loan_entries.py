@@ -28,9 +28,11 @@ def update_loan(loan_id: int, loan_update: LoanEntryUpdate, db: Session = Depend
         raise HTTPException(status_code=404, detail="Loan Entry not found or unauthorized")
     return updated_loan
 
-@router.delete("/{loan_id}", response_model=LoanEntry)
-def remove_loan(loan_id: int, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
-    deleted = delete_loan_entry(db, loan_id, token_data.id)
-    if not deleted:
-        raise HTTPException(status_code=404, detail="Loan Entry not found or unauthorized")
-    return deleted
+
+@router.delete("/{entry_id}")
+def delete_loan(entry_id: int, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
+    # You must pass the user's ID to the service function
+    success = delete_loan_entry(db, entry_id, token_data.id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Loan entry not found or unauthorized")
+    return {"detail": "Loan entry deleted successfully"}
