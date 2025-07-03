@@ -1,18 +1,31 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
-class BookCreate(BaseModel):
-    name: str
+
+class BookBase(BaseModel):
+    title: str
     description: str
     type: str
+
+class BookCreate(BookBase):
+    pass
+
+
+class BookUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    type: Optional[str] = None
 
 class BookOut(BaseModel):
     id: int
-    name: str
+    title: str
     description: str
     type: str
     user_id: int
-    updated_at: datetime
+    created_at: datetime  
+    updated_at: Optional[datetime] = None  
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }

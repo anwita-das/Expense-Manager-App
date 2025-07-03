@@ -106,7 +106,3 @@ yarn-error.log*
 # Static / media (if using uploads)
 media/
 staticfiles/
-
-uploads/
-
-user.csv
