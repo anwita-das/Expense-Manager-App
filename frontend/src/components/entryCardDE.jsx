@@ -46,7 +46,7 @@ function EntryCard({ amount, type, description, datetime, category, payment_meth
             {category}
           </div>
         </div>
-        <div className="text-sm">{time}</div>
+        <div className="text-sm">at {time}</div>
       </div>
     </div>
   );
