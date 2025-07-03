@@ -6,7 +6,7 @@ from routes.daily_expense import router as daily_expense_router
 from routes.loan_entries import router as loan_entry_router 
 from routes.savings import router as savings_router 
 from routes.category import router as category_router
-from routes import category, book, savings # etc.
+
 
 app = FastAPI()
 
