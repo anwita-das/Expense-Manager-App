@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faArrowRight, faMoneyBills } from '@fortawesome/free-solid-svg-icons'
 import { getDailyExpensesByBookId } from "@/api/dailyExpense";
+import { deleteDailyExpense } from "@/api/dailyExpense";
 import { useParams } from "react-router-dom";
 import { getBookById } from "@/api/books";
 import { useState, useEffect } from "react";
@@ -83,7 +84,7 @@ function BookDetails() {
                     <FontAwesomeIcon icon={faChevronLeft} className="text-2xl cursor-pointer" />
                 </Link>
                 <div className='flex flex-row justify-between items-center w-full'>
-                    <h1 className='text-3xl font-medium'>{book?.name || "Loading..."}</h1>
+                    <h1 className='text-3xl font-medium'>{book?.title || "Loading..."}</h1>
                     <div className='text-xl'>Daily Expense</div>
                 </div>
                 <FontAwesomeIcon icon={faMoneyBills} className="text-2xl"/> 
@@ -146,7 +147,20 @@ function BookDetails() {
                     <div key={date}>
                     <div className='text-neutral-400 dark:text-neutral-500 w-full text-center mt-4'>{date}</div>
                     {entries.map(entry => (
-                        <EntryCard key={entry.id} {...entry} />
+                        <EntryCard
+                            key={entry.id}
+                            {...entry}
+                            onDelete={async (idToDelete) => {
+                            try {
+                                await deleteDailyExpense(idToDelete); // 🔥 this calls your API
+                                const updatedExpenses = expenses.filter((e) => e.id !== idToDelete);
+                                setExpenses(updatedExpenses);
+                                setGroupedExpenses(groupByDate(updatedExpenses));
+                            } catch (err) {
+                                alert("Failed to delete entry.");
+                            }
+                            }}
+                        />
                     ))}
                     </div>
                 ))

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 
 function BookCard({ book }) {
-    const { id, name, type, updated_at } = book;
+    const { id, title, type, updated_at } = book;
 
     const getStyle = () => {
         switch(type) {
@@ -32,7 +32,7 @@ function BookCard({ book }) {
         <FontAwesomeIcon icon={icon} className="text-2xl mr-3" />
         <div className="flex flex-col justify-center w-full">
           <div className="flex flex-row justify-between">
-            <div className="font-medium text-xl mt-2">{name}</div>
+            <div className="font-medium text-xl mt-2">{title}</div>
             <div className="text-md mt-2">{type}</div>
           </div>
           <div className="flex flex-row justify-between">

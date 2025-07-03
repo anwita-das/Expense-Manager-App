@@ -61,7 +61,7 @@ function Books() {
     };
     try {
       await createBook({
-        name: title,
+        title: title,
         description,
         type: typeMap[selectedType],
       });
@@ -79,7 +79,7 @@ function Books() {
 
   const filteredBooks = () => {
     return books.filter((book) => {
-      const matchesSearch = book.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = filterType === "All" || book.type === filterType;
       return matchesSearch && matchesType;
     });

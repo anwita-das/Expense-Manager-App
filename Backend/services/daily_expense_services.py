@@ -33,6 +33,11 @@ def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, l
         Book.user_id == user_id
     ).offset(skip).limit(limit).all()
 
+def get_expense_by_id(db: Session, expense_id: int, user_id: int):
+    return db.query(DailyExpense).join(Book).filter(
+        DailyExpense.id == expense_id,
+        Book.user_id == user_id
+    ).first()
 
 def update_daily_expense(db: Session, expense_id: int, expense: DailyExpenseUpdate, user_id: int):
 

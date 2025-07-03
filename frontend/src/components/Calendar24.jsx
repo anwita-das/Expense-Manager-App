@@ -13,14 +13,16 @@ import {
 
 export function Calendar24({ value, onChange }) {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(value ? new Date(value) : undefined);
-  const [time, setTime] = useState(() => {
+  const [date, setDate] = useState();
+  const [time, setTime] = useState("10:30:00");
+
+  useEffect(() => {
     if (value) {
       const d = new Date(value);
-      return d.toTimeString().slice(0, 8); // HH:MM:SS
+      setDate(d);
+      setTime(d.toTimeString().slice(0, 8)); // HH:MM:SS
     }
-    return "10:30:00";
-  });
+  }, [value]);
 
   useEffect(() => {
     if (date && time) {
