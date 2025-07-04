@@ -1,10 +1,13 @@
 // import dayjs from "dayjs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faMoneyBills } from '@fortawesome/free-solid-svg-icons';
-import { Link, useLocation } from 'react-router-dom';
+import { createDailyExpense } from "@/api/dailyExpense";
+import { fetchCategories } from "@/api/categories";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useParams } from "react-router-dom";
 import {
   Select,
   SelectContent,
@@ -19,9 +22,43 @@ function AddEntryDE() {
   // const dateOnly = now.format("DD MMM YYYY");
   // const timeOnly = now.format("HH:mm:ss");
 
+  const navigate = useNavigate();
+
   const location = useLocation();
   const initialType = location.state?.type || "cashout";
+  const { bookId } = useParams();
+  const [categories, setCategories] = useState([]);
   const [entryType, setEntryType] = useState(initialType);
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [datetime, setDatetime] = useState(new Date().toISOString());
+  const [category, setCategory] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+
+  const handleSubmit = async () => {
+    if (!bookId || !amount || !category || !paymentMethod) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    const payload = {
+      book_id: bookId,
+      type: entryType,
+      amount: parseFloat(amount),
+      description,
+      datetime,
+      category,
+      payment_method: paymentMethod,
+    };
+
+    try {
+      await createDailyExpense(payload);
+      navigate(`/detailsde/${bookId}`);
+    } catch (err) {
+      alert("Error creating entry.");
+    }
+  };
+
 
   useEffect(() => {
     if (location.state?.type) {
@@ -29,12 +66,25 @@ function AddEntryDE() {
     }
   }, [location.state]);
 
+  
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (err) {
+        alert("Failed to fetch categories");
+      }
+    };
+    loadCategories();
+  }, []);
+
   return (
     <div className="flex justify-center items-center bg-neutral-800 min-h-screen pb-2 dark:bg-neutral-200 dark:text-neutral-900">
       <div className="flex flex-col items-center justify-center w-[80%] h-auto p-4 rounded-2xl space-y-3 bg-neutral-600 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-800">
         
         <div className="flex flex-row items-center justify-between w-full mb-5">
-          <Link to="/detailsde">
+          <Link to={`/detailsde/${bookId}`}>
             <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" />
           </Link>
           <div className="font-bold text-3xl">New Entry</div>
@@ -42,7 +92,7 @@ function AddEntryDE() {
         </div>
 
         <div className="flex flex-row justify-between w-full items-center">
-          <Calendar24 />
+          <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} />
         </div>
 
         <div className="flex flex-row justify-center gap-3 mt-3 w-full">
@@ -64,50 +114,30 @@ function AddEntryDE() {
 
         <div className='mt-3 w-full'>
           <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount</div>
-          <Input className={"dark:bg-neutral-100"} placeholder={"Enter the amount"} />
+          <Input value={amount} onChange={(e) => setAmount(e.target.value)} />
         </div>
 
         <div className='mt-3 w-full'>
           <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description</div>
-          <Input className={"dark:bg-neutral-100"} placeholder={"Enter a brief description"} />
+          <Input value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
-
         
           <div className="mt-3 w-full">
           <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
             Category
           </div>
-          <Select>
+          <Select onValueChange={setCategory}>
             <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
-              {(entryType === "cashin"
-                ? [
-                    "Salary",
-                    "Rental Income",
-                    "Investment Return",
-                    "Gift",
-                    "Refund",
-                    "Cashback",
-                    "Settlement",
-                    "Reimbursement",
-                    "Others",
-                  ]
-                : [
-                    "Food",
-                    "Travel",
-                    "Shopping",
-                    "Entertainment",
-                    "Bills",
-                    "Miscellaneous",
-                  ]
-              ).map((category, index) => (
-                <SelectItem key={index} value={category.toLowerCase().replace(/\s+/g, "-")}>
-                  {category}
+              {categories.map((cat) => (
+                <SelectItem key={cat.id} value={cat.name}>
+                  {cat.name}
                 </SelectItem>
               ))}
             </SelectContent>
+
           </Select>
         </div>
 
@@ -116,13 +146,13 @@ function AddEntryDE() {
             <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
               Payment Mode
             </div>
-            <Select>
+            <Select onValueChange={setPaymentMethod}>
               <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
                 <SelectValue placeholder="Select payment mode" />
               </SelectTrigger>
               <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
-                <SelectItem value="cash">Online</SelectItem>
-                <SelectItem value="upi">Offline</SelectItem>
+                <SelectItem value="Online">Online</SelectItem>
+                <SelectItem value="Offline">Offline</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -130,7 +160,7 @@ function AddEntryDE() {
         
 
         <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
-          <Button type="submit" className="w-[40%] bg-purple-950 dark:text-neutral-50">
+          <Button type="submit" onClick={handleSubmit} className="w-[40%] bg-purple-950 dark:text-neutral-50">
             Add Entry
           </Button>
           <Button

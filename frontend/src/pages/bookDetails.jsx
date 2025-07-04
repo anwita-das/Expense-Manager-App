@@ -1,11 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faArrowRight, faMoneyBills } from '@fortawesome/free-solid-svg-icons'
+import { getDailyExpensesByBookId } from "@/api/dailyExpense";
+import { deleteDailyExpense } from "@/api/dailyExpense";
+import { useParams } from "react-router-dom";
+import { getBookById } from "@/api/books";
+import { useState, useEffect } from "react";
+import EntryCard from "@/components/entryCardDE";
 import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Filter } from "lucide-react";
-import { MoreVertical } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,12 +21,60 @@ import {
 function BookDetails() {
     const navigate = useNavigate();
 
+    const { id } = useParams();
+    const [book, setBook] = useState(null);
+    const [expenses, setExpenses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [groupedExpenses, setGroupedExpenses] = useState({});
+
+    const groupByDate = (data) => {
+    const grouped = {};
+    data.forEach((entry) => {
+        const dateStr = new Date(entry.datetime).toLocaleDateString("en-GB", {
+        day: "2-digit", month: "long", year: "numeric",
+        });
+        if (!grouped[dateStr]) grouped[dateStr] = [];
+        grouped[dateStr].push(entry);
+    });
+    return grouped;
+    };
+
+    useEffect(() => {
+    const fetchBook = async () => {
+        try {
+        const bookData = await getBookById(id);
+        setBook(bookData);
+        } catch (err) {
+        console.error("Failed to fetch book details", err);
+        }
+    };
+    fetchBook();
+    }, [id]);
+
+    useEffect(() => {
+    const fetchExpenses = async () => {
+        try {
+        const res = await getDailyExpensesByBookId(id); // uses /expenses/:bookId
+        setExpenses(res.data);
+        setGroupedExpenses(groupByDate(res.data));
+        } catch (err) {
+        console.error("Error fetching daily expenses:", err);
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    fetchExpenses();
+    }, [id]);
+
+
+
     const handleCashInClick = () => {
-        navigate("/entryde", { state: { type: "cashin" } });
+        navigate(`/entryde/${id}`, { state: { type: "cashin", bookId: id } });
     };
 
     const handleCashOutClick = () => {
-        navigate("/entryde", { state: { type: "cashout" } });
+        navigate(`/entryde/${id}`, { state: { type: "cashout", bookId: id } });
     };
     return(
         <>
@@ -31,7 +84,7 @@ function BookDetails() {
                     <FontAwesomeIcon icon={faChevronLeft} className="text-2xl cursor-pointer" />
                 </Link>
                 <div className='flex flex-row justify-between items-center w-full'>
-                    <h1 className='text-3xl font-medium'>Trip to Manali</h1>
+                    <h1 className='text-3xl font-medium'>{book?.title || "Loading..."}</h1>
                     <div className='text-xl'>Daily Expense</div>
                 </div>
                 <FontAwesomeIcon icon={faMoneyBills} className="text-2xl"/> 
@@ -85,65 +138,40 @@ function BookDetails() {
             </div>
             <div className='mt-3'>
                 <div className='text-sm text-neutral-300 ml-6 font-medium mt-4 dark:text-neutral-800'>Entries</div>
-                <div className='text-neutral-400 dark:text-neutral-500 w-full text-center mt-2'>20 June 2025</div>
-                <div className='flex flex-col space-y-2 bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-xl text-neutral-50 dark:text-neutral-800'>
-                    <div className='flex flex-row justify-between w-full'>
-                        <div className='text-red-400 font-bold'>Rs. 4500</div>
-                        <div className='flex flex-row space-x-2'>
-                            <div className='font-medium'>Hotel Booking</div>
-                            <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button className="">
-                                <MoreVertical className="h-4 w-4 hover:cursor-pointer" />
-                                </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <Link to="/edetailsde"><DropdownMenuItem className={"hover:cursor-pointer"}>Edit</DropdownMenuItem></Link>
-                                <DropdownMenuItem className={"hover:cursor-pointer"}>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
+                {loading ? (
+                <p className="text-center text-neutral-400 mt-4">Loading...</p>
+                ) : Object.keys(groupedExpenses).length === 0 ? (
+                <p className="text-center text-neutral-400 mt-4">No entries found.</p>
+                ) : (
+                Object.entries(groupedExpenses).map(([date, entries]) => (
+                    <div key={date}>
+                    <div className='text-neutral-400 dark:text-neutral-500 w-full text-center mt-4'>{date}</div>
+                    {entries.map(entry => (
+                        <EntryCard
+                            key={entry.id}
+                            {...entry}
+                            onDelete={async (idToDelete) => {
+                            try {
+                                await deleteDailyExpense(idToDelete);
+                                const updatedExpenses = expenses.filter((e) => e.id !== idToDelete);
+                                setExpenses(updatedExpenses);
+                                setGroupedExpenses(groupByDate(updatedExpenses));
+                            } catch (err) {
+                                alert("Failed to delete entry.");
+                            }
+                            }}
+                        />
+                    ))}
                     </div>
-                    <div className='flex flex-row justify-between w-full'>
-                        <div className='flex flex-row space-x-1 text-xs'>
-                            <div className='bg-neutral-800 dark:bg-neutral-400 font-semibold pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Online</div>
-                            <div className='bg-neutral-800 dark:bg-neutral-400 font-semibold pr-2 pl-2 pt-1 pb-1 rounded-2xl'>Travel</div>
-                        </div>
-                        <div className='text-sm'>Time: 11:19:29</div>
-                    </div>
-                </div>
-                <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='text-green-400 dark:text-green-600 font-bold'>Rs. 5000</div>
-                        <div className='font-medium'>Cash Withdrawn</div>
-                    </div>
-                </div>
-                <div className='text-neutral-400 dark:text-neutral-500 w-full text-center mt-4'>21 June 2025</div>
-                <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='text-red-400 font-bold'>Rs. 2500</div>
-                        <div className='font-medium'>Paragliding</div>
-                    </div>
-                </div>
-                <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='text-red-400 font-bold'>Rs. 900</div>
-                        <div className='font-medium'>Dinner</div>
-                    </div>
-                </div>
-                <div className='flex flex-row bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl text-neutral-50 dark:text-neutral-800'>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='text-green-400 dark:text-green-600 font-bold'>Rs. 1000</div>
-                        <div className='font-medium'>Refund from friend</div>
-                    </div>
-                </div>
+                ))
+                )}
             </div>
             <div className="flex flex-row justify-center fixed bottom-4 z-50 w-full">
-                <Button onClick={handleCashInClick} className="bg-green-500 text-white rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
-                + Cash IN
+                <Button onClick={handleCashInClick} className="bg-green-500 text-white dark:text-black rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
+                + Cash-IN
                 </Button>
-                <Button onClick={handleCashOutClick} className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
-                - Cash OUT
+                <Button onClick={handleCashOutClick} className="bg-red-500 text-white dark:text-black rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
+                - Cash-OUT
                 </Button>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 
 function BookCard({ book }) {
-    const { id, name, type, updated_at } = book;
+    const { id, title, type, updated_at } = book;
 
     const getStyle = () => {
         switch(type) {
@@ -23,16 +23,20 @@ function BookCard({ book }) {
     const { bg, icon } = getStyle();
 
     return (
-    <Link to={`/details/${id}`}>
-      <div className={`flex flex-row items-center w-119 ${bg} text-neutral-800 h-20 m-1 p-4 rounded-4xl space-x-2`}>
+    <Link to={
+    type === "Daily Expense" ? `/detailsde/${id}` :
+    type === "Loan Status" ? `/detailsls/${id}` :
+    type === "Savings" ? `/detailss/${id}` :
+    `/detailsde/${id}`}>
+      <div className={`flex flex-row items-center w-119 ${bg} text-neutral-800 h-20 m-1 p-4 rounded-tr-4xl rounded-bl-4xl space-x-2`}>
         <FontAwesomeIcon icon={icon} className="text-2xl mr-3" />
         <div className="flex flex-col justify-center w-full">
           <div className="flex flex-row justify-between">
-            <div className="font-medium text-xl mt-2">{name}</div>
+            <div className="font-medium text-xl mt-2">{title}</div>
             <div className="text-md mt-2">{type}</div>
           </div>
           <div className="flex flex-row justify-between">
-            <div className="text-sm mt-1">Updated on: {dayjs(updated_at).format("MMMM D, YYYY")}</div>
+            <div className="text-sm mt-1">Updated on {dayjs(updated_at).format("MMMM D, YYYY")}</div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="p-2">

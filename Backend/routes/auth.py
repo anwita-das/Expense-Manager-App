@@ -11,10 +11,10 @@ from services.auth_services import get_password_hash, verify_password, create_ac
 from datetime import timedelta
 from db.session import get_db
 from services.auth_services import verify_token
-
+ 
 router = APIRouter()
-
-
+ 
+ 
 @router.post("/signup", response_model=schemas.UserOut)
 def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(User).filter((User.email == user.email)).first()
@@ -27,19 +27,17 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
-
-
-
+ 
+ 
 @router.post("/login", response_model=schemas.Token)
 def login(form_data: schemas.UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == form_data.email).first()
     if not db_user or not verify_password(form_data.password, db_user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    
     access_token = create_access_token(data={"sub": db_user.email}, expires_delta=timedelta(minutes=30))
     return {"access_token": access_token, "token_type": "bearer"}
-
-
+ 
+ 
 @router.get("/books")
 def protected_route(current_user: User = Depends(verify_token)):
     """Example protected route"""
@@ -48,11 +46,11 @@ def protected_route(current_user: User = Depends(verify_token)):
         "ID": current_user.id,
         "email": current_user.email
     }
-
+ 
 @router.get("/profile", response_model=schemas.UserOut)
 def get_profile(current_user: User = Depends(verify_token)):
     return current_user
-
+ 
 @router.put("/update-profile", response_model=schemas.UserOut)
 def update_profile(update_data: schemas.UserUpdate, current_user: User = Depends(verify_token), db: Session = Depends(get_db)):
     current_user.name = update_data.name
@@ -61,7 +59,7 @@ def update_profile(update_data: schemas.UserUpdate, current_user: User = Depends
     db.commit()
     db.refresh(current_user)
     return current_user
-
+ 
 @router.put("/upload-photo", response_model=schemas.UserOut)
 def upload_profile_photo(
     file: UploadFile = File(...),
@@ -70,18 +68,18 @@ def upload_profile_photo(
 ):
     uploads_dir = "uploads"
     os.makedirs(uploads_dir, exist_ok=True)
-
+ 
     filename = f"user_{current_user.id}_{file.filename}"
     file_path = os.path.join(uploads_dir, filename)
-
+ 
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-
+ 
     current_user.profile_photo_url = f"/{file_path}"
     db.commit()
     db.refresh(current_user)
     return current_user
-
+ 
 @router.delete("/delete-photo", response_model=schemas.UserOut)
 def delete_profile_photo(current_user: User = Depends(verify_token), db: Session = Depends(get_db)):
     if current_user.profile_photo_url:
@@ -91,7 +89,7 @@ def delete_profile_photo(current_user: User = Depends(verify_token), db: Session
                 os.remove(file_path)
         except Exception as e:
             print(f"Error deleting file: {e}")
-
+ 
     current_user.profile_photo_url = None
     db.commit()
     db.refresh(current_user)

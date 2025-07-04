@@ -20,3 +20,12 @@ export const createBook = async (bookData) => {
     }
 };
 
+export const getBookById = async (bookId) => {
+  try {
+    const response = await API.get(`/books/${bookId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching book by ID:", error);
+    throw error;
+  }
+};
