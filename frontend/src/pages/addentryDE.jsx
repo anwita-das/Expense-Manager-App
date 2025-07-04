@@ -98,28 +98,28 @@ function AddEntryDE() {
         <div className="flex flex-row justify-center gap-3 mt-3 w-full">
           <Button
             type="button"
-            className={`w-[45%] ${entryType === "cashin" ? "bg-green-400 dark:bg-green-00" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-green-300"} text-black`}
+            className={`w-[45%] ${entryType === "cashin" ? "bg-green-400 dark:bg-green-600" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-green-300"} text-black`}
             onClick={() => setEntryType("cashin")}
           >
-            Cash IN
+            Cash-IN
           </Button>
           <Button
             type="button"
             className={`w-[45%] ${entryType === "cashout" ? "bg-red-400 dark:bg-red-600" : "bg-neutral-400 dark:bg-neutral-200 hover:bg-red-300"} text-black`}
             onClick={() => setEntryType("cashout")}
           >
-            Cash OUT
+            Cash-OUT
           </Button>
         </div>
 
         <div className='mt-3 w-full'>
           <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount</div>
-          <Input value={amount} onChange={(e) => setAmount(e.target.value)} />
+          <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={"Enter the amount"} />
         </div>
 
         <div className='mt-3 w-full'>
           <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description</div>
-          <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Enter a brief description"}/>
         </div>
         
           <div className="mt-3 w-full">
@@ -165,6 +165,7 @@ function AddEntryDE() {
           </Button>
           <Button
             variant="default"
+            onClick={() => navigate(-1)}
             className="hover:cursor-pointer w-[40%] bg-red-500 text-neutral-50"
           >
             Cancel

@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-function EntryCardLS({ id, amount, entry_type, description, date }) {
+function EntryCardLS({ id, amount, entry_type, description, date, category }) {
   const isNewLoan = entry_type === "newloan";
 
   const formattedDate = new Date(date).toLocaleDateString("en-GB", {
@@ -41,7 +41,7 @@ function EntryCardLS({ id, amount, entry_type, description, date }) {
       </div>
       <div className="flex flex-row text-xs justify-between">
         <div className="bg-neutral-800 dark:bg-neutral-400 font-semibold pr-2 pl-2 pt-1 pb-1 rounded-2xl">
-          {entry_type}
+          {category}
         </div>
         <div className="text-sm">{formattedDate}</div>
       </div>

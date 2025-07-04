@@ -31,10 +31,10 @@ function AppContent() {
         <Route path="/detailsls/:id" element={<BookDetails2 />} />
         <Route path="/detailss/:id" element={<BookDetails3 />} />
         <Route path="/entryde/:bookId" element={<AddEntryDE />} />
-        <Route path="/entryls" element={<AddEntryLS />} />
+        <Route path="/entryls/:bookId" element={<AddEntryLS />} />
         <Route path="/entrys" element={<AddEntryS />} />
         <Route path="/edetailsde/:id" element={<EntryDetailsDE />} />
-        <Route path="/edetailsls" element={<EntryDetailsLS />} />
+        <Route path="/edetailsls/:id" element={<EntryDetailsLS />} />
         <Route path="/edetailss" element={<EntryDetailsS />} />
         <Route path="/summaryde" element={<SummaryDE />} />
         <Route path="/summaryls" element={<SummaryLS />} />

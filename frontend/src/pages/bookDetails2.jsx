@@ -5,20 +5,43 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import EntryCardLS from "@/components/entryCardLS";
 import { getLoanStatusByBookId } from "@/api/loanStatus";
+import { getBookById } from "@/api/books";
+import { Input } from "@/components/ui/input";
+import { Filter } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 function BookDetails2() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [book, setBook] = useState(null);
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const handleNewLoanClick = () => {
-    navigate("/entryls", { state: { type: "newloan", bookId: id } });
+    navigate(`/entryls/${id}`, { state: { type: "newloan", bookId: id } });
   };
 
   const handleEMIPaymentClick = () => {
-    navigate("/entryls", { state: { type: "emipayment", bookId: id } });
+    navigate(`/entryls/${id}`, { state: { type: "emipayment", bookId: id } });
   };
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const bookData = await getBookById(id);
+        setBook(bookData);
+      } catch (err) {
+        console.error("Failed to fetch book details", err);
+      }
+    };
+    fetchBook();
+  }, [id]);
+
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -42,11 +65,36 @@ function BookDetails2() {
           <FontAwesomeIcon icon={faChevronLeft} className="text-2xl cursor-pointer" />
         </Link>
         <div className='flex flex-row justify-between items-center w-full'>
-          <h1 className='text-3xl font-medium'>Loans</h1>
+          <h1 className='text-3xl font-medium'>{book?.title || "Loading..."}</h1>
           <div className='text-xl'>Loan Status</div>
         </div>
         <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl mr-3"/>
       </div>
+
+      <div className="sticky top-0 z-40 bg-transparent flex flex-row justify-between items-center w-full">
+        <div className="w-full px-4 py-2">
+          <Input
+            type="text"
+            placeholder="Search entries..."
+            className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-300 dark:border-2 dark:border-neutral-400 dark:text-neutral-900"
+          />
+        </div>
+        <div className="mr-3 mt-1">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
+                <Filter className="w-6 h-6 text-white dark:text-black" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
+              <DropdownMenuItem>All</DropdownMenuItem>
+              <DropdownMenuItem>Filter 1</DropdownMenuItem>
+              <DropdownMenuItem>Filter 2</DropdownMenuItem>
+              <DropdownMenuItem>Filter 3</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>  
 
       <div className='mt-3'>
         <div className='text-sm text-neutral-300 ml-6 font-medium dark:text-neutral-800'>Description</div>
