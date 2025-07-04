@@ -1,5 +1,5 @@
 # In models/loan_entries.py
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, DECIMAL
 from db.session import Base
 
 class LoanEntry(Base):
@@ -9,6 +9,7 @@ class LoanEntry(Base):
     book_id = Column(Integer, ForeignKey('books.id'))
     
     entry_type = Column(String)
-    amount = Column(Float)
+    amount = Column(DECIMAL(10, 2))
     description = Column(String)
     date = Column(DateTime)
+    category = Column(String(100))

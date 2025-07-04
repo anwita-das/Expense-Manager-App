@@ -19,7 +19,8 @@ def create_loan_entry(db: Session, entry: LoanEntryCreate, user_id: int):
         entry_type=entry.entry_type,
         amount=entry.amount,
         description=entry.description,
-        date=entry.date
+        date=entry.date,
+        category=entry.category
     )
     db.add(db_loan_entry)
     db.commit()

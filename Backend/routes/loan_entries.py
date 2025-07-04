@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.post("/create", response_model=LoanEntry)
 def add_loan_entry(entry: LoanEntryCreate, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
-    return create_loan_entry(db=db, entry=entry)
+    return create_loan_entry(db=db, entry=entry, user_id=token_data.id)
 
 
 @router.get("/{book_id}", response_model=List[LoanEntry])
