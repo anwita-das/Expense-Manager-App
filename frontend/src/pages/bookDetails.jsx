@@ -152,7 +152,7 @@ function BookDetails() {
                             {...entry}
                             onDelete={async (idToDelete) => {
                             try {
-                                await deleteDailyExpense(idToDelete); // 🔥 this calls your API
+                                await deleteDailyExpense(idToDelete);
                                 const updatedExpenses = expenses.filter((e) => e.id !== idToDelete);
                                 setExpenses(updatedExpenses);
                                 setGroupedExpenses(groupByDate(updatedExpenses));
@@ -167,11 +167,11 @@ function BookDetails() {
                 )}
             </div>
             <div className="flex flex-row justify-center fixed bottom-4 z-50 w-full">
-                <Button onClick={handleCashInClick} className="bg-green-500 text-white rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
-                + Cash IN
+                <Button onClick={handleCashInClick} className="bg-green-500 text-white dark:text-black rounded-l-full h-12 w-[40%] text-xl shadow-lg p-0">
+                + Cash-IN
                 </Button>
-                <Button onClick={handleCashOutClick} className="bg-red-500 text-white rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
-                - Cash OUT
+                <Button onClick={handleCashOutClick} className="bg-red-500 text-white dark:text-black rounded-r-full h-12 w-[40%] text-xl shadow-lg p-0">
+                - Cash-OUT
                 </Button>
             </div>
         </div>

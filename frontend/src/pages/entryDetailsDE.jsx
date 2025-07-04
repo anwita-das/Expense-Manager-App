@@ -85,32 +85,32 @@ function EntryDetailsDE() {
                 <div className="flex flex-row justify-center gap-3 mt-2 w-full">
                     <Button
                         type="button"
-                        className={`w-[45%] ${entryType === "cashin" ? "bg-green-400" : "bg-neutral-400"} text-black`}
+                        className={`w-[45%] font-bold text-lg ${entryType === "cashin" ? "bg-green-500 hover:bg-green-600" : "bg-neutral-400 hover:bg-green-400"} text-black`}
                         onClick={() => setEntryType("cashin")}
                     >
-                        Cash IN
+                        Cash-IN
                     </Button>
                     <Button
                         type="button"
-                        className={`w-[45%] ${entryType === "cashout" ? "bg-red-400" : "bg-neutral-400"} text-black`}
+                        className={`w-[45%] font-bold text-lg ${entryType === "cashout" ? "bg-red-500 hover:bg-red-600" : "bg-neutral-400 hover:bg-red-400"} text-black`}
                         onClick={() => setEntryType("cashout")}
                     >
-                        Cash OUT
+                        Cash-OUT
                     </Button>
                 </div>
                 <div className='w-full'>
                     <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount</div>
-                    <Input value={amount} onChange={(e) => setAmount(e.target.value)} />
+                    <Input className={"dark:bg-neutral-200"} value={amount} onChange={(e) => setAmount(e.target.value)} />
                 </div>
                 <div className='w-full'>
                     <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description</div>
-                    <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <Input className={"dark:bg-neutral-200"} value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
                 <div className="w-full">
                     <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Category</div>
                     <Select value={category} onValueChange={setCategory}>
                         <SelectTrigger className="dark:bg-neutral-100 w-full">
-                        <SelectValue placeholder="Select category" />
+                        <SelectValue placeholder="Select category"/>
                         </SelectTrigger>
                         <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
                         {categories.map((cat) => (

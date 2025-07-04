@@ -14,22 +14,22 @@ import {
 export function Calendar24({ value, onChange }) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
-  const [time, setTime] = useState("10:30:00");
+  const [time, setTime] = useState("10:30");
 
   useEffect(() => {
     if (value) {
       const d = new Date(value);
       setDate(d);
-      setTime(d.toTimeString().slice(0, 8)); // HH:MM:SS
+      setTime(d.toTimeString().slice(0, 5)); // HH:MM:SS
     }
   }, [value]);
 
   useEffect(() => {
     if (date && time) {
       // Combine date + time into a local datetime string like 2025-07-01T10:30:00
-      const [h, m, s] = time.split(":");
+      const [h, m] = time.split(":");
       const localDate = new Date(date);
-      localDate.setHours(h, m, s, 0);
+      localDate.setHours(h, m, 0, 0);
 
       // Format without timezone — like 2025-07-01T10:30:00
       const formatted = localDate.toLocaleString("sv-SE").replace(" ", "T");
@@ -46,7 +46,7 @@ export function Calendar24({ value, onChange }) {
             <Button
               variant="outline"
               id="date-picker"
-              className="w-40 justify-between font-normal text-neutral-800"
+              className="w-40 justify-between font-normal hover:cursor-pointer text-neutral-800 dark:bg-neutral-200 dark:hover:bg-neutral-200 dark:hover:text-neutral-800"
             >
               {date ? date.toLocaleDateString() : "Select date"}
               <ChevronDownIcon />
@@ -70,10 +70,10 @@ export function Calendar24({ value, onChange }) {
         <Input
           type="time"
           id="time-picker"
-          step="1"
+          step="60"
           value={time}
           onChange={(e) => setTime(e.target.value)}
-          className="bg-background w-40 text-neutral-800"
+          className="bg-background w-40 cursor-pointer text-neutral-800 dark:bg-neutral-200"
         />
       </div>
     </div>
