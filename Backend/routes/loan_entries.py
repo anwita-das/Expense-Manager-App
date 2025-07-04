@@ -18,7 +18,7 @@ def add_loan_entry(entry: LoanEntryCreate, db: Session = Depends(get_db), token_
 @router.get("/{book_id}", response_model=List[LoanEntry])
 def read_loan_entries(book_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
 
-    entries = get_loan_entries(db, book_id=book_id, skip=skip, limit=limit)
+    entries = get_loan_entries(db, book_id=book_id, user_id=token_data.id, skip=skip, limit=limit)
     return entries
 
 @router.put("/{loan_id}", response_model=LoanEntry)
