@@ -5,15 +5,11 @@ import models
 
 def create_book(db: Session, book: BookCreate, user_id: int):
     db_book = Book(
-        name=book.name, 
+        title=book.title, 
         description=book.description, 
         type=book.type,
-<<<<<<< HEAD
-        user_id = user_id)
-=======
         user_id=user_id
     )
->>>>>>> origin/frontend
     db.add(db_book)
     db.commit()
     db.refresh(db_book)
