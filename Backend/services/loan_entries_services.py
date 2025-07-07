@@ -38,6 +38,11 @@ def get_loan_entries(db: Session, book_id: int, user_id: int, skip: int = 0, lim
         Book.user_id == user_id
     ).offset(skip).limit(limit).all()
 
+def get_loan_by_id(db: Session, loan_id: int, user_id: int):
+    return db.query(LoanEntry).join(Book).filter(
+        LoanEntry.id == loan_id,
+        Book.user_id == user_id
+    ).first()
 
 # --- UPDATE ---
 def update_loan_entry(db: Session, loan_id: int, loan_update: LoanEntryUpdate, user_id: int):
