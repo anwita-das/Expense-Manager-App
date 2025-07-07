@@ -87,9 +87,9 @@ function AddEntryLS() {
                     <div className="font-bold text-3xl">New Entry</div>
                     <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl"/>
                 </div>
-                <div className="flex flex-row justify-between w-full items-center">
-                    <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} />
-                </div>
+            
+                <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} showTime={false} />
+                
                 <div className="flex flex-row justify-center gap-3 mt-3 w-full">
                     <Button
                         type="button"

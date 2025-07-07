@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faArrowRight, faBuildingColumns } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { deleteLoanStatus } from "@/api/loanStatus";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import EntryCardLS from "@/components/entryCardLS";
@@ -99,7 +100,7 @@ function BookDetails2() {
       <div className='mt-3'>
         <div className='text-sm text-neutral-300 ml-6 font-medium dark:text-neutral-800'>Description</div>
         <div className='bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl font-medium text-neutral-50 dark:text-neutral-800'>
-          Recent Loans Taken
+          {book?.description || "Loading..."}
         </div>
       </div>
 
@@ -131,7 +132,17 @@ function BookDetails2() {
           <p className="text-center text-neutral-400 mt-4">No entries found.</p>
         ) : (
           entries.map((entry) => (
-            <EntryCardLS key={entry.id} {...entry} />
+            <EntryCardLS key={entry.id} {...entry} 
+            onDelete={async (idToDelete) => {
+              try {
+                  await deleteLoanStatus(idToDelete);
+                  const updatedEntries = entries.filter((e) => e.id !== idToDelete);
+                  setEntries(updatedEntries);
+              } catch (err) {
+                  alert("Failed to delete entry.");
+              }
+            }}
+            />
           ))
         )}
       </div>

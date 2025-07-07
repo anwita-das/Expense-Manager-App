@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function Calendar24({ value, onChange }) {
+export function Calendar24({ value, onChange, showTime = true }) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState();
   const [time, setTime] = useState("10:30");
@@ -20,22 +20,26 @@ export function Calendar24({ value, onChange }) {
     if (value) {
       const d = new Date(value);
       setDate(d);
-      setTime(d.toTimeString().slice(0, 5)); // HH:MM:SS
+      if (showTime) {
+        setTime(d.toTimeString().slice(0, 5)); // HH:MM
+      }
     }
-  }, [value]);
+  }, [value, showTime]);
 
   useEffect(() => {
-    if (date && time) {
-      // Combine date + time into a local datetime string like 2025-07-01T10:30:00
+    if (!date) return;
+
+    if (showTime) {
       const [h, m] = time.split(":");
       const localDate = new Date(date);
       localDate.setHours(h, m, 0, 0);
-
-      // Format without timezone — like 2025-07-01T10:30:00
-      const formatted = localDate.toLocaleString("sv-SE").replace(" ", "T");
-      onChange(formatted); // Pass to parent
+      const formatted = localDate.toLocaleString("sv-SE").replace(" ", "T"); // "YYYY-MM-DDTHH:mm:ss"
+      onChange(formatted);
+    } else {
+      const formatted = date.toISOString().split("T")[0]; // "YYYY-MM-DD"
+      onChange(formatted);
     }
-  }, [date, time, onChange]);
+  }, [date, time, onChange, showTime]);
 
   return (
     <div className="flex flex-row ml-2 justify-between gap-8">
@@ -65,6 +69,7 @@ export function Calendar24({ value, onChange }) {
           </PopoverContent>
         </Popover>
       </div>
+      {showTime && (
       <div className="flex flex-col gap-3">
         <Label htmlFor="time-picker" className="px-1">Time</Label>
         <Input
@@ -76,6 +81,7 @@ export function Calendar24({ value, onChange }) {
           className="bg-background w-40 cursor-pointer text-neutral-800 dark:bg-neutral-200"
         />
       </div>
+      )}
     </div>
   );
 }

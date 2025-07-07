@@ -92,7 +92,7 @@ function AddEntryDE() {
         </div>
 
         <div className="flex flex-row justify-between w-full items-center">
-          <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} />
+          <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} showTime={true}/>
         </div>
 
         <div className="flex flex-row justify-center gap-3 mt-3 w-full">

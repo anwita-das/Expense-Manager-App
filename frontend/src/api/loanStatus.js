@@ -19,3 +19,33 @@ export const createLoanStatus = async (loanData) => {
     throw error;
   }
 };
+
+export const getLoanStatusById = async (loanId) => {
+  try {
+    const response = await API.get(`/loans/entry/${loanId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching loan entry by ID:", error);
+    throw error;
+  }
+};
+
+export const updateLoanStatus = async (loanId, updatedData) => {
+  try {
+    const response = await API.put(`/loans/${loanId}`, updatedData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating loan status:", error);
+    throw error;
+  }
+};
+
+export const deleteLoanStatus = async (loanId) => {
+  try {
+    const response = await API.delete(`/loans/${loanId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting loan status:", error);
+    throw error;
+  }
+};

@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';   
 import { faChevronLeft, faMoneyBills } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button"
 import { useParams, useNavigate } from "react-router-dom";
 import { getDailyExpenseById, updateDailyExpense } from "@/api/dailyExpense";
@@ -81,7 +80,7 @@ function EntryDetailsDE() {
                     <div className="font-bold text-3xl">Edit Entry Details</div>
                     <FontAwesomeIcon icon={faMoneyBills} className="text-2xl" />
                 </div>
-                <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} />
+                <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} showTime={true}/>
                 <div className="flex flex-row justify-center gap-3 mt-2 w-full">
                     <Button
                         type="button"

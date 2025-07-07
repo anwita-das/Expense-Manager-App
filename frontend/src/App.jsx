@@ -32,10 +32,10 @@ function AppContent() {
         <Route path="/detailss/:id" element={<BookDetails3 />} />
         <Route path="/entryde/:bookId" element={<AddEntryDE />} />
         <Route path="/entryls/:bookId" element={<AddEntryLS />} />
-        <Route path="/entrys" element={<AddEntryS />} />
+        <Route path="/entrys/:bookId" element={<AddEntryS />} />
         <Route path="/edetailsde/:id" element={<EntryDetailsDE />} />
         <Route path="/edetailsls/:id" element={<EntryDetailsLS />} />
-        <Route path="/edetailss" element={<EntryDetailsS />} />
+        <Route path="/edetailss/:id" element={<EntryDetailsS />} />
         <Route path="/summaryde" element={<SummaryDE />} />
         <Route path="/summaryls" element={<SummaryLS />} />
         <Route path="/summarys" element={<SummaryS />} />
