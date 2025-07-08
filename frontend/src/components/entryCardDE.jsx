@@ -84,7 +84,6 @@ function EntryCard({
         <div className="text-sm">at {time}</div>
       </div>
 
-      {/* Delete Dialog (outside dropdown) */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="bg-neutral-900 dark:bg-white text-white dark:text-black">
           <DialogHeader>

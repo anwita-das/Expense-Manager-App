@@ -1,18 +1,63 @@
+import { useEffect, useState } from "react";
+import { getSavingsByBookId } from "@/api/savings";
+import { getBookById } from "@/api/books";
+import { deleteSavings } from "@/api/savings";
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faMinus, faPlus, faArrowRight, faPiggyBank } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faArrowRight, faPiggyBank } from '@fortawesome/free-solid-svg-icons'
+import EntryCardS from "@/components/EntryCardS";
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { MoreVertical } from "lucide-react";
+import { Filter } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 function BookDetails3() {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const [book, setBook] = useState(null);
+    const [savings, setSavings] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBook = async () => {
+        try {
+            const bookData = await getBookById(id);
+            setBook(bookData);
+        } catch (err) {
+            console.error("Failed to fetch book details", err);
+        }
+        };
+        fetchBook();
+    }, [id]);
+
+    useEffect(() => {
+        const fetchSavings = async () => {
+            try {
+            const response = await getSavingsByBookId(id);
+            setSavings(response.data);
+            } catch (err) {
+            console.error("Failed to fetch savings entries", err);
+            } finally {
+            setLoading(false);
+            }
+        };
+        fetchSavings();
+    }, [id]);
+
 
     const handleDepositClick = () => {
-        navigate("/entrys", { state: { type: "deposit" } });
+        navigate(`/entrys/${id}`, { state: { type: "deposit" } });
     };
 
     const handleWithdrawalClick = () => {
-        navigate("/entrys", { state: { type: "withdrawal" } });
+        navigate(`/entrys/${id}`, { state: { type: "withdrawal" } });
     };
     return(
         <>
@@ -22,14 +67,40 @@ function BookDetails3() {
                     <FontAwesomeIcon icon={faChevronLeft} className="text-2xl cursor-pointer" />
                 </Link>
                 <div className='flex flex-row justify-between items-center w-full'>
-                    <h1 className='text-3xl font-medium'>Savings Account</h1>
+                    <h1 className='text-3xl font-medium'>{book?.title || "Loading..."}</h1>
                     <div className='text-xl'>Savings</div>
                 </div>
                 <FontAwesomeIcon icon={faPiggyBank} className="text-2xl"/> 
             </div>
+
+            <div className="sticky top-0 z-40 bg-transparent flex flex-row justify-between items-center w-full">
+                <div className="w-full px-4 py-2">
+                <Input
+                    type="text"
+                    placeholder="Search entries..."
+                    className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-300 dark:border-2 dark:border-neutral-400 dark:text-neutral-900"
+                />
+                </div>
+                <div className="mr-3 mt-1">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
+                        <Filter className="w-6 h-6 text-white dark:text-black" />
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
+                    <DropdownMenuItem>All</DropdownMenuItem>
+                    <DropdownMenuItem>Filter 1</DropdownMenuItem>
+                    <DropdownMenuItem>Filter 2</DropdownMenuItem>
+                    <DropdownMenuItem>Filter 3</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                </div>
+            </div> 
+
             <div className='mt-3'>
                 <div className='text-sm text-neutral-300 ml-6 font-medium dark:text-neutral-800'>Description</div>
-                <div className='bg-neutral-700 p-3 m-3 rounded-2xl font-medium text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>Emergency Fund</div>
+                <div className='bg-neutral-700 p-3 m-3 rounded-2xl font-medium text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>{book?.description || "Loading..."}</div>
             </div>
             <div className='mt-3'>
                 <div className='text-sm text-neutral-300 ml-6 font-medium dark:text-neutral-800'>Summary</div>
@@ -54,35 +125,32 @@ function BookDetails3() {
                 </div>
             </div>
             <div className='mt-3'>
-                    <div className='flex flex-row justify-between'>
-                        <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Entries</div>
-                        <Input
-                            type="text"
-                            placeholder="Search entries..."
-                            className="w-70 mr-3 border-2 border-neutral-400 bg-neutral-300 dark:bg-neutral-300 text-neutral-800 dark:text-neutral-900"
-                        />
-                    </div>
-                <Link to="/edetailss"><div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
-                    <FontAwesomeIcon icon={faPlus} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='font-bold'>Rs. 3000</div>
-                        <div className='font-medium'>Monthly Savings</div>
-                    </div>
-                </div></Link>
-                <div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
-                    <FontAwesomeIcon icon={faPlus} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='font-bold'>Rs. 5000</div>
-                        <div className='font-medium'>Salary Deduction</div>
-                    </div>
+                <div className='flex flex-row justify-between'>
+                    <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Entries</div>
                 </div>
-                <div className='flex flex-row bg-neutral-700 p-3 m-3 rounded-2xl text-neutral-50 dark:bg-neutral-300 dark:text-neutral-800'>
-                    <FontAwesomeIcon icon={faPlus} className='mt-1 text-xl text-green-400 dark:text-green-700'/>
-                    <div className='flex flex-row justify-between w-full ml-2'>
-                        <div className='font-bold'>Rs. 2000</div>
-                        <div className='font-medium'>Gift from Aunt</div>
-                    </div>
-                </div>
+                {loading ? (
+                <p className="text-center text-neutral-400 mt-4">Loading...</p>
+                ) : savings.length === 0 ? (
+                <p className="text-center text-neutral-400 mt-4">No savings entries found.</p>
+                ) : (
+                savings.map((entry) => (
+                    <EntryCardS
+                    key={entry.id}
+                    {...entry}
+                    onDelete={async (idToDelete) => {
+                        try {
+                            await deleteSavings(idToDelete);
+                            const updatedSavings = savings.filter((e) => e.id !== idToDelete);
+                            setSavings(updatedSavings);
+                        } catch (err) {
+                            alert("Failed to delete entry.");
+                        }
+                    }}
+                    />
+                ))
+                )}
+
+
             </div>
             <div className="flex flex-row justify-center fixed bottom-4 z-50 w-full">
                 <Button onClick={handleDepositClick} className="bg-green-500 text-white rounded-full h-12 w-[40%] text-xl shadow-lg p-0">

@@ -36,7 +36,7 @@ function BookCard({ book }) {
             <div className="text-md mt-2">{type}</div>
           </div>
           <div className="flex flex-row justify-between">
-            <div className="text-sm mt-1">Updated on {dayjs(updated_at).format("MMMM D, YYYY")}</div>
+            <div className="text-sm mt-1">Created on {dayjs(updated_at).format("MMMM D, YYYY")}</div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="p-2">

@@ -45,7 +45,7 @@ function Login() {
                             id="password" 
                             type="password" 
                             placeholder="Enter your password" 
-                            className={"bg-neutral-200 dark:bg-neutral-100"}
+                            className={"bg-neutral-200 dark:bg-neutral-100 text-neutral-800"}
                             value = {password}
                             onChange={(e) => setPassword(e.target.value)}
                         />

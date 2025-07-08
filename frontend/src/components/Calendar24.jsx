@@ -36,7 +36,7 @@ export function Calendar24({ value, onChange, showTime = true }) {
       const formatted = localDate.toLocaleString("sv-SE").replace(" ", "T"); // "YYYY-MM-DDTHH:mm:ss"
       onChange(formatted);
     } else {
-      const formatted = date.toISOString().split("T")[0]; // "YYYY-MM-DD"
+      const formatted = date.toLocaleDateString("sv-SE"); // "YYYY-MM-DD"
       onChange(formatted);
     }
   }, [date, time, onChange, showTime]);
@@ -60,6 +60,7 @@ export function Calendar24({ value, onChange, showTime = true }) {
             <Calendar
               mode="single"
               selected={date}
+              defaultMonth={date}
               captionLayout="dropdown"
               onSelect={(selectedDate) => {
                 setDate(selectedDate);

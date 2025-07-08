@@ -125,7 +125,7 @@ function BookDetails2() {
       </div>
 
       <div className='mt-3'>
-        <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Payment History</div> 
+        <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Entries</div> 
         {loading ? (
           <p className="text-center text-neutral-400 mt-4">Loading...</p>
         ) : entries.length === 0 ? (
