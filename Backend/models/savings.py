@@ -10,5 +10,5 @@ class savings(Base):
     amount = Column(DECIMAL(10, 2))
     description = Column(String(255), nullable=True) 
     date = Column(DateTime)    
-    frequency = Column(String(100))
+    frequency = Column(String(100), nullable=True)
     interest_rate = Column(DECIMAL(10, 2))
