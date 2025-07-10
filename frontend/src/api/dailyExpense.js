@@ -1,8 +1,10 @@
 import API from "./api";
 
-export const getDailyExpensesByBookId = async (bookId) => {
+export const getDailyExpensesByBookId = async (bookId, filters= {}) => {
   try {
-    const response = await API.get(`/expenses/${bookId}`);
+    const queryString = new URLSearchParams(filters).toString();
+    const url = queryString ? `/expenses/${bookId}?${queryString}` : `/expenses/${bookId}`;
+    const response = await API.get(url);
     return response;
   } catch (error) {
     console.error("Error fetching daily expenses:", error);

@@ -26,6 +26,8 @@ function BookDetails() {
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [groupedExpenses, setGroupedExpenses] = useState({});
+    const [searchTerm, setSearchTerm] = useState("");
+    const [typeFilter, setTypeFilter] = useState("");
 
     const groupByDate = (data) => {
     const grouped = {};
@@ -54,7 +56,10 @@ function BookDetails() {
     useEffect(() => {
     const fetchExpenses = async () => {
         try {
-        const res = await getDailyExpensesByBookId(id); // uses /expenses/:bookId
+        const res = await getDailyExpensesByBookId(id, {
+            ...(searchTerm && { search: searchTerm }),
+            ...(typeFilter && { type: typeFilter }),
+        });
         setExpenses(res.data);
         setGroupedExpenses(groupByDate(res.data));
         } catch (err) {
@@ -65,7 +70,7 @@ function BookDetails() {
     };
 
     fetchExpenses();
-    }, [id]);
+    }, [id, searchTerm, typeFilter]);
 
 
 
@@ -76,6 +81,14 @@ function BookDetails() {
     const handleCashOutClick = () => {
         navigate(`/entryde/${id}`, { state: { type: "cashout", bookId: id } });
     };
+
+    const getFilterLabel = () => {
+        if (typeFilter === "cashin") return "Cash-IN";
+        if (typeFilter === "cashout") return "Cash-OUT";
+        return "All";
+    };
+
+
     return(
         <>
         <div className="bg-neutral-800 min-h-screen pb-20 dark:bg-neutral-200 dark:text-neutral-900">
@@ -93,6 +106,8 @@ function BookDetails() {
         <div className="w-full px-4 py-2">
           <Input
             type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search entries..."
             className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-300 dark:border-2 dark:border-neutral-400 dark:text-neutral-900"
           />
@@ -102,13 +117,13 @@ function BookDetails() {
             <DropdownMenuTrigger asChild>
               <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
                 <Filter className="w-6 h-6 text-white dark:text-black" />
+                <span className="text-white dark:text-black text-sm">{getFilterLabel()}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
-              <DropdownMenuItem>All</DropdownMenuItem>
-              <DropdownMenuItem>Filter 1</DropdownMenuItem>
-              <DropdownMenuItem>Filter 2</DropdownMenuItem>
-              <DropdownMenuItem>Filter 3</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTypeFilter("")}>All</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTypeFilter("cashin")}>Cash-IN</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTypeFilter("cashout")}>Cash-OUT</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -128,12 +143,12 @@ function BookDetails() {
                         <div>Net Balance:</div>
                         <div>-Rs. 18000</div>
                     </div>
-                    <Link to = "/summaryde">
+                    {/* <Link to = "/summaryde">
                     <Button className='flex flex-row justify-center w-full space-x-1 bg-neutral-800 dark:bg-neutral-400 text-neutral-50 dark:text-neutral-900 rounded-2xl p-2'>
                     <p>View Detailed Summary</p>
                     <FontAwesomeIcon icon={faArrowRight} className='text-xl mt-1' />  
                     </Button>
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
             <div className='mt-3'>
