@@ -9,12 +9,14 @@ class LoanEntryCreate(BaseModel):
     amount: Decimal
     description: Optional[str] = None
     date: datetime
+    category: str
 
 class LoanEntryUpdate(BaseModel):
     entry_type: Optional[str] = None
     amount: Optional[Decimal] = None
     description: Optional[str] = None
-    date: Optional[datetime] = None    
+    date: Optional[datetime] = None
+    category: Optional[str] = None  
 
 class LoanEntry(BaseModel):
     id: int
@@ -23,6 +25,7 @@ class LoanEntry(BaseModel):
     amount: Decimal
     description: Optional[str] = None
     date: datetime
+    category: str
 
 
     model_config = ConfigDict(from_attributes=True)

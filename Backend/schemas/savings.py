@@ -28,7 +28,7 @@ class savings(BaseModel):
     amount: Decimal
     description: Optional[str] = None
     date: datetime
-    frequency: str
+    frequency: Optional[str] = None
     interest_rate: Decimal
 
     model_config = ConfigDict(from_attributes=True)
