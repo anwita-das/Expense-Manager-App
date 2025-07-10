@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleDot, faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { faCircleDot, faRepeat, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MoreVertical } from "lucide-react";
@@ -43,7 +43,7 @@ function EntryCardS({
         <div className="flex flex-col w-full space-y-1">
             <div className="flex flex-row justify-between w-full">
             <div className="font-bold">Rs. {amount}</div>
-            <div className="font-bold text-green-500 dark:text-green-600">Rs. {isNaN(grownAmount) ? "0.00" : grownAmount}</div>
+            <div className="font-bold text-green-500 dark:text-green-600"><span><FontAwesomeIcon icon={faArrowTrendUp} /></span> Rs. {isNaN(grownAmount) ? "0.00" : grownAmount}</div>
             <div className="text-md font-semibold">{`ROI : ${interest_rate ?? 0}%`}</div>
         </div>
 

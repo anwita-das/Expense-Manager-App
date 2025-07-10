@@ -21,11 +21,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { createBook, fetchBooks } from "@/api/books";
+import { createBook, fetchBooks, editBook, deleteBook } from "@/api/books";
 import Navbar from "@/components/navbar";
 
 function Books() {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,6 +34,13 @@ function Books() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("All");
 
+  const [editBookId, setEditBookId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editSelectedType, setEditSelectedType] = useState("");
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState(null);
 
   const loadBooks = async () => {
     try {
@@ -74,6 +82,26 @@ function Books() {
     } catch (err) {
         console.error("Failed to create book:", err);
         alert("Failed to create book.");
+    }
+  };
+
+  const handleEditBook = async (e) => {
+    e.preventDefault();
+    const typeMap = { dailyexpense: "Daily Expense", loanstatus: "Loan Status", savings: "Savings" };
+    try {
+      await editBook(editBookId, { title: editTitle, description: editDescription, type: typeMap[editSelectedType] });
+      setEditDialogOpen(false); loadBooks();
+    } catch (err) {
+      console.error("Failed to update book:", err); alert("Failed to update book.");
+    }
+  };
+
+  const handleDeleteBook = async (bookId) => {
+    try {
+      await deleteBook(bookId);
+      loadBooks();
+    } catch (err) {
+      console.error("Failed to delete book:", err);
     }
   };
 
@@ -227,7 +255,95 @@ function Books() {
         </div>
       </div>
 
-      <BookList books={filteredBooks()} />
+      <BookList
+        books={filteredBooks()}
+        onEdit={(book) => {
+          setEditBookId(book.id);
+          setEditTitle(book.title);
+          setEditDescription(book.description);
+          setEditSelectedType(
+            book.type === "Daily Expense" ? "dailyexpense" :
+            book.type === "Loan Status" ? "loanstatus" :
+            "savings"
+          );
+          setEditDialogOpen(true);
+        }}
+        onDelete={(bookId) => {
+          setBookToDelete(bookId);
+          setDeleteDialogOpen(true);
+        }}
+      />
+
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-neutral-800 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900">
+          <DialogHeader>
+            <DialogTitle>Edit Book</DialogTitle>
+            <DialogDescription className="text-neutral-200 dark:text-neutral-600">Update book details below:</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleEditBook}>
+            <div className="grid gap-4">
+              <div className="grid gap-3">
+                <Label htmlFor="edit-title">Book Title</Label>
+                <Input id="edit-title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="dark:bg-neutral-300" />
+              </div>
+              <div className="grid gap-3">
+                <Label>Book Type</Label>
+                <div className="flex gap-2">
+                  {["dailyexpense", "loanstatus", "savings"].map(type => (
+                    <Button key={type} type="button" onClick={() => setEditSelectedType(type)}
+                      className={`text-black w-[32%] ${editSelectedType === type ? {
+                        dailyexpense: "bg-green-300",
+                        loanstatus: "bg-orange-300",
+                        savings: "bg-blue-300"
+                      }[type] : "bg-neutral-400"}`}>
+                      {{ dailyexpense: "Daily Expense", loanstatus: "Loan Status", savings: "Savings" }[type]}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="edit-description">Description</Label>
+                <Input id="edit-description" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} className="dark:bg-neutral-300" />
+              </div>
+            </div>
+            <DialogFooter className="mt-4">
+              <DialogClose asChild><Button type="button" variant="default" className="bg-red-400 text-neutral-50">Cancel</Button></DialogClose>
+              <Button type="submit" className="bg-purple-900 dark:text-neutral-50">Save Changes</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="bg-neutral-900 dark:bg-white text-white dark:text-black">
+          <DialogHeader>
+            <DialogTitle>Delete Book</DialogTitle>
+            <DialogDescription className={"text-neutral-400 dark:text-neutral-700"}>
+              Are you sure you want to delete this book? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-4 mt-4">
+            <Button
+              variant="default"
+              onClick={() => setDeleteDialogOpen(false)}
+              className="bg-purple-700 hover:bg-purple-500 text-white"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={async () => {
+                await handleDeleteBook(bookToDelete);
+                setDeleteDialogOpen(false);
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Confirm
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+
       <Navbar />
     </div>
   );

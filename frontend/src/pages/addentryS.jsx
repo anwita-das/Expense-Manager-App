@@ -155,12 +155,10 @@ function AddEntryS() {
                     <SelectValue placeholder="Select frequency" />
                   </SelectTrigger>
                   <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
-                    <SelectItem value="Daily">Daily</SelectItem>
-                    <SelectItem value="Weekly">Weekly</SelectItem>
-                    <SelectItem value="Monthly">Monthly</SelectItem>
-                    <SelectItem value="Quarterly">Quarterly</SelectItem>
-                    <SelectItem value="Half Yearly">Half Yearly</SelectItem>
-                    <SelectItem value="Yearly">Yearly</SelectItem>
+                    <SelectItem value="monthly">Monthly</SelectItem>
+                    <SelectItem value="quarterly">Quarterly</SelectItem>
+                    <SelectItem value="halfyearly">Half Yearly</SelectItem>
+                    <SelectItem value="yearly">Yearly</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

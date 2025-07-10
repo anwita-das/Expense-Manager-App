@@ -1,36 +1,39 @@
 export function calculateGrowth({ amount, rate, date, frequency }) {
-  const now = new Date();
-  const start = new Date(date);
+    const now = new Date();
+    const start = new Date(date);
+    if (isNaN(start)) return 0;
 
-  if (isNaN(start)) return amount; // fallback if invalid date
+    // Calculate total completed months
+    const totalMonths =
+        (now.getFullYear() - start.getFullYear()) * 12 +
+        (now.getMonth() - start.getMonth()) -
+        (now.getDate() < start.getDate() ? 1 : 0);
 
-  const years = (now - start) / (1000 * 60 * 60 * 24 * 365.25);
+    const years = totalMonths / 12;
 
-  if (frequency === "onetime" || !frequency) {
-    // Compound Interest: A = P * (1 + r)^t
-    return +(amount * Math.pow(1 + rate / 100, years)).toFixed(2);
-  } else {
-    // Map frequencies to number of compounding periods per year
-    const frequencyMap = {
-      daily: 365,
-      weekly: 52,
-      monthly: 12,
-      quarterly: 4,
-      halfyearly: 2,
-      yearly: 1,
+    // Case 1: Fixed Deposit (FD)
+    if (!frequency || frequency === "onetime" || frequency === "fixed") {
+        const n = 4; // Quarterly compounding
+        const r = rate / 100;
+        const maturity = amount * Math.pow(1 + r / n, n * years);
+        const profit = maturity - amount;
+        return +profit.toFixed(2);
+    }
+
+    // Case 2: Recurring Deposit (monthly, quarterly, etc.)
+    const freqMap = {
+        monthly: 1,
+        quarterly: 3,
+        halfyearly: 6,
+        yearly: 12,
     };
 
-    const periodsPerYear = frequencyMap[frequency.toLowerCase()];
-    if (!periodsPerYear) return amount;
+    const interval = freqMap[frequency?.toLowerCase()];
+    if (!interval) return 0;
 
-    const totalDays = (now - start) / (1000 * 60 * 60 * 24);
-    const n = Math.floor(periodsPerYear * years); // total number of periods
-    const i = rate / 100 / periodsPerYear;        // rate per period
+    const n = Math.floor(totalMonths / interval); // Number of deposits
+    if (n <= 0) return 0;
 
-    if (i === 0 || n === 0) return amount;
-
-    // SIP Growth Formula
-    const fv = amount * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
-    return +fv.toFixed(2);
-  }
+    const interest = amount * (n * (n + 1)) / 2 * (rate / (12 * 100));
+    return +interest.toFixed(2);
 }

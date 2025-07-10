@@ -31,7 +31,6 @@ function EntryDetailsS() {
         const fetchData = async () => {
         try {
             const data = await getSavingsById(id);
-            console.log("Fetched savings entry:", data); 
             setEntryType(data.saving_type);
             setAmount(data.amount);
             setDescription(data.description || "");
@@ -118,8 +117,6 @@ function EntryDetailsS() {
                     <SelectTrigger className="dark:bg-neutral-100 w-full">
                         <SelectValue>
                         {{
-                            daily: "Daily",
-                            weekly: "Weekly",
                             monthly: "Monthly",
                             quarterly: "Quarterly",
                             halfyearly: "Half Yearly",
@@ -128,8 +125,6 @@ function EntryDetailsS() {
                         </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">
-                        <SelectItem value="daily">Daily</SelectItem>
-                        <SelectItem value="weekly">Weekly</SelectItem>
                         <SelectItem value="monthly">Monthly</SelectItem>
                         <SelectItem value="quarterly">Quarterly</SelectItem>
                         <SelectItem value="halfyearly">Half Yearly</SelectItem>

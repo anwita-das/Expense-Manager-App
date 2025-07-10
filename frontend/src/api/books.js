@@ -29,3 +29,23 @@ export const getBookById = async (bookId) => {
     throw error;
   }
 };
+
+export const editBook = async (bookId, updatedData) => {
+  try {
+    const response = await API.put(`/books/${bookId}`, updatedData);
+    return response.data;
+  } catch (error) {
+    console.error("Error editing book:", error);
+    throw error;
+  }
+};
+
+export const deleteBook = async (bookId) => {
+  try {
+    const response = await API.delete(`/books/${bookId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting book:", error);
+    throw error;
+  }
+};

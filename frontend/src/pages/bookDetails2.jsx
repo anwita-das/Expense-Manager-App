@@ -23,6 +23,10 @@ function BookDetails2() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("All");
+  const [visibleCount, setVisibleCount] = useState(10);
+
   const handleNewLoanClick = () => {
     navigate(`/entryls/${id}`, { state: { type: "newloan", bookId: id } });
   };
@@ -59,6 +63,32 @@ function BookDetails2() {
     fetchEntries();
   }, [id]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottomReached = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+      if (bottomReached) {
+        setVisibleCount((prev) => prev + 10);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [searchTerm, filterType]);
+
+  const totalLoan = entries
+    .filter((e) => e.entry_type === "newloan")
+    .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const totalEMIPaid = entries
+    .filter((e) => e.entry_type === "emipayment")
+    .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const remainingLoan = totalLoan - totalEMIPaid;
+
+
   return (
     <div className="bg-neutral-800 min-h-screen dark:bg-neutral-200 pb-20 dark:text-neutral-900">
       <div className='flex flex-row items-center p-2 bg-orange-300 space-x-2'>
@@ -77,21 +107,24 @@ function BookDetails2() {
           <Input
             type="text"
             placeholder="Search entries..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-300 dark:border-2 dark:border-neutral-400 dark:text-neutral-900"
           />
         </div>
         <div className="mr-3 mt-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
-                <Filter className="w-6 h-6 text-white dark:text-black" />
+              <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg flex items-center px-3 py-2 gap-2">
+                <Filter className="w-5 h-5 text-white dark:text-black" />
+                <span className="text-white dark:text-black text-sm">{filterType}</span>
               </Button>
+
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
-              <DropdownMenuItem>All</DropdownMenuItem>
-              <DropdownMenuItem>Filter 1</DropdownMenuItem>
-              <DropdownMenuItem>Filter 2</DropdownMenuItem>
-              <DropdownMenuItem>Filter 3</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterType("All")}>All</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterType("EMI Payments")}>EMI Payments</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFilterType("New Loans")}>New Loans</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -109,18 +142,18 @@ function BookDetails2() {
         <div className='flex flex-col bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl font-medium text-neutral-50 dark:text-neutral-800 space-y-2'>
           <div className='flex flex-row justify-between'>   
             <div>Remaining Loan Amount:</div>
-            <div>Rs. 125000</div>
+            <div>Rs. {remainingLoan}</div>
           </div>
           <div className='flex flex-row justify-between'>   
             <div>Total EMI Paid:</div>
-            <div>Rs. 75000</div>
+            <div>Rs. {totalEMIPaid}</div>
           </div>
-          <Link to="/summaryls">
+          {/* <Link to="/summaryls">
             <Button className='flex flex-row justify-center w-full space-x-1 bg-neutral-800 dark:bg-neutral-400 text-neutral-50 dark:text-neutral-900 rounded-2xl p-2'>
               <p>View Detailed Summary</p>
               <FontAwesomeIcon icon={faArrowRight} className='text-xl mt-1' />  
             </Button>
-          </Link> 
+          </Link>  */}
         </div>
       </div>
 
@@ -131,7 +164,20 @@ function BookDetails2() {
         ) : entries.length === 0 ? (
           <p className="text-center text-neutral-400 mt-4">No entries found.</p>
         ) : (
-          entries.map((entry) => (
+          [...entries].sort((a, b) => new Date(b.date) - new Date(a.date))
+
+          .filter((entry) => {
+            if (filterType === "New Loans" && entry.entry_type !== "newloan") return false;
+            if (filterType === "EMI Payments" && entry.entry_type !== "emipayment") return false;
+
+            const search = searchTerm.toLowerCase();
+            return (
+              entry.description.toLowerCase().includes(search) ||
+              entry.category.toLowerCase().includes(search)
+            );
+          })
+          .slice(0, visibleCount)
+          .map((entry) => (
             <EntryCardLS key={entry.id} {...entry} 
             onDelete={async (idToDelete) => {
               try {
