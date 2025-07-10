@@ -59,6 +59,7 @@ def update_expense(expense_id: int, expense_update: DailyExpenseUpdate, db: Sess
         raise HTTPException(status_code=404, detail="Expense not found or unauthorized")
     return updated_expense
 
+
 @router.delete("/{expense_id}", response_model=DailyExpense)
 def remove_expense(expense_id: int, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
     deleted = delete_daily_expense(db, expense_id, token_data.id)

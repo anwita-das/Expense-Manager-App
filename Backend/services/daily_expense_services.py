@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-# In services/daily_expense_services.py
-
-from sqlalchemy.orm import Session
-from models.daily_expense import DailyExpense
-from models.book import Book  
-from schemas.daily_expense import DailyExpenseCreate, DailyExpenseUpdate
-
-=======
 from sqlalchemy.orm import Session
 from models.daily_expense import DailyExpense
 from models.book import Book
@@ -16,17 +7,12 @@ import models
 from sqlalchemy import func, case
 from models.daily_expense import DailyExpense # Assuming your ORM model is here
 from models.book import Book
->>>>>>> 38ed754f318163cb1cdb9bbd46b72c61b1bd1f4f
 
 def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int):
 
     book = db.query(Book).filter(Book.id == expense.book_id, Book.user_id == user_id).first()
     if not book:
-<<<<<<< HEAD
-        return None 
-=======
         return None
->>>>>>> 38ed754f318163cb1cdb9bbd46b72c61b1bd1f4f
 
     db_expense = DailyExpense(
         book_id=expense.book_id,
@@ -42,14 +28,6 @@ def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int)
     db.refresh(db_expense)
     return db_expense
 
-<<<<<<< HEAD
-def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10):
-
-    return db.query(DailyExpense).join(Book).filter(
-        DailyExpense.book_id == book_id, 
-        Book.user_id == user_id
-    ).offset(skip).limit(limit).all()
-=======
 
 def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10, search: Optional[str] = None, category: Optional[str] = None):
     query = db.query(DailyExpense).join(Book).filter(
@@ -66,7 +44,6 @@ def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, l
     expenses = query.offset(skip).limit(limit).all()
     return expenses
 
->>>>>>> 38ed754f318163cb1cdb9bbd46b72c61b1bd1f4f
 
 def get_expense_by_id(db: Session, expense_id: int, user_id: int):
     return db.query(DailyExpense).join(Book).filter(
@@ -74,10 +51,6 @@ def get_expense_by_id(db: Session, expense_id: int, user_id: int):
         Book.user_id == user_id
     ).first()
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 38ed754f318163cb1cdb9bbd46b72c61b1bd1f4f
 def update_daily_expense(db: Session, expense_id: int, expense: DailyExpenseUpdate, user_id: int):
 
     db_expense = db.query(DailyExpense).join(Book).filter(
@@ -89,17 +62,10 @@ def update_daily_expense(db: Session, expense_id: int, expense: DailyExpenseUpda
         update_data = expense.model_dump(exclude_unset=True)
         for key, value in update_data.items():
             setattr(db_expense, key, value)
-<<<<<<< HEAD
-        
-        db.commit()
-        db.refresh(db_expense)
-    
-=======
 
         db.commit()
         db.refresh(db_expense)
 
->>>>>>> 38ed754f318163cb1cdb9bbd46b72c61b1bd1f4f
     return db_expense
 
 
@@ -112,11 +78,6 @@ def delete_daily_expense(db: Session, expense_id: int, user_id: int):
     if db_expense:
         db.delete(db_expense)
         db.commit()
-<<<<<<< HEAD
-        return db_expense 
-    
-    return None
-=======
         return db_expense
 
     return None
@@ -155,4 +116,3 @@ def get_expense_summary(db: Session, book_id: int, user_id: int):
         "total_spending": total_spending,
         "balance": balance
     }
->>>>>>> 38ed754f318163cb1cdb9bbd46b72c61b1bd1f4f
