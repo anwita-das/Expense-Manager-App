@@ -33,13 +33,14 @@ def read_daily_expenses(
     db: Session = Depends(get_db),
     token_data: UserOut = Depends(verify_token),
     search: Optional[str] = Query(None),
-    category: Optional[str] = Query(None)
+    category: Optional[str] = Query(None),
+    type: Optional[str] = Query(None)
 ):
-    print("testing")
-    print(f"search: {search}")
-    print(f"category: {category}")
-    print(f"skip: {skip}")
-    print(f"limit: {limit}")
+    # print("testing")
+    # print(f"search: {search}")
+    # print(f"category: {category}")
+    # print(f"skip: {skip}")
+    # print(f"limit: {limit}")
 
     expenses = get_daily_expenses(
         db,
@@ -48,7 +49,8 @@ def read_daily_expenses(
         skip=skip,
         limit=limit,
         search=search,
-        category=category
+        category=category,
+        type=type
     )
     return expenses
 

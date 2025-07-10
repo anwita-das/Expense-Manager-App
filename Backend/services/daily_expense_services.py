@@ -5,8 +5,6 @@ from schemas.daily_expense import DailyExpenseCreate, DailyExpenseUpdate
 from typing import Optional
 import models
 from sqlalchemy import func, case
-from models.daily_expense import DailyExpense # Assuming your ORM model is here
-from models.book import Book
 
 def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int):
 
@@ -29,7 +27,7 @@ def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int)
     return db_expense
 
 
-def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10, search: Optional[str] = None, category: Optional[str] = None):
+def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10, search: Optional[str] = None, category: Optional[str] = None, type: Optional[str] = None):
     query = db.query(DailyExpense).join(Book).filter(
         DailyExpense.book_id == book_id,
         Book.user_id == user_id
@@ -38,10 +36,14 @@ def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, l
     if search:
         query = query.filter(models.DailyExpense.description.ilike(f"%{search}%"))
 
+    if type:
+        query = query.filter(DailyExpense.type == type)
+
     if category:
         query = query.filter(models.DailyExpense.category == category)
 
-    expenses = query.offset(skip).limit(limit).all()
+    expenses = query.order_by(DailyExpense.datetime.desc()).offset(skip).limit(limit).all()
+
     return expenses
 
 
@@ -99,8 +101,8 @@ def get_expense_summary(db: Session, book_id: int, user_id: int):
     # We sum the amount if the type is 'credit', otherwise we sum 0.
     # We do the same for 'debit'.
     summary_query = db.query(
-        func.sum(case((DailyExpense.type == 'credit', DailyExpense.amount), else_=0)).label('total_earning'),
-        func.sum(case((DailyExpense.type == 'debit', DailyExpense.amount), else_=0)).label('total_spending')
+        func.sum(case((DailyExpense.type == 'cashin', DailyExpense.amount), else_=0)).label('total_earning'),
+        func.sum(case((DailyExpense.type == 'cashout', DailyExpense.amount), else_=0)).label('total_spending')
     ).filter(DailyExpense.book_id == book_id)
 
     # Execute the query
