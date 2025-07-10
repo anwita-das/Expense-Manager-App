@@ -34,7 +34,7 @@ def login(form_data: schemas.UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == form_data.email).first()
     if not db_user or not verify_password(form_data.password, db_user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    access_token = create_access_token(data={"sub": db_user.email}, expires_delta=timedelta(minutes=30))
+    access_token = create_access_token(data={"sub": db_user.email}, expires_delta=timedelta(minutes=120))
     return {"access_token": access_token, "token_type": "bearer"}
  
  
