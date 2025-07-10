@@ -5,8 +5,13 @@ from schemas.daily_expense import DailyExpenseCreate, DailyExpenseUpdate
 from typing import Optional
 import models
 from sqlalchemy import func, case
-from models.daily_expense import DailyExpense # Assuming your ORM model is here
+from models.daily_expense import DailyExpense 
 from models.book import Book
+from decimal import Decimal 
+
+
+
+
 
 def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int):
 
@@ -83,33 +88,28 @@ def delete_daily_expense(db: Session, expense_id: int, user_id: int):
 
     return None
 
-
-
 def get_expense_summary(db: Session, book_id: int, user_id: int):
     """
     Calculates the summary of expenses for a specific book owned by the user.
     """
-    # First, verify that the book exists and belongs to the user for authorization
+    
     book = db.query(Book).filter(Book.id == book_id, Book.user_id == user_id).first()
     if not book:
-        # Return None to indicate the book was not found or the user is not authorized
+        
         return None
-
-    # Use a single query to get the sum of credits and debits
-    # 'case' works like an IF statement in SQL.
-    # We sum the amount if the type is 'credit', otherwise we sum 0.
-    # We do the same for 'debit'.
+    
     summary_query = db.query(
         func.sum(case((DailyExpense.type == 'credit', DailyExpense.amount), else_=0)).label('total_earning'),
         func.sum(case((DailyExpense.type == 'debit', DailyExpense.amount), else_=0)).label('total_spending')
     ).filter(DailyExpense.book_id == book_id)
 
-    # Execute the query
     result = summary_query.one()
 
-    # The result might contain None if there are no entries, so default to 0.0
-    total_earning = result.total_earning or 0.0
-    total_spending = result.total_spending or 0.0
+    raw_earning = result.total_earning
+    raw_spending = result.total_spending
+    total_earning = float(raw_earning) if raw_earning is not None else 0.0
+    total_spending = float(raw_spending) if raw_spending is not None else 0.0
+
     balance = total_earning - total_spending
 
     return {
