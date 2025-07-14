@@ -1,6 +1,6 @@
 // import dayjs from "dayjs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faMoneyBills } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faMoneyBills, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { validateDailyExpenseEntry } from "../../utils/validation";
 import { createDailyExpense } from "@/api/dailyExpense";
 import { fetchCategories } from "@/api/categories";
@@ -139,8 +139,15 @@ function AddEntryDE() {
         </div>
         
           <div className="mt-3 w-full">
-          <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
-            Category <span className="text-red-500">*</span>
+          <div className="flex flex-row justify-between text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
+            <div className='flex flex-row'>Category <span className="text-red-500 ml-1">*</span> </div>
+            <div>
+            <Link to = "/settings">
+            <span className="text-md mr-2 cursor-pointer transition-all" title="Manage categories in Settings">
+              <FontAwesomeIcon icon={faCircleInfo} />
+            </span>
+            </Link>
+            </div>
           </div>
           <Select onValueChange={setCategory}>
             <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">

@@ -47,19 +47,19 @@ function Signup() {
                 <h1 className="font-bold text-2xl text-neutral-800">Sign Up</h1>
                     <div className="flex flex-col w-full space-y-3">
                         <Label htmlFor="fullname" className={"dark:text-neutral-900"}>Name<span className="text-red-500 ml-1">*</span></Label>
-                        <Input id="fullname" type="text" placeholder="Enter your full name" className={"bg-neutral-200 dark:bg-neutral-100"} onChange={(e) => setName(e.target.value)}/>
+                        <Input id="fullname" type="text" placeholder="Enter your full name" className={"bg-neutral-200 dark:bg-neutral-100 text-neutral-800"} onChange={(e) => setName(e.target.value)}/>
                         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
 
                     <div className="flex flex-col w-full space-y-3">
                         <Label htmlFor="email" className={"dark:text-neutral-900"}>Email<span className="text-red-500 ml-1">*</span></Label>
-                        <Input id="email" type="text" placeholder="Enter your email id" className={"bg-neutral-200 dark:bg-neutral-100"} onChange={(e) => setEmail(e.target.value)}/>
+                        <Input id="email" type="text" placeholder="Enter your email id" className={"bg-neutral-200 dark:bg-neutral-100 text-neutral-800"} onChange={(e) => setEmail(e.target.value)}/>
                         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
 
                     <div className="flex flex-col w-full space-y-3">
                         <Label htmlFor="password" className={"dark:text-neutral-900"}>Password<span className="text-red-500 ml-1">*</span></Label>
-                        <Input id="password" type="password" placeholder="Enter your password" className={"bg-neutral-200 dark:bg-neutral-100"} onChange={(e) => setPassword(e.target.value)}/>
+                        <Input id="password" type="password" placeholder="Enter your password" className={"bg-neutral-200 dark:bg-neutral-100 text-neutral-800"} onChange={(e) => setPassword(e.target.value)}/>
                         {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                     </div>
 

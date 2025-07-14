@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import NoBooksState from "@/components/noBooksState";
+import BookSkeleton from "@/components/bookSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,12 +44,17 @@ function Books() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
 
+  const [loading, setLoading] = useState(true);
+
   const loadBooks = async () => {
+    setLoading(true);
     try {
       const data = await fetchBooks();
       setBooks(data);
     } catch (err) {
       console.error("Failed to load books", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -254,25 +261,46 @@ function Books() {
           </DropdownMenu>
         </div>
       </div>
+      
+      {loading ? (
+        <div className="px-3 mt-4 space-y-2">
+          {[...Array(5)].map((_, i) => (
+            <BookSkeleton key={i} />
+          ))}
+        </div>
+      ) : books.length === 0 ? (
+        <NoBooksState onCreateClick={() => setDialogOpen(true)} />
+      ) : filteredBooks().length === 0 ? (
+        <div className="flex flex-col items-center justify-center mt-10 text-center text-neutral-400 dark:text-neutral-600">
+          <img
+            src="/notFound.svg"
+            alt="No results found"
+            className="w-60 h-60 mb-4 opacity-100"
+          />
+          <p className="text-xl font-semibold mb-2">No matching results</p>
+          <p className="text-sm">Try adjusting your search or filters.</p>
+        </div>
+      ) : (
+        <BookList
+          books={filteredBooks()}
+          onEdit={(book) => {
+            setEditBookId(book.id);
+            setEditTitle(book.title);
+            setEditDescription(book.description);
+            setEditSelectedType(
+              book.type === "Daily Expense" ? "dailyexpense" :
+              book.type === "Loan Status" ? "loanstatus" :
+              "savings"
+            );
+            setEditDialogOpen(true);
+          }}
+          onDelete={(bookId) => {
+            setBookToDelete(bookId);
+            setDeleteDialogOpen(true);
+          }}
+        />
+      )}
 
-      <BookList
-        books={filteredBooks()}
-        onEdit={(book) => {
-          setEditBookId(book.id);
-          setEditTitle(book.title);
-          setEditDescription(book.description);
-          setEditSelectedType(
-            book.type === "Daily Expense" ? "dailyexpense" :
-            book.type === "Loan Status" ? "loanstatus" :
-            "savings"
-          );
-          setEditDialogOpen(true);
-        }}
-        onDelete={(bookId) => {
-          setBookToDelete(bookId);
-          setDeleteDialogOpen(true);
-        }}
-      />
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-neutral-800 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900">

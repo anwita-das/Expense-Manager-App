@@ -130,12 +130,12 @@ function BookDetails2() {
         </div>
       </div>  
 
-      <div className='mt-3'>
+      {/* <div className='mt-3'>
         <div className='text-sm text-neutral-300 ml-6 font-medium dark:text-neutral-800'>Description</div>
         <div className='bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl font-medium text-neutral-50 dark:text-neutral-800'>
           {book?.description || "Loading..."}
         </div>
-      </div>
+      </div> */}
 
       <div className='mt-3'>
         <div className='text-sm text-neutral-300 ml-6 font-medium dark:text-neutral-800'>Summary</div>

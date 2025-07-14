@@ -28,12 +28,12 @@ function Login() {
             <div className="flex flex-col justify-center items-center h-auto w-sm bg-neutral-300 rounded-2xl shadow-md p-5 space-y-7">
                 <h1 className="font-bold text-2xl text-neutral-800">Login</h1>
                     <div className="flex flex-row space-x-15">
-                        <Label htmlFor="email" className={"dark:text-neutral-900"}>Email</Label>
+                        <Label htmlFor="email" className={"text-neutral-900"}>Email</Label>
                         <Input 
                             id="email" 
                             type="text" 
                             placeholder="Enter your email id" 
-                            className="bg-neutral-200 dark:bg-neutral-100" 
+                            className="text-neutral-800 bg-neutral-200 dark:bg-neutral-100" 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)}
                         />
