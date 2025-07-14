@@ -5,6 +5,7 @@ from schemas.daily_expense import DailyExpenseCreate, DailyExpenseUpdate
 from typing import Optional
 import models
 from sqlalchemy import func, case
+from decimal import Decimal
 
 def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int):
 
@@ -109,8 +110,8 @@ def get_expense_summary(db: Session, book_id: int, user_id: int):
     result = summary_query.one()
 
     # The result might contain None if there are no entries, so default to 0.0
-    total_earning = result.total_earning or 0.0
-    total_spending = result.total_spending or 0.0
+    total_earning = float(result.total_earning or 0.0)
+    total_spending = float(result.total_spending or 0.0)
     balance = total_earning - total_spending
 
     return {
