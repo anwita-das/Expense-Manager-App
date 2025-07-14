@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import { createSavings } from "@/api/savings";
+import { validateSavingsEntry } from "../../utils/validation";
 // import dayjs from "dayjs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faPiggyBank } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +33,7 @@ function AddEntryS() {
   const [interestRate, setInterestRate] = useState("");
   const [frequency, setFrequency] = useState("");
   const [date, setDate] = useState(new Date());
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (location.state?.type) {
@@ -40,10 +42,18 @@ function AddEntryS() {
   }, [location.state]);
 
   const handleSubmit = async () => {
-    if (!bookId || !amount || !interestRate || !date) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+    const validationErrors = validateSavingsEntry({
+      amount,
+      interestRate,
+      date,
+      frequency,
+      description,
+    });
+            
+    setErrors(validationErrors);
+    
+    // If any error exists, don't proceed
+    if (Object.keys(validationErrors).length > 0) return;
 
     const payload = {
       book_id: parseInt(bookId),
@@ -66,7 +76,7 @@ function AddEntryS() {
 
   return (
     <div className="flex justify-center items-center bg-neutral-800 min-h-screen pb-2 dark:bg-neutral-200 dark:text-neutral-900">
-      <div className="flex flex-col items-center justify-center w-[80%] h-auto m-5 p-4 rounded-2xl space-y-3 bg-neutral-600 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-800">
+      <div className="flex flex-col items-center justify-center w-[80%] h-auto m-5 p-4 rounded-2xl space-y-3 bg-neutral-700 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-800">
         
         <div className="flex flex-row items-center justify-between w-full mb-5">
           <Link to={`/detailss/${bookId}`}>
@@ -77,6 +87,9 @@ function AddEntryS() {
         </div>
 
         <Calendar24 value={date} onChange={setDate} showTime={false}/>
+        {errors.date && (
+          <p className="text-red-400 text-sm mt-1">{errors.date}</p>
+        )}
         
 
         {/* <div className="flex flex-row justify-center gap-3 mt-3 w-full">
@@ -132,24 +145,33 @@ function AddEntryS() {
             </div>
 
             <div className="mt-3 w-full">
-              <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Amount</div>
+              <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Amount <span className="text-red-500">*</span></div>
               <Input type="number" placeholder="Enter amount saved" value={amount}
               onChange={(e) => setAmount(e.target.value)} className="dark:bg-neutral-100" />
+              {errors.amount && (
+                <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
+              )}
             </div>
             <div className="mt-3 w-full">
-              <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Description</div>
+              <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Description <span className="text-red-500">*</span></div>
               <Input type="text" placeholder="Savings purpose" value={description}
               onChange={(e) => setDescription(e.target.value)} className="dark:bg-neutral-100" />
+              {errors.description && (
+                <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+              )}
             </div>
             <div className="mt-3 w-full">
-              <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Rate of Interest (%)</div>
+              <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Rate of Interest (%) <span className="text-red-500">*</span></div>
               <Input type="number" placeholder="Enter interest rate (p.a)" value={interestRate}
               onChange={(e) => setInterestRate(e.target.value)} className="dark:bg-neutral-100" />
+              {errors.interestRate && (
+                <p className="text-red-400 text-sm mt-1">{errors.interestRate}</p>
+              )}
             </div>
 
             {depositMode === "recurring" && (
               <div className="mt-3 w-full">
-                <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Frequency</div>
+                <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Frequency <span className="text-red-500">*</span></div>
                 <Select value={frequency} onValueChange={setFrequency}>
                   <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
                     <SelectValue placeholder="Select frequency" />
@@ -161,6 +183,9 @@ function AddEntryS() {
                     <SelectItem value="yearly">Yearly</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.frequency && (
+                  <p className="text-red-400 text-sm mt-1">{errors.frequency}</p>
+                )}
               </div>
             )}
           </>

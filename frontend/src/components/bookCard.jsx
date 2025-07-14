@@ -33,8 +33,8 @@ function BookCard({ book, onEdit, onDelete }) {
             type === "Savings" ? `/detailss/${id}` :
             `/detailsde/${id}`}>
           <div className="flex flex-row justify-between">
-            <div className="font-medium text-xl mt-2">{title}</div>
-            <div className="font-medium text-md mt-2 mr-2 text-neutral-700"><span><FontAwesomeIcon icon={faScaleBalanced} className="me-2" /></span>Rs. 3450</div>
+            <div className="font-medium text-xl mt-1">{title}</div>
+            <div className="font-medium text-md mt-1 mr-2 text-neutral-700"><span><FontAwesomeIcon icon={faScaleBalanced} className="me-2" /></span>Rs. 3450</div>
           </div> </Link>
           <div className="flex flex-row justify-between">
             <div className="text-sm mt-1">Created on {dayjs(created_at).format("MMMM D, YYYY")}</div>

@@ -1,6 +1,7 @@
 // import dayjs from "dayjs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faMoneyBills } from '@fortawesome/free-solid-svg-icons';
+import { validateDailyExpenseEntry } from "../../utils/validation";
 import { createDailyExpense } from "@/api/dailyExpense";
 import { fetchCategories } from "@/api/categories";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -34,12 +35,20 @@ function AddEntryDE() {
   const [datetime, setDatetime] = useState(new Date().toISOString());
   const [category, setCategory] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async () => {
-    if (!bookId || !amount || !category || !paymentMethod) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+    const validationErrors = validateDailyExpenseEntry({
+      amount,
+      category,
+      paymentMethod,
+      description,
+    });
+
+    setErrors(validationErrors);
+
+    // If any error exists, don't proceed
+    if (Object.keys(validationErrors).length > 0) return;
 
     const payload = {
       book_id: bookId,
@@ -51,13 +60,14 @@ function AddEntryDE() {
       payment_method: paymentMethod,
     };
 
-    try {
-      await createDailyExpense(payload);
-      navigate(`/detailsde/${bookId}`);
-    } catch (err) {
-      alert("Error creating entry.");
-    }
-  };
+  try {
+    await createDailyExpense(payload);
+    navigate(`/detailsde/${bookId}`);
+  } catch (err) {
+    alert("Error creating entry.");
+  }
+};
+
 
 
   useEffect(() => {
@@ -81,7 +91,7 @@ function AddEntryDE() {
 
   return (
     <div className="flex justify-center items-center bg-neutral-800 min-h-screen pb-2 dark:bg-neutral-200 dark:text-neutral-900">
-      <div className="flex flex-col items-center justify-center w-[80%] h-auto p-4 rounded-2xl space-y-3 bg-neutral-600 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-800">
+      <div className="flex flex-col items-center justify-center w-[80%] h-auto p-4 rounded-2xl space-y-3 bg-neutral-700 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-800">
         
         <div className="flex flex-row items-center justify-between w-full mb-5">
           <Link to={`/detailsde/${bookId}`}>
@@ -113,18 +123,24 @@ function AddEntryDE() {
         </div>
 
         <div className='mt-3 w-full'>
-          <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount</div>
+          <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount <span className="text-red-500">*</span></div>
           <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={"Enter the amount"} />
+          {errors.amount && (
+            <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
+          )}
         </div>
 
         <div className='mt-3 w-full'>
-          <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description</div>
+          <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description <span className="text-red-500">*</span></div>
           <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Enter a brief description"}/>
+          {errors.description && (
+            <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+          )}
         </div>
         
           <div className="mt-3 w-full">
           <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
-            Category
+            Category <span className="text-red-500">*</span>
           </div>
           <Select onValueChange={setCategory}>
             <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
@@ -139,12 +155,15 @@ function AddEntryDE() {
             </SelectContent>
 
           </Select>
+          {errors.category && (
+            <p className="text-red-400 text-sm mt-1">{errors.category}</p>
+          )}
         </div>
 
 
           <div className="mt-3 w-full">
             <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
-              Payment Mode
+              Payment Mode <span className="text-red-500">*</span>
             </div>
             <Select onValueChange={setPaymentMethod}>
               <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
@@ -155,6 +174,9 @@ function AddEntryDE() {
                 <SelectItem value="Offline">Offline</SelectItem>
               </SelectContent>
             </Select>
+            {errors.paymentMethod && (
+              <p className="text-red-400 text-sm mt-1">{errors.paymentMethod}</p>
+            )}
           </div>
           
         

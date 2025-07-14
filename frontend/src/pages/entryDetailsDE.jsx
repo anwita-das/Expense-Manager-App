@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useParams, useNavigate } from "react-router-dom";
 import { getDailyExpenseById, updateDailyExpense } from "@/api/dailyExpense";
 import { fetchCategories } from "@/api/categories";
+import { validateDailyExpenseEntry } from "../../utils/validation";
 import { Input } from "@/components/ui/input";
 import { Calendar24 } from "@/components/Calendar24";
 import {
@@ -27,6 +28,7 @@ function EntryDetailsDE() {
     const [datetime, setDatetime] = useState("");
     const [category, setCategory] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("");
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,6 +56,17 @@ function EntryDetailsDE() {
     }, [id]);
 
     const handleUpdate = async () => {
+        const validationErrors = validateDailyExpenseEntry({
+            amount,
+            category,
+            paymentMethod,
+            description,
+        });
+
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length > 0) return;
+        
         try {
         await updateDailyExpense(id, {
             type: entryType,
@@ -84,29 +97,35 @@ function EntryDetailsDE() {
                 <div className="flex flex-row justify-center gap-3 mt-2 w-full">
                     <Button
                         type="button"
-                        className={`w-[45%] font-bold text-lg ${entryType === "cashin" ? "bg-green-500 hover:bg-green-600" : "bg-neutral-400 hover:bg-green-400"} text-black`}
+                        className={`w-[45%] font-medium text-md ${entryType === "cashin" ? "bg-green-500 hover:bg-green-600" : "bg-neutral-400 hover:bg-green-400"} text-black`}
                         onClick={() => setEntryType("cashin")}
                     >
                         Cash-IN
                     </Button>
                     <Button
                         type="button"
-                        className={`w-[45%] font-bold text-lg ${entryType === "cashout" ? "bg-red-500 hover:bg-red-600" : "bg-neutral-400 hover:bg-red-400"} text-black`}
+                        className={`w-[45%] font-medium text-md ${entryType === "cashout" ? "bg-red-500 hover:bg-red-600" : "bg-neutral-400 hover:bg-red-400"} text-black`}
                         onClick={() => setEntryType("cashout")}
                     >
                         Cash-OUT
                     </Button>
                 </div>
                 <div className='w-full'>
-                    <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount</div>
+                    <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount <span className="text-red-500">*</span></div>
                     <Input className={"dark:bg-neutral-200"} value={amount} onChange={(e) => setAmount(e.target.value)} />
+                    {errors.amount && (
+                        <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
+                    )}
                 </div>
                 <div className='w-full'>
-                    <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description</div>
+                    <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description <span className="text-red-500">*</span></div>
                     <Input className={"dark:bg-neutral-200"} value={description} onChange={(e) => setDescription(e.target.value)} />
+                    {errors.description && (
+                        <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+                    )}
                 </div>
                 <div className="w-full">
-                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Category</div>
+                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Category <span className="text-red-500">*</span></div>
                     <Select value={category} onValueChange={setCategory}>
                         <SelectTrigger className="dark:bg-neutral-100 w-full">
                         <SelectValue placeholder="Select category"/>
@@ -119,9 +138,12 @@ function EntryDetailsDE() {
                         ))}
                         </SelectContent>
                     </Select>
+                    {errors.category && (
+                        <p className="text-red-400 text-sm mt-1">{errors.category}</p>
+                    )}
                 </div>
                 <div className="w-full">
-                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Payment Method</div>
+                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Payment Method <span className="text-red-500">*</span></div>
                     <Select value={paymentMethod} onValueChange={setPaymentMethod}>
                         <SelectTrigger className="dark:bg-neutral-100 w-full">
                         <SelectValue placeholder="Select payment mode" />
@@ -131,6 +153,9 @@ function EntryDetailsDE() {
                         <SelectItem value="Offline">Offline</SelectItem>
                         </SelectContent>
                     </Select>
+                    {errors.paymentMethod && (
+                        <p className="text-red-400 text-sm mt-1">{errors.paymentMethod}</p>
+                    )}
                 </div>
                 <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
                     <Button type="submit" onClick={handleUpdate} className="w-[40%] bg-purple-950 hover:bg-purple-400 dark:text-neutral-50">
