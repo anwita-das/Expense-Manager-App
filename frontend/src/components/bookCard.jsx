@@ -1,7 +1,7 @@
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBuildingColumns, faMoneyBills, faPiggyBank } from '@fortawesome/free-solid-svg-icons'
+import { faBuildingColumns, faMoneyBills, faPiggyBank, faScaleBalanced } from '@fortawesome/free-solid-svg-icons'
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -34,21 +34,24 @@ function BookCard({ book, onEdit, onDelete }) {
             `/detailsde/${id}`}>
           <div className="flex flex-row justify-between">
             <div className="font-medium text-xl mt-2">{title}</div>
-            <div className="text-md mt-2">{type}</div>
+            <div className="font-medium text-md mt-2 mr-2 text-neutral-700"><span><FontAwesomeIcon icon={faScaleBalanced} className="me-2" /></span>Rs. 3450</div>
           </div> </Link>
           <div className="flex flex-row justify-between">
             <div className="text-sm mt-1">Created on {dayjs(created_at).format("MMMM D, YYYY")}</div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="p-2">
-                  <MoreVertical className="h-5 w-5 hover:cursor-pointer" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={onEdit} className={"hover:cursor-pointer"}>Edit</DropdownMenuItem>
-                <DropdownMenuItem onClick={onDelete} className={"text-red-500 hover:cursor-pointer"}>Delete</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex flex-row">
+              <div className="text-md font-semibold italic">{type}</div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-1">
+                    <MoreVertical className="h-5 w-5 hover:cursor-pointer" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={onEdit} className={"hover:cursor-pointer"}>Edit</DropdownMenuItem>
+                  <DropdownMenuItem onClick={onDelete} className={"text-red-500 hover:cursor-pointer"}>Delete</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
       </div>

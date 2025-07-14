@@ -39,7 +39,7 @@ function EntryCard({
         <div
           className={
             isCashOut
-              ? "text-red-400 font-bold"
+              ? "text-red-400 dark:text-red-500 font-bold"
               : "text-green-400 dark:text-green-600 font-bold"
           }
         >

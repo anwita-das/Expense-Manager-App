@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faArrowRight, faMoneyBills } from '@fortawesome/free-solid-svg-icons'
 import { getDailyExpensesByBookId } from "@/api/dailyExpense";
 import { deleteDailyExpense } from "@/api/dailyExpense";
+import { getExpenseSummary } from "@/api/dailyExpense";
 import { useParams } from "react-router-dom";
 import { getBookById } from "@/api/books";
 import { useState, useEffect } from "react";
@@ -28,6 +29,11 @@ function BookDetails() {
     const [groupedExpenses, setGroupedExpenses] = useState({});
     const [searchTerm, setSearchTerm] = useState("");
     const [typeFilter, setTypeFilter] = useState("");
+    const [summary, setSummary] = useState({
+        total_earning: 0,
+        total_spending: 0,
+        balance: 0
+    })
 
     const groupByDate = (data) => {
     const grouped = {};
@@ -72,7 +78,17 @@ function BookDetails() {
     fetchExpenses();
     }, [id, searchTerm, typeFilter]);
 
-
+    useEffect(() => {
+        const fetchSummary = async () => {
+            try{
+                const res = await getExpenseSummary(id);
+                setSummary(res);
+            } catch (err) {
+                console.error("Failed to fetch summary", err);
+            }
+        };
+        fetchSummary();
+    }, [id, expenses]);
 
     const handleCashInClick = () => {
         navigate(`/entryde/${id}`, { state: { type: "cashin", bookId: id } });
@@ -133,15 +149,17 @@ function BookDetails() {
                 <div className='flex flex-col bg-neutral-700 dark:bg-neutral-300 p-3 m-3 rounded-2xl font-medium text-neutral-50 dark:text-neutral-800 space-y-2'>
                     <div className='flex flex-row justify-between'>   
                         <div>Total Cash-OUT:</div>
-                        <div className='text-red-400 font-bold'>Rs. 20000</div>
+                        <div className='text-red-400 dark:text-red-500 font-bold'>Rs. {summary.total_spending}</div>
                     </div>
                     <div className='flex flex-row justify-between'>   
                         <div>Total Cash-IN:</div>
-                        <div className='text-green-400 dark:text-green-600 font-bold'>Rs. 2000</div>
+                        <div className='text-green-400 dark:text-green-600 font-bold'>Rs. {summary.total_earning}</div>
                     </div> 
                     <div className='flex flex-row justify-between'>   
                         <div>Net Balance:</div>
-                        <div>-Rs. 18000</div>
+                        <div className={`${summary.balance < 0 ? "text-red-400 dark:text-red-500" : "text-green-500"} font-bold`}>
+                            {summary.balance < 0 ? `-Rs. ${Math.abs(summary.balance)}` : `Rs. ${summary.balance}`}
+                        </div>
                     </div>
                     {/* <Link to = "/summaryde">
                     <Button className='flex flex-row justify-center w-full space-x-1 bg-neutral-800 dark:bg-neutral-400 text-neutral-50 dark:text-neutral-900 rounded-2xl p-2'>

@@ -51,3 +51,13 @@ export const deleteDailyExpense = async (expenseId) => {
     throw error;
   }
 };
+
+export const getExpenseSummary = async (bookId) => {
+  try {
+    const response = await API.get(`/expenses/${bookId}/summary`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching expense summary:", error);
+    throw error;
+  }
+}
