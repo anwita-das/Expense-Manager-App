@@ -3,6 +3,7 @@ import { faChevronLeft, faPiggyBank} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getSavingsById, updateSavings } from "@/api/savings";
+import { validateSavingsEntry } from "../../utils/validation";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ function EntryDetailsS() {
     const [date, setDate] = useState("");
     const [interestRate, setInterestRate] = useState("");
     const [frequency, setFrequency] = useState("");
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,6 +49,17 @@ function EntryDetailsS() {
     }, [id]);
 
     const handleUpdate = async () => {
+        const validationErrors = validateSavingsEntry({
+            amount,
+            interestRate,
+            date,
+            frequency,
+            description,
+        });
+
+        setErrors(validationErrors);
+        
+        if (Object.keys(validationErrors).length > 0) return;
         try {
         await updateSavings(id, {
             saving_type: entryType,
@@ -72,10 +85,13 @@ function EntryDetailsS() {
                     <FontAwesomeIcon icon={faPiggyBank} className="text-2xl" />
                 </div>
                 <Calendar24 value={date} onChange={(val) => setDate(val)} showTime={false} />
+                {errors.date && (
+                    <p className="text-red-400 text-sm mt-1">{errors.date}</p>
+                )}
                 <div className="flex flex-row justify-center gap-3 mt-2 w-full">
                     <Button
                     type="button"
-                    className={`w-[45%] font-bold text-lg ${
+                    className={`w-[45%] font-medium text-md ${
                         entryType === "onetime"
                         ? "bg-purple-500 hover:bg-purple-600 text-white"
                         : "bg-neutral-400 hover:bg-purple-400 hover:text-white text-black"
@@ -87,7 +103,7 @@ function EntryDetailsS() {
 
                     <Button
                     type="button"
-                    className={`w-[45%] font-bold text-lg ${
+                    className={`w-[45%] font-medium text-md ${
                         entryType === "recurring"
                         ? "bg-purple-500 hover:bg-purple-600 text-white"
                         : "bg-neutral-400 hover:bg-purple-400 hover:text-white text-black"
@@ -99,20 +115,29 @@ function EntryDetailsS() {
 
                 </div>
                 <div className='mt-2 w-full'>
-                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Amount</div>
+                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Amount <span className="text-red-500">*</span></div>
                     <Input className="dark:bg-neutral-200" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                    {errors.amount && (
+                        <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
+                    )}
                 </div>
                 <div className='mt-2 w-full'>
-                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Description</div>
+                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Description <span className="text-red-500">*</span></div>
                     <Input className="dark:bg-neutral-200" value={description} onChange={(e) => setDescription(e.target.value)} />
+                    {errors.description && (
+                        <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+                    )}
                 </div>
                 <div className='mt-2 w-full'>
-                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Rate of Interest</div>
+                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Rate of Interest <span className="text-red-500">*</span></div>
                     <Input className="dark:bg-neutral-200" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} />
+                    {errors.interestRate && (
+                        <p className="text-red-400 text-sm mt-1">{errors.interestRate}</p>
+                    )}
                 </div>
                 {entryType === "recurring" && (
                 <div className="w-full">
-                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Frequency</div>
+                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Frequency <span className="text-red-500">*</span></div>
                     <Select value={frequency} onValueChange={setFrequency}>
                     <SelectTrigger className="dark:bg-neutral-100 w-full">
                         <SelectValue>
@@ -131,6 +156,9 @@ function EntryDetailsS() {
                         <SelectItem value="yearly">Yearly</SelectItem>
                     </SelectContent>
                     </Select>
+                    {errors.frequency && (
+                        <p className="text-red-400 text-sm mt-1">{errors.frequency}</p>
+                    )}
                 </div>
                 )}
                 <div className="flex flex-row justify-center mt-3 space-x-2 w-full">

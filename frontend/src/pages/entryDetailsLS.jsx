@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getLoanStatusById, updateLoanStatus } from "@/api/loanStatus";
 import { fetchCategories } from "@/api/categories";
+import { validateLoanEntry } from "../../utils/validation";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
@@ -27,6 +28,7 @@ function EntryDetailsLS() {
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
     const [category, setCategory] = useState("");
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,6 +55,15 @@ function EntryDetailsLS() {
     }, [id]);
 
     const handleUpdate = async () => {
+        const validationErrors = validateLoanEntry({
+            amount,
+            category,
+            description,
+        });
+
+        setErrors(validationErrors);
+        
+        if (Object.keys(validationErrors).length > 0) return;
         try {
         await updateLoanStatus(id, {
             entry_type: entryType,
@@ -80,29 +91,35 @@ function EntryDetailsLS() {
                 <div className="flex flex-row justify-center gap-3 mt-2 w-full">
                     <Button
                         type="button"
-                        className={`w-[45%] font-bold text-lg ${entryType === "emipayment" ? "bg-green-500 hover:bg-green-600" : "bg-neutral-400 hover:bg-green-400"} text-black`}
+                        className={`w-[45%] font-medium text-md ${entryType === "emipayment" ? "bg-green-500 hover:bg-green-600" : "bg-neutral-400 hover:bg-green-400"} text-black`}
                         onClick={() => setEntryType("emipayment")}
                     >
                         EMI Payment
                     </Button>
                     <Button
                         type="button"
-                        className={`w-[45%] font-bold text-lg ${entryType === "newloan" ? "bg-red-500 hover:bg-red-600" : "bg-neutral-400 hover:bg-red-400"} text-black`}
+                        className={`w-[45%] font-medium text-md ${entryType === "newloan" ? "bg-red-500 hover:bg-red-600" : "bg-neutral-400 hover:bg-red-400"} text-black`}
                         onClick={() => setEntryType("newloan")}
                     >
                         New Loan
                     </Button>
                 </div>
                 <div className='mt-2 w-full'>
-                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Amount</div>
+                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Amount <span className="text-red-500">*</span></div>
                     <Input className={"dark:bg-neutral-200"} value={amount} onChange={(e) => setAmount(e.target.value)} />
+                    {errors.amount && (
+                        <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
+                    )}
                 </div>
                 <div className='mt-2 w-full'>
-                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Description</div>
+                    <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Description <span className="text-red-500">*</span></div>
                     <Input className={"dark:bg-neutral-200"} value={description} onChange={(e) => setDescription(e.target.value)} />
+                    {errors.description && (
+                        <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+                    )}
                 </div>
                 <div className="w-full">
-                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Category</div>
+                    <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Category <span className="text-red-500">*</span></div>
                     <Select value={category} onValueChange={setCategory}>
                         <SelectTrigger className="dark:bg-neutral-100 w-full">
                         <SelectValue placeholder="Select category"/>
@@ -115,6 +132,9 @@ function EntryDetailsLS() {
                         ))}
                         </SelectContent>
                     </Select>
+                    {errors.category && (
+                        <p className="text-red-400 text-sm mt-1">{errors.category}</p>
+                    )}
                 </div>
                 <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
                     <Button type="submit" onClick={handleUpdate} className="w-[40%] bg-purple-950 hover:bg-purple-400 dark:text-neutral-50">
