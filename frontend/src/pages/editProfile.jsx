@@ -105,7 +105,7 @@ function EditProfile() {
                 <div className='mt-2 w-full'>
                     <div className='text-sm text-neutral-300 mb-2 ml-2 font-medium dark:text-neutral-800'>Currency Preference:</div>
                     <Select value={userData.currency_preference} onValueChange={handleCurrencyChange}>
-                    <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
+                    <SelectTrigger className="dark:bg-neutral-200 w-full hover:cursor-pointer">
                     <SelectValue placeholder="Select currency" />
                     </SelectTrigger>
                     <SelectContent className="dark:bg-neutral-100 dark:text-neutral-900">

@@ -85,7 +85,7 @@ function EntryDetailsLS() {
                 <div className="flex flex-row items-center justify-between w-full mb-5">
                     <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" onClick={() => navigate(-1)} />
                     <div className="font-bold text-3xl">Edit Entry Details</div>
-                    <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl" />
+                    <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl hover:text-orange-400" />
                 </div>
                 <Calendar24 value={date} onChange={(val) => setDate(val)} showTime={false} />
                 <div className="flex flex-row justify-center gap-3 mt-2 w-full">

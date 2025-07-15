@@ -3,6 +3,7 @@ import { faChevronLeft, faArrowRight, faMoneyBills } from '@fortawesome/free-sol
 import { getDailyExpensesByBookId } from "@/api/dailyExpense";
 import { deleteDailyExpense } from "@/api/dailyExpense";
 import { getExpenseSummary } from "@/api/dailyExpense";
+import { fetchCategories } from '@/api/categories';
 import { useParams } from "react-router-dom";
 import { getBookById } from "@/api/books";
 import { useState, useEffect } from "react";
@@ -27,8 +28,12 @@ function BookDetails() {
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [groupedExpenses, setGroupedExpenses] = useState({});
+    const [allExpenses, setAllExpenses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [typeFilter, setTypeFilter] = useState("");
+    const [paymentFilter, setPaymentFilter] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
+    const [categories, setCategories] = useState([]);
     const [summary, setSummary] = useState({
         total_earning: 0,
         total_spending: 0,
@@ -60,14 +65,31 @@ function BookDetails() {
     }, [id]);
 
     useEffect(() => {
+    const fetchCats = async () => {
+        try {
+        const data = await fetchCategories();
+        setCategories(data);
+        } catch (err) {
+        console.error("Failed to fetch categories", err);
+        }
+    };
+    fetchCats();
+    }, []);
+
+    useEffect(() => {
     const fetchExpenses = async () => {
         try {
         const res = await getDailyExpensesByBookId(id, {
             ...(searchTerm && { search: searchTerm }),
             ...(typeFilter && { type: typeFilter }),
+            ...(paymentFilter && { payment_method: paymentFilter }),
+            ...(categoryFilter && { category: categoryFilter }),
         });
         setExpenses(res.data);
         setGroupedExpenses(groupByDate(res.data));
+        if (!searchTerm && !typeFilter && !paymentFilter && !categoryFilter) {
+            setAllExpenses(res.data);
+        }
         } catch (err) {
         console.error("Error fetching daily expenses:", err);
         } finally {
@@ -76,12 +98,17 @@ function BookDetails() {
     };
 
     fetchExpenses();
-    }, [id, searchTerm, typeFilter]);
+    }, [id, searchTerm, typeFilter, paymentFilter, categoryFilter]);
 
     useEffect(() => {
         const fetchSummary = async () => {
-            try{
-                const res = await getExpenseSummary(id);
+            try {
+                const res = await getExpenseSummary(id, {
+                ...(searchTerm && { search: searchTerm }),
+                ...(typeFilter && { type: typeFilter }),
+                ...(paymentFilter && { payment_method: paymentFilter }),
+                ...(categoryFilter && { category: categoryFilter }),
+                });
                 setSummary(res);
             } catch (err) {
                 console.error("Failed to fetch summary", err);
@@ -108,7 +135,7 @@ function BookDetails() {
     return(
         <>
         <div className="bg-neutral-800 min-h-screen pb-20 dark:bg-neutral-200 dark:text-neutral-900">
-            <div className='flex flex-row items-center p-2 bg-green-300 space-x-2'>
+            <div className='sticky top-0 z-40 flex flex-row items-center p-2 bg-green-300 space-x-2'>
                 <Link to="/books">
                     <FontAwesomeIcon icon={faChevronLeft} className="text-2xl cursor-pointer" />
                 </Link>
@@ -118,7 +145,7 @@ function BookDetails() {
                 </div>
                 <FontAwesomeIcon icon={faMoneyBills} className="text-2xl"/> 
             </div>
-            <div className="sticky top-0 z-40 bg-transparent flex flex-row justify-between items-center w-full">
+        <div className="bg-transparent flex flex-col justify-between items-center w-full">
         <div className="w-full px-4 py-2">
           <Input
             type="text"
@@ -128,20 +155,61 @@ function BookDetails() {
             className="w-full bg-neutral-300 text-neutral-800 dark:bg-neutral-300 dark:border-2 dark:border-neutral-400 dark:text-neutral-900"
           />
         </div>
-        <div className="mr-3 mt-1">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
-                <Filter className="w-6 h-6 text-white dark:text-black" />
-                <span className="text-white dark:text-black text-sm">{getFilterLabel()}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
-              <DropdownMenuItem onClick={() => setTypeFilter("")}>All</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTypeFilter("cashin")}>Cash-IN</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTypeFilter("cashout")}>Cash-OUT</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className='flex flex-row justify-between'>
+            <div className="mr-3 mt-1">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
+                    <Filter className="w-6 h-6 text-white dark:text-black" />
+                    <span className="text-white dark:text-black text-sm">
+                        {typeFilter ? (typeFilter === "cashin" ? "Cash-IN" : "Cash-OUT") : "Type"}
+                    </span>
+                </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
+                <DropdownMenuItem onClick={() => setTypeFilter("")}>All</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTypeFilter("cashin")}>Cash-IN</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTypeFilter("cashout")}>Cash-OUT</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            </div>
+            <div className="mr-3 mt-1">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
+                    <Filter className="w-6 h-6 text-white dark:text-black" />
+                    <span className="text-white dark:text-black text-sm">
+                        {paymentFilter ? (paymentFilter === "Online" ? "Online" : "Offline") : "Payment"}
+                    </span>
+                </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40 mr-5 bg-neutral-300 dark:bg-neutral-100 text-black">
+                <DropdownMenuItem onClick={() => setPaymentFilter("")}>All</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setPaymentFilter("Online")}>Online</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setPaymentFilter("Offline")}>Offline</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            </div>
+            <div className="mr-3 mt-1">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>   
+                <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
+                    <Filter className="w-6 h-6 text-white dark:text-black" />
+                    <span className="text-white dark:text-black text-sm">
+                        {categoryFilter || "Category"}
+                    </span>
+                </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-neutral-300 dark:bg-neutral-100 text-black max-h-60 overflow-y-auto">
+                <DropdownMenuItem onClick={() => setCategoryFilter("")}>All</DropdownMenuItem>
+                {categories.map((cat) => (
+                    <DropdownMenuItem key={cat.id} onClick={() => setCategoryFilter(cat.name)}>
+                    {cat.name}
+                    </DropdownMenuItem>
+                ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+            </div>
         </div>
         </div>  
             <div className='mt-3'>
@@ -157,7 +225,7 @@ function BookDetails() {
                     </div> 
                     <div className='flex flex-row justify-between'>   
                         <div>Net Balance:</div>
-                        <div className={`${summary.balance < 0 ? "text-red-400 dark:text-red-500" : "text-green-500"} font-bold`}>
+                        <div className={`${summary.balance < 0 ? "text-red-400 dark:text-red-500" : "text-green-400 dark:text-green-600"} font-bold`}>
                             {summary.balance < 0 ? `-Rs. ${Math.abs(summary.balance)}` : `Rs. ${summary.balance}`}
                         </div>
                     </div>
@@ -170,15 +238,33 @@ function BookDetails() {
                 </div>
             </div>
             <div className='mt-3'>
-                <div className='text-sm text-neutral-300 ml-6 font-medium mt-4 dark:text-neutral-800'>Entries</div>
+                <div className='flex flex-row justify-between text-sm text-neutral-300 ml-6 mr-6 font-medium mt-4 dark:text-neutral-800'>Entries <span>({expenses.length} of {allExpenses.length})</span></div>
                 {loading ? (
                 <p className="text-center text-neutral-400 mt-4">Loading...</p>
-                ) : Object.keys(groupedExpenses).length === 0 ? (
-                <p className="text-center text-neutral-400 mt-4">No entries found.</p>
+                ) : allExpenses.length === 0 ? (
+                <div className="flex flex-col items-center justify-center mt-10 text-center text-neutral-400 dark:text-neutral-600">
+                    <img
+                    src="/emptyEntries.svg"
+                    alt="No entries yet"
+                    className="w-60 h-60 mb-4 opacity-100"
+                    />
+                    <p className="text-xl font-semibold mb-2">No entries added yet</p>
+                    <p className="text-sm">Start by adding a Cash-IN or Cash-OUT entry.</p>
+                </div>
+                ): expenses.length === 0 ? (
+                <div className="flex flex-col items-center justify-center text-center text-neutral-400 dark:text-neutral-600">
+                    <img
+                    src="/notFound.svg"
+                    alt="No matching entries"
+                    className="w-60 h-60 mb-4 opacity-100"
+                    />
+                    <p className="text-xl font-semibold mb-2">No matching results</p>
+                    <p className="text-sm">Try adjusting your search or filters.</p>
+                </div>
                 ) : (
                 Object.entries(groupedExpenses).map(([date, entries]) => (
                     <div key={date}>
-                    <div className='text-neutral-400 dark:text-neutral-500 w-full text-center mt-4'>{date}</div>
+                    <div className='sticky top-13 z-40 text-neutral-400 dark:text-neutral-500 w-full text-sm text-center mt-4'>{date}</div>
                     {entries.map(entry => (
                         <EntryCard
                             key={entry.id}

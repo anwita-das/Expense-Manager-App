@@ -123,7 +123,7 @@ function Books() {
   return (
     <div className="bg-neutral-800 dark:bg-neutral-300 min-h-screen pb-10">
       <div className="flex flex-row justify-between items-center p-3">
-        <h1 className="text-4xl font-sans font-medium text-neutral-50 dark:text-neutral-900">
+        <h1 className="text-4xl font-sans font-bold text-neutral-50 dark:text-neutral-900">
           My Books
         </h1>
         <div className="flex items-center gap-3">
@@ -164,7 +164,7 @@ function Books() {
                     <Button
                       type="button"
                       onClick={() => setSelectedType("dailyexpense")}
-                      className={`text-black w-[32%] dark:bg-neutral-300 hover:bg-green-300 ${
+                      className={`text-black w-[32%] dark:bg-neutral-300 hover:bg-green-300 dark:hover:bg-green-300 ${
                         selectedType === "dailyexpense"
                           ? "bg-green-300 dark:bg-green-300"
                           : "bg-neutral-400"
@@ -175,7 +175,7 @@ function Books() {
                     <Button
                       type="button"
                       onClick={() => setSelectedType("loanstatus")}
-                      className={`text-black w-[32%] dark:bg-neutral-300 hover:bg-orange-300 ${
+                      className={`text-black w-[32%] dark:bg-neutral-300 hover:bg-orange-300 dark:hover:bg-orange-300 ${
                         selectedType === "loanstatus"
                           ? "bg-orange-300 dark:bg-orange-300"
                           : "bg-neutral-400"
@@ -186,7 +186,7 @@ function Books() {
                     <Button
                       type="button"
                       onClick={() => setSelectedType("savings")}
-                      className={`text-black w-[32%] dark:bg-neutral-300 hover:bg-blue-300 ${
+                      className={`text-black w-[32%] dark:bg-neutral-300 hover:bg-blue-300 dark:hover:bg-blue-300 ${
                         selectedType === "savings"
                           ? "bg-blue-300 dark:bg-blue-300"
                           : "bg-neutral-400"
@@ -225,7 +225,7 @@ function Books() {
         </Dialog>
 
         <Link to="/settings">
-          <Button className="bg-neutral-700 dark:bg-neutral-300 p-2 rounded-full" variant="default">
+          <Button className="bg-neutral-700 dark:bg-neutral-200 p-2 rounded-full shadow-lg" variant="default">
             <Settings className="w-5 h-5 text-white dark:text-black" />
           </Button>
         </Link>
@@ -246,7 +246,7 @@ function Books() {
         <div className="mr-3 mt-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="bg-neutral-700 dark:bg-neutral-300 rounded-full shadow-lg">
+              <Button className="bg-neutral-700 dark:bg-neutral-200 rounded-full shadow-lg">
                 <Filter className="w-6 h-6 text-white dark:text-black" />
                 <span className="ml-1 text-sm">{filterType}</span>
               </Button>
@@ -320,9 +320,9 @@ function Books() {
                   {["dailyexpense", "loanstatus", "savings"].map(type => (
                     <Button key={type} type="button" onClick={() => setEditSelectedType(type)}
                       className={`text-black w-[32%] ${editSelectedType === type ? {
-                        dailyexpense: "bg-green-300",
-                        loanstatus: "bg-orange-300",
-                        savings: "bg-blue-300"
+                        dailyexpense: "bg-green-300 hover:bg-green-400",
+                        loanstatus: "bg-orange-300 hover:bg-orange-400",
+                        savings: "bg-blue-300 hover:bg-blue-400"
                       }[type] : "bg-neutral-400"}`}>
                       {{ dailyexpense: "Daily Expense", loanstatus: "Loan Status", savings: "Savings" }[type]}
                     </Button>

@@ -1,6 +1,6 @@
 // import dayjs from "dayjs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faBuildingColumns } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faBuildingColumns, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { validateLoanEntry } from "../../utils/validation";
@@ -92,7 +92,7 @@ function AddEntryLS() {
                     <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" />
                     </Link>
                     <div className="font-bold text-3xl">New Entry</div>
-                    <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl"/>
+                    <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl hover:text-orange-400"/>
                 </div>
             
                 <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} showTime={false} />
@@ -115,21 +115,28 @@ function AddEntryLS() {
                 </div>
                 <div className='mt-3 w-full'>
                     <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount (add interest for new loan) <span className="text-red-500">*</span></div>
-                    <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={"Enter the amount"} />
+                    <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={"Enter the amount"} className={"dark:bg-neutral-100"} />
                     {errors.amount && (
                         <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
                     )}
                 </div>
                 <div className='mt-3 w-full'>
                     <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description <span className="text-red-500">*</span></div>
-                    <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Enter a brief description"} />
+                    <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Enter a brief description"} className={"dark:bg-neutral-100"} />
                     {errors.description && (
                         <p className="text-red-400 text-sm mt-1">{errors.description}</p>
                     )}
                 </div>
                 <div className="mt-3 w-full">
-                <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
-                    Category <span className="text-red-500">*</span>
+                <div className="flex flex-row justify-between text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">
+                    <div className='flex flex-row'>Category <span className="text-red-500 ml-1">*</span> </div>
+                    <div>
+                    <Link to = "/settings">
+                    <span className="text-md mr-2 cursor-pointer transition-all" title="Manage categories in Settings">
+                        <FontAwesomeIcon icon={faCircleInfo} />
+                    </span>
+                    </Link>
+                    </div>
                 </div>
                 <Select onValueChange={setCategory}>
                     <SelectTrigger className="dark:bg-neutral-100 w-full hover:cursor-pointer">
@@ -150,7 +157,7 @@ function AddEntryLS() {
                 </div>
                 <div className="flex flex-row justify-center mt-3 space-x-2 w-full">
                     <Button type="submit" onClick={handleSubmit} className="w-[40%] bg-purple-950 dark:text-neutral-50">
-                        Add Payment
+                        Add Entry
                     </Button>
                     <Button
                       variant="default"

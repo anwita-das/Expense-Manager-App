@@ -83,7 +83,7 @@ function AddEntryS() {
             <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" />
           </Link>
           <div className="font-bold text-3xl">New Entry</div>
-          <FontAwesomeIcon icon={faPiggyBank} className="text-2xl" />
+          <FontAwesomeIcon icon={faPiggyBank} className="text-2xl hover:text-blue-400" />
         </div>
 
         <Calendar24 value={date} onChange={setDate} showTime={false}/>

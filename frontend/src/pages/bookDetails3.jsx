@@ -25,6 +25,7 @@ function BookDetails3() {
     const [savings, setSavings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [groupedSavings, setGroupedSavings] = useState({});
+    const [allSavings, setAllSavings] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [filterType, setFilterType] = useState("All");
@@ -60,6 +61,7 @@ function BookDetails3() {
             const response = await getSavingsByBookId(id);
             const sortedData = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
             setSavings(sortedData);
+            setAllSavings(sortedData);
             setGroupedSavings(groupByDate(sortedData));
             } catch (err) {
             console.error("Failed to fetch savings entries", err);
@@ -120,7 +122,7 @@ function BookDetails3() {
     return(
         <>
         <div className="bg-neutral-800 min-h-screen pb-20 dark:bg-neutral-200 dark:text-neutral-900">
-            <div className='flex flex-row items-center p-2 bg-blue-300 space-x-2'>
+            <div className='sticky top-0 z-40 flex flex-row items-center p-2 bg-blue-300 space-x-2'>
                 <Link to="/books">
                     <FontAwesomeIcon icon={faChevronLeft} className="text-2xl cursor-pointer" />
                 </Link>
@@ -181,17 +183,35 @@ function BookDetails3() {
                 </div>
             </div>
             <div className='mt-3'>
-                <div className='flex flex-row justify-between'>
-                    <div className='text-sm text-neutral-300 ml-6 font-medium mt-3 dark:text-neutral-800'>Entries</div>
-                </div>
+                
+                <div className='flex flex-row justify-between text-sm text-neutral-300 ml-6 mr-6 font-medium mt-3 dark:text-neutral-800'>Entries <span>({savings.length} of {allSavings.length})</span></div>
+                
                 {loading ? (
                 <p className="text-center text-neutral-400 mt-4">Loading...</p>
+                ) : allSavings.length === 0 ? (
+                <div className="flex flex-col items-center justify-center mt-10 text-center text-neutral-400 dark:text-neutral-600">
+                    <img
+                    src="/emptyEntries.svg"
+                    alt="No entries yet"
+                    className="w-60 h-60 mb-4 opacity-100"
+                    />
+                    <p className="text-xl font-semibold mb-2">No savings entries yet</p>
+                    <p className="text-sm">Start by making your first deposit.</p>
+                </div>
                 ) : paginatedSavings.length === 0 ? (
-                <p className="text-center text-neutral-400 mt-4">No entries match your filter/search.</p>
+                <div className="flex flex-col items-center justify-center text-center text-neutral-400 dark:text-neutral-600">
+                    <img
+                    src="/notFound.svg"
+                    alt="No matching entries"
+                    className="w-60 h-60 mb-4 opacity-100"
+                    />
+                    <p className="text-xl font-semibold mb-2">No matching results</p>
+                    <p className="text-sm">Try adjusting your search or filters.</p>
+                </div>
                 ) : (
                 Object.entries(groupedToShow).map(([date, entries]) => (
                     <div key={date}>
-                    <div className="text-neutral-400 dark:text-neutral-500 w-full text-center mt-4">{date}</div>
+                    <div className="sticky top-13 z-40 text-neutral-400 dark:text-neutral-500 w-full text-sm text-center mt-4">{date}</div>
                     {entries.map((entry) => (
                         <EntryCardS
                         key={entry.id}
@@ -199,7 +219,8 @@ function BookDetails3() {
                         onDelete={async (idToDelete) => {
                             try {
                             await deleteSavings(idToDelete);
-                            const updated = savings.filter((e) => e.id !== idToDelete);
+                            const updated = allSavings.filter((e) => e.id !== idToDelete);
+                            setAllSavings(updated);
                             setSavings(updated);
                             } catch (err) {
                             alert("Failed to delete entry.");
@@ -210,6 +231,7 @@ function BookDetails3() {
                     </div>
                 ))
                 )}
+
             </div>
             <div className="flex flex-row justify-center fixed bottom-4 z-50 w-full">
                 <Button onClick={handleDepositClick} className="bg-green-500 text-white rounded-full h-12 w-[40%] text-xl shadow-lg p-0">

@@ -81,8 +81,8 @@ function EntryDetailsS() {
             <div className="flex flex-col items-center justify-center w-[90%] h-auto m-5 p-4 rounded-2xl space-y-2 bg-neutral-600 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-800">
                 <div className="flex flex-row items-center justify-between w-full mb-5">
                     <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" onClick={() => navigate(-1)} />
-                    <div className="font-bold text-3xl">Entry Details</div>
-                    <FontAwesomeIcon icon={faPiggyBank} className="text-2xl" />
+                    <div className="font-bold text-3xl">Edit Entry</div>
+                    <FontAwesomeIcon icon={faPiggyBank} className="text-2xl hover:text-blue-400" />
                 </div>
                 <Calendar24 value={date} onChange={(val) => setDate(val)} showTime={false} />
                 {errors.date && (
@@ -93,7 +93,7 @@ function EntryDetailsS() {
                     type="button"
                     className={`w-[45%] font-medium text-md ${
                         entryType === "onetime"
-                        ? "bg-purple-500 hover:bg-purple-600 text-white"
+                        ? "bg-purple-800 hover:bg-purple-900 text-white"
                         : "bg-neutral-400 hover:bg-purple-400 hover:text-white text-black"
                     }`}
                     onClick={() => setEntryType("onetime")}
@@ -105,7 +105,7 @@ function EntryDetailsS() {
                     type="button"
                     className={`w-[45%] font-medium text-md ${
                         entryType === "recurring"
-                        ? "bg-purple-500 hover:bg-purple-600 text-white"
+                        ? "bg-purple-800 hover:bg-purple-900 text-white"
                         : "bg-neutral-400 hover:bg-purple-400 hover:text-white text-black"
                     }`}
                     onClick={() => setEntryType("recurring")}
@@ -139,7 +139,7 @@ function EntryDetailsS() {
                 <div className="w-full">
                     <div className="text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800">Frequency <span className="text-red-500">*</span></div>
                     <Select value={frequency} onValueChange={setFrequency}>
-                    <SelectTrigger className="dark:bg-neutral-100 w-full">
+                    <SelectTrigger className="dark:bg-neutral-200 w-full">
                         <SelectValue>
                         {{
                             monthly: "Monthly",

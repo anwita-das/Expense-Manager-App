@@ -72,7 +72,7 @@ function Settings() {
     <div className="bg-neutral-800 dark:bg-neutral-200 text-neutral-50 dark:text-neutral-900 min-h-screen px-6 py-5">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-4xl font-bold">Settings</h1>
-        <Button onClick={() => navigate(-1)} className="bg-purple-900 text-white dark:text-white">
+        <Button onClick={() => navigate(-1)} className="bg-purple-900 hover:bg-purple-700 text-white dark:text-white">
           Back
         </Button>
       </div>

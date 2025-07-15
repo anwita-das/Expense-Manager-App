@@ -49,7 +49,7 @@ function EntryCardS({
 
         <div className="flex flex-row justify-between w-full">
             <div className={`${
-                !frequency ? "bg-neutral-700" : "bg-neutral-800 dark:bg-neutral-400"
+                !frequency ? "bg-neutral-700 dark:bg-neutral-300" : "bg-neutral-800 dark:bg-neutral-400"
                 } text-xs font-semibold pr-2 pl-2 pt-1 pb-1 rounded-2xl`}>
                 {{
                     daily: "Daily",

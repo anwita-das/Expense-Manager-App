@@ -98,7 +98,7 @@ function AddEntryDE() {
             <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" />
           </Link>
           <div className="font-bold text-3xl">New Entry</div>
-          <FontAwesomeIcon icon={faMoneyBills} className="text-2xl" />
+          <FontAwesomeIcon icon={faMoneyBills} className="text-2xl hover:text-green-500" />
         </div>
 
         <div className="flex flex-row justify-between w-full items-center">
@@ -124,7 +124,7 @@ function AddEntryDE() {
 
         <div className='mt-3 w-full'>
           <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Amount <span className="text-red-500">*</span></div>
-          <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={"Enter the amount"} />
+          <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={"Enter the amount"} className={"dark:bg-neutral-100"}/>
           {errors.amount && (
             <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
           )}
@@ -132,7 +132,7 @@ function AddEntryDE() {
 
         <div className='mt-3 w-full'>
           <div className='text-sm text-neutral-300 mb-2 font-bold dark:text-neutral-800'>Description <span className="text-red-500">*</span></div>
-          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Enter a brief description"}/>
+          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={"Enter a brief description"} className={"dark:bg-neutral-100"}/>
           {errors.description && (
             <p className="text-red-400 text-sm mt-1">{errors.description}</p>
           )}

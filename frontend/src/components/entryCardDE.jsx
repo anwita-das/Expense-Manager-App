@@ -46,7 +46,7 @@ function EntryCard({
           Rs. {amount}
         </div>
         <div className="flex flex-row space-x-2">
-          <div className="font-medium">{description}</div>
+          <div className="font-medium italic">{description}</div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button>

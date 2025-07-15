@@ -52,9 +52,11 @@ export const deleteDailyExpense = async (expenseId) => {
   }
 };
 
-export const getExpenseSummary = async (bookId) => {
+export const getExpenseSummary = async (bookId, filters = {}) => {
   try {
-    const response = await API.get(`/expenses/${bookId}/summary`);
+    const queryString = new URLSearchParams(filters).toString();
+    const url = queryString ? `/expenses/${bookId}/summary?${queryString}` : `/expenses/${bookId}/summary`;
+    const response = await API.get(url);
     return response.data;
   } catch (error) {
     console.error("Error fetching expense summary:", error);

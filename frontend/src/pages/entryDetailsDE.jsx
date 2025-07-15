@@ -91,7 +91,7 @@ function EntryDetailsDE() {
                     <FontAwesomeIcon icon={faChevronLeft} className="text-xl cursor-pointer" onClick={() => navigate(-1)} />
                     
                     <div className="font-bold text-3xl">Edit Entry Details</div>
-                    <FontAwesomeIcon icon={faMoneyBills} className="text-2xl" />
+                    <FontAwesomeIcon icon={faMoneyBills} className="text-2xl hover:text-green-500" />
                 </div>
                 <Calendar24 value={datetime} onChange={(val) => setDatetime(val)} showTime={true}/>
                 <div className="flex flex-row justify-center gap-3 mt-2 w-full">
