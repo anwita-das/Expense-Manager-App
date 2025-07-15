@@ -28,7 +28,7 @@ def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int)
     return db_expense
 
 
-def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10, search: Optional[str] = None, category: Optional[str] = None, type: Optional[str] = None):
+def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10, search: Optional[str] = None, category: Optional[str] = None, type: Optional[str] = None, payment_method: Optional[str] = None):
     query = db.query(DailyExpense).join(Book).filter(
         DailyExpense.book_id == book_id,
         Book.user_id == user_id
@@ -42,6 +42,9 @@ def get_daily_expenses(db: Session, book_id: int, user_id: int, skip: int = 0, l
 
     if category:
         query = query.filter(models.DailyExpense.category == category)
+
+    if payment_method:
+        query = query.filter(DailyExpense.payment_method == payment_method)
 
     expenses = query.order_by(DailyExpense.datetime.desc()).offset(skip).limit(limit).all()
 
@@ -87,7 +90,7 @@ def delete_daily_expense(db: Session, expense_id: int, user_id: int):
 
 
 
-def get_expense_summary(db: Session, book_id: int, user_id: int):
+def get_expense_summary(db: Session, book_id: int, user_id: int, search: Optional[str] = None, category: Optional[str] = None, type: Optional[str] = None, payment_method: Optional[str] = None):
     """
     Calculates the summary of expenses for a specific book owned by the user.
     """
@@ -101,13 +104,25 @@ def get_expense_summary(db: Session, book_id: int, user_id: int):
     # 'case' works like an IF statement in SQL.
     # We sum the amount if the type is 'credit', otherwise we sum 0.
     # We do the same for 'debit'.
-    summary_query = db.query(
+    query = db.query(
         func.sum(case((DailyExpense.type == 'cashin', DailyExpense.amount), else_=0)).label('total_earning'),
         func.sum(case((DailyExpense.type == 'cashout', DailyExpense.amount), else_=0)).label('total_spending')
-    ).filter(DailyExpense.book_id == book_id)
+    ).join(Book).filter(
+        DailyExpense.book_id == book_id,
+        Book.user_id == user_id
+    )
+
+    if search:
+        query = query.filter(DailyExpense.description.ilike(f"%{search}%"))
+    if category:
+        query = query.filter(DailyExpense.category == category)
+    if type:
+        query = query.filter(DailyExpense.type == type)
+    if payment_method:
+        query = query.filter(DailyExpense.payment_method == payment_method)
 
     # Execute the query
-    result = summary_query.one()
+    result = query.one()
 
     # The result might contain None if there are no entries, so default to 0.0
     total_earning = float(result.total_earning or 0.0)
