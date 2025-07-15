@@ -16,6 +16,6 @@ class CategoryUpdate(BaseModel):
 
 class CategoryOut(CategoryBase):
     id: int
-    user_id: int
+    user_id: Optional[int]
 
     model_config = ConfigDict(from_attributes=True)

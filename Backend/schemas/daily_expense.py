@@ -34,3 +34,9 @@ class DailyExpense(BaseModel):
     payment_method: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ExpenseSummary(BaseModel):
+    total_earning: float
+    total_spending: float
+    balance: float    

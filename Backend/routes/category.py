@@ -1,5 +1,3 @@
-# routes/category.py
-
 from fastapi import APIRouter, Depends, HTTPException, status ,Query
 from sqlalchemy.orm import Session
 from schemas.category import CategoryCreate, CategoryOut, CategoryUpdate

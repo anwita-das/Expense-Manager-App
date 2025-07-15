@@ -20,7 +20,10 @@ def get_categories(db: Session, user_id: int, page: int, size: int):
 
     # This is the recommended way to write this query
     categories = (db.query(models.category.Category)
-                    .filter(models.category.Category.user_id == user_id)
+                    .filter(
+                        (models.category.Category.user_id == user_id) | 
+                        (models.category.Category.user_id == None) 
+                    )
                     .offset(offset)
                     .limit(size)
                     .all())

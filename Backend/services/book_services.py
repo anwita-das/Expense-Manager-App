@@ -32,11 +32,10 @@ def update_book(db: Session, book_id: int, book: BookUpdate, user_id: int):
     db_book = db.query(Book).filter(Book.id == book_id, Book.user_id == user_id).first()
 
     if db_book:
-
         update_data = book.model_dump(exclude_unset=True)
         for key, value in update_data.items():
             setattr(db_book, key, value)
-        
+
         db.commit()
         db.refresh(db_book)
 
@@ -48,6 +47,6 @@ def delete_book(db: Session, book_id: int, user_id: int):
     if db_book:
         db.delete(db_book)
         db.commit()
-        return db_book  
-    
-    return None 
+        return db_book
+
+    return None
