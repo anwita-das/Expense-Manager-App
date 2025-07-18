@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String ,DateTime, ForeignKey
 from sqlalchemy.sql import func
 from db.session import Base
 from sqlalchemy.sql import func
+from sqlalchemy import DECIMAL
 
 
 class Book(Base):
@@ -12,4 +13,9 @@ class Book(Base):
     description = Column(String)
     type = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+<<<<<<< HEAD
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+=======
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    amount = Column(DECIMAL(10, 2), nullable=False, default=0)
+>>>>>>> 5e420fb225ca9a6473e5f887847f623d6d18d347

@@ -7,7 +7,7 @@ load_dotenv()
 class Settings:
     SECRET_KEY: str = os.getenv("SECRET_KEY", "supersecret")
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 120
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 180
     MYSQL_USER: str = os.getenv("MYSQL_USER")
     MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD")
     MYSQL_DB: str = os.getenv("MYSQL_DB")
