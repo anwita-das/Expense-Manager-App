@@ -6,11 +6,7 @@ from schemas.daily_expense import DailyExpenseCreate, DailyExpenseUpdate
 from typing import Optional
 import models 
 from sqlalchemy import func, case
-<<<<<<< HEAD
 from decimal import Decimal
-=======
-
->>>>>>> 5e420fb225ca9a6473e5f887847f623d6d18d347
 
 def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int):
 
@@ -83,15 +79,11 @@ def get_expense_by_id(db: Session, expense_id: int, user_id: int):
         Book.user_id == user_id
     ).first()
 
-<<<<<<< HEAD
-def update_daily_expense(db: Session, expense_id: int, expense: DailyExpenseUpdate, user_id: int):
-=======
 
 def update_daily_expense(db: Session, expense_id: int, expense_data: DailyExpenseUpdate, user_id: int):
     db_expense = get_expense_by_id(db, expense_id, user_id)
     if not db_expense:
         return None
->>>>>>> 5e420fb225ca9a6473e5f887847f623d6d18d347
 
     for key, value in expense_data.model_dump(exclude_unset=True).items():
         setattr(db_expense, key, value)
@@ -132,20 +124,14 @@ def delete_daily_expense(db: Session, expense_id: int, user_id: int):
     db.commit()
     return {"detail": "Expense deleted successfully"}
 
-<<<<<<< HEAD
 def get_expense_summary(db: Session, book_id: int, user_id: int, search: Optional[str] = None, category: Optional[str] = None, type: Optional[str] = None, payment_method: Optional[str] = None):
     """
     Calculates the summary of expenses for a specific book owned by the user.
     """
     # First, verify that the book exists and belongs to the user for authorization
-=======
-def get_expense_summary(db: Session, book_id: int, user_id: int):
-
->>>>>>> 5e420fb225ca9a6473e5f887847f623d6d18d347
     book = db.query(Book).filter(Book.id == book_id, Book.user_id == user_id).first()
     if not book:
         return None
-<<<<<<< HEAD
 
     # Use a single query to get the sum of credits and debits
     # 'case' works like an IF statement in SQL.
@@ -174,21 +160,6 @@ def get_expense_summary(db: Session, book_id: int, user_id: int):
     # The result might contain None if there are no entries, so default to 0.0
     total_earning = float(result.total_earning or 0.0)
     total_spending = float(result.total_spending or 0.0)
-=======
-    
-    summary_query = db.query(
-        func.sum(case((DailyExpense.type == 'credit', DailyExpense.amount), else_=0)).label('total_earning'),
-        func.sum(case((DailyExpense.type == 'debit', DailyExpense.amount), else_=0)).label('total_spending')
-    ).filter(DailyExpense.book_id == book_id)
-
-    result = summary_query.one()
-
-    raw_earning = result.total_earning
-    raw_spending = result.total_spending
-    total_earning = float(raw_earning) if raw_earning is not None else 0.0
-    total_spending = float(raw_spending) if raw_spending is not None else 0.0
-
->>>>>>> 5e420fb225ca9a6473e5f887847f623d6d18d347
     balance = total_earning - total_spending
 
     return {
@@ -196,8 +167,6 @@ def get_expense_summary(db: Session, book_id: int, user_id: int):
         "total_spending": total_spending,
         "balance": balance
     }
-<<<<<<< HEAD
-=======
 
 def update_book_amount_DE(db: Session, book_id: int):
     print(f"book_id: {book_id}")
@@ -229,8 +198,3 @@ def update_book_amount_DE(db: Session, book_id: int):
 
     print(f"db_book: {db_book}")
     db.add(db_book)
-    
-
-
-
->>>>>>> 5e420fb225ca9a6473e5f887847f623d6d18d347
