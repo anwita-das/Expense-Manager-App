@@ -5,7 +5,7 @@ from decimal import Decimal
 
 class LoanEntryCreate(BaseModel):
     book_id: int
-    entry_type: str 
+    type: str 
     amount: Decimal
     description: Optional[str] = None
     date: datetime
@@ -28,4 +28,12 @@ class LoanEntry(BaseModel):
     category: str
 
 
+    model_config = ConfigDict(from_attributes=True)
+
+class LoanSummary(BaseModel):
+    total_loan_taken: Decimal
+    total_loan_given: Decimal
+    balance: Decimal
+
+    # You can add this config here if you ever create a LoanSummary from a model instance
     model_config = ConfigDict(from_attributes=True)

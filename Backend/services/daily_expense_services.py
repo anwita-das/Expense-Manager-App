@@ -1,36 +1,52 @@
+
 from sqlalchemy.orm import Session
 from models.daily_expense import DailyExpense
 from models.book import Book
 from schemas.daily_expense import DailyExpenseCreate, DailyExpenseUpdate
 from typing import Optional
-import models
+import models 
 from sqlalchemy import func, case
-from models.daily_expense import DailyExpense 
-from models.book import Book
-from decimal import Decimal 
-
-
-
 
 
 def create_daily_expense(db: Session, expense: DailyExpenseCreate, user_id: int):
 
-    book = db.query(Book).filter(Book.id == expense.book_id, Book.user_id == user_id).first()
-    if not book:
+    if not db.query(Book).filter(Book.id == expense.book_id, Book.user_id == user_id).first():
         return None
+ 
 
-    db_expense = DailyExpense(
-        book_id=expense.book_id,
-        type=expense.type,
-        amount=expense.amount,
-        description=expense.description,
-        datetime=expense.datetime,
-        category=expense.category,
-        payment_method=expense.payment_method
-    )
+    db_expense = DailyExpense(**expense.model_dump())
     db.add(db_expense)
-    db.commit()
+    db.commit()  
     db.refresh(db_expense)
+ 
+
+    book_id = expense.book_id
+    print(f"book_id: {book_id}")
+ 
+    total_credit = db.query(func.sum(DailyExpense.amount)).filter(
+        DailyExpense.book_id == book_id,
+        DailyExpense.type == 'credit'
+    ).scalar()
+    print(f"total_credit: {total_credit}")
+ 
+    total_debit = db.query(func.sum(DailyExpense.amount)).filter(
+        DailyExpense.book_id == book_id,
+        DailyExpense.type == 'debit'
+    ).scalar()
+    print(f"total_debit: {total_debit}")
+ 
+    total_credit = total_credit or 0
+    total_debit = total_debit or 0
+    final_balance = total_credit - total_debit
+    print(f"final_balance: {final_balance}")
+ 
+
+    db_book = db.query(Book).filter(Book.id == book_id).first()
+    if db_book:
+        db_book.amount = final_balance
+        db.commit()
+        db.refresh(db_book)
+ 
     return db_expense
 
 
@@ -57,45 +73,54 @@ def get_expense_by_id(db: Session, expense_id: int, user_id: int):
     ).first()
 
 
-def update_daily_expense(db: Session, expense_id: int, expense: DailyExpenseUpdate, user_id: int):
+def update_daily_expense(db: Session, expense_id: int, expense_data: DailyExpenseUpdate, user_id: int):
+    db_expense = get_expense_by_id(db, expense_id, user_id)
+    if not db_expense:
+        return None
 
-    db_expense = db.query(DailyExpense).join(Book).filter(
-        DailyExpense.id == expense_id,
-        Book.user_id == user_id
-    ).first()
+    for key, value in expense_data.model_dump(exclude_unset=True).items():
+        setattr(db_expense, key, value)
+    
+    db.add(db_expense)
+    
+    book_id = db_expense.book_id
+    summary = db.query(
+        func.sum(case((DailyExpense.type == 'credit', DailyExpense.amount), else_=0)).label('total_credit'),
+        func.sum(case((DailyExpense.type == 'debit', DailyExpense.amount), else_=0)).label('total_debit')
+    ).filter(DailyExpense.book_id == book_id).one()
 
-    if db_expense:
-        update_data = expense.model_dump(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(db_expense, key, value)
+    new_balance = (summary.total_debit or 0) - (summary.total_credit or 0)
+    db.query(Book).filter(Book.id == book_id).update({"amount": new_balance})
 
-        db.commit()
-        db.refresh(db_expense)
-
+    db.commit()
+    db.refresh(db_expense)
     return db_expense
 
 
 def delete_daily_expense(db: Session, expense_id: int, user_id: int):
-    db_expense = db.query(DailyExpense).join(Book).filter(
-        DailyExpense.id == expense_id,
-        Book.user_id == user_id
-    ).first()
+    db_expense = get_expense_by_id(db, expense_id, user_id)
+    if not db_expense:
+        return None
+    
+    book_id_to_update = db_expense.book_id
+    
+    db.delete(db_expense)
+    
+    summary = db.query(
+        func.sum(case((DailyExpense.type == 'credit', DailyExpense.amount), else_=0)).label('total_credit'),
+        func.sum(case((DailyExpense.type == 'debit', DailyExpense.amount), else_=0)).label('total_debit')
+    ).filter(DailyExpense.book_id == book_id_to_update).one()
 
-    if db_expense:
-        db.delete(db_expense)
-        db.commit()
-        return db_expense
-
-    return None
+    new_balance = (summary.total_debit or 0) - (summary.total_credit or 0)
+    db.query(Book).filter(Book.id == book_id_to_update).update({"amount": new_balance})
+    
+    db.commit()
+    return {"detail": "Expense deleted successfully"}
 
 def get_expense_summary(db: Session, book_id: int, user_id: int):
-    """
-    Calculates the summary of expenses for a specific book owned by the user.
-    """
-    
+
     book = db.query(Book).filter(Book.id == book_id, Book.user_id == user_id).first()
     if not book:
-        
         return None
     
     summary_query = db.query(
@@ -117,3 +142,38 @@ def get_expense_summary(db: Session, book_id: int, user_id: int):
         "total_spending": total_spending,
         "balance": balance
     }
+
+def update_book_amount_DE(db: Session, book_id: int):
+    print(f"book_id: {book_id}")
+    total_credit = db.query(func.sum(DailyExpense.amount)).filter(
+        DailyExpense.book_id == book_id,
+        DailyExpense.type == 'credit'
+    ).scalar()
+    print(f"total_credit: {total_credit}")
+
+    total_debit = db.query(func.sum(DailyExpense.amount)).filter(
+        DailyExpense.book_id == book_id,
+        DailyExpense.type == 'debit'
+    ).scalar()
+    print(f"total_debit: {total_debit}")
+
+    if total_credit is None:
+        total_credit = 0
+    
+    if total_debit is None:
+        total_debit = 0
+
+    final_balance = total_credit - total_debit
+    print(f"final_balance: {final_balance}")
+    
+    db_book = db.query(Book).filter(Book.id == book_id).first()
+
+    if db_book:
+        setattr(db_book, "amount", final_balance)
+
+    print(f"db_book: {db_book}")
+    db.add(db_book)
+    
+
+
+

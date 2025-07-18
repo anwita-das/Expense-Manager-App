@@ -18,7 +18,6 @@ def get_categories(db: Session, user_id: int, page: int, size: int):
     """
     offset = (page - 1) * size
 
-    # This is the recommended way to write this query
     categories = (db.query(models.category.Category)
                     .filter(
                         (models.category.Category.user_id == user_id) | 
