@@ -82,7 +82,41 @@ This app is designed for anyone who needs to record and manage their finances, i
    cd expense-manager-app
    ```
 
-2. **Set Up the Backend**:
+2. **Set up the Database**
+* Ensure MySQL is installed and running on your system.
+* Log in to MySQL using a client (e.g., MySQL Workbench or command line):
+```bash
+mysql -u your-mysql-username -p your-mysql-password
+```
+* Create the database named `expmanager`:
+```bash
+CREATE DATABASE expmanager;
+```
+* Verify the database exists:
+```bash
+SHOW DATABASES;
+```
+* Import the database schema from `Backend/schema.sql`:
+> Using MySQL Workbench:
+  -> Open MySQL Workbench and connect to your MySQL server.
+  -> Go to File > Open SQL Script, navigate to `expense-manager-app/Backend/schema.sql`, and open it.
+  -> Click the Execute button (lightning bolt) or press `Ctrl+Shift+Enter` to run the script.
+> Using command line:
+```bash
+mysql -u your-mysql-username -p expmanager < Backend/schema.sql
+```
+> Verify the tables were created:
+```sql
+USE expmanager;
+SHOW TABLES;
+```
+You should see `users`, `books`, `categories`, `daily_expenses`, `loan_entries`, and `savings`.
+> Exit the MySQL client:
+```sql
+EXIT;
+```
+
+3. **Set Up the Backend**:
 Navigate to the backend directory:
 ```bash
 cd backend
@@ -114,7 +148,7 @@ ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 * ORIGINS: Allowed CORS origins for the frontend (matches frontend URLs).
 Ensure MySQL is running and the specified database is created.
 
-3. **Set Up the Frontend**:
+4. **Set Up the Frontend**:
 Navigate to the frontend directory:
 ```bash
 cd frontend
