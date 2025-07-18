@@ -148,4 +148,5 @@ The frontend will be available at http://localhost:5173 (or the port specified b
 
 ## Access the App:
 Open your browser and navigate to http://localhost:5173. 🌐
+
 Sign up or log in to start managing your finances. 🔐
