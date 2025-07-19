@@ -19,7 +19,6 @@ def create_savings(db: Session, entry: savingsCreate, user_id: int):
     db.add(db_savings)
     db.commit()
     db.refresh(db_savings)
-    calculate_total_savings(db, entry.book_id)
     return db_savings
 
 
@@ -48,7 +47,6 @@ def update_savings(db: Session, saving_id: int, entry: savingsUpdate, user_id: i
 
         db.commit()
         db.refresh(db_entry)
-        calculate_total_savings(db, db_entry.book_id)
 
     return db_entry
 
@@ -62,7 +60,6 @@ def delete_savings(db: Session, saving_id: int, user_id: int):
         book_id = db_entry.book_id
         db.delete(db_entry)
         db.commit()
-        calculate_total_savings(db, book_id)
         return True
 
     return False

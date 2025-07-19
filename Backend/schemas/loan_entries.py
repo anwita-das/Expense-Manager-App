@@ -5,14 +5,14 @@ from decimal import Decimal
 
 class LoanEntryCreate(BaseModel):
     book_id: int
-    type: str 
+    entry_type: str 
     amount: Decimal
     description: Optional[str] = None
     date: datetime
     category: str
 
 class LoanEntryUpdate(BaseModel):
-    type: Optional[str] = None
+    entry_type: Optional[str] = None
     amount: Optional[Decimal] = None
     description: Optional[str] = None
     date: Optional[datetime] = None
@@ -21,7 +21,7 @@ class LoanEntryUpdate(BaseModel):
 class LoanEntry(BaseModel):
     id: int
     book_id: int
-    type: str
+    entry_type: str
     amount: Decimal
     description: Optional[str] = None
     date: datetime

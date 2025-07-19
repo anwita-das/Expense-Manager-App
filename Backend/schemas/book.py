@@ -7,7 +7,7 @@ class BookBase(BaseModel):
     title: str
     description: str
     type: str
-    amount: float
+    amount: Optional[float] = None
 
 class BookCreate(BookBase):
     pass

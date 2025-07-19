@@ -6,6 +6,7 @@ from services.savings_services import create_savings, get_savings, update_saving
 from services.auth_services import verify_token
 from schemas.user import UserOut
 from db.session import get_db
+from services.savings_services import calculate_total_savings
 
 router = APIRouter()
 
@@ -20,7 +21,7 @@ def fetch_savings_by_id(id: int, db: Session = Depends(get_db), token_data: User
 
 @router.get("/{book_id}", response_model=List[savings])
 def read_savings(book_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), token_data: UserOut = Depends(verify_token)):
-
+    calculate_total_savings(db, book_id)
     entries = get_savings(db, book_id=book_id, user_id=token_data.id, skip=skip, limit=limit)
     return entries
 
