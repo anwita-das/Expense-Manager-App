@@ -24,7 +24,9 @@ class BookOut(BaseModel):
     type: str
     user_id: int
     created_at: datetime  
-    updated_at: Optional[datetime] = None  
+    updated_at: Optional[datetime] = None 
+    amount: Optional[float] = None 
+
 
     model_config = {
         "from_attributes": True
