@@ -5,10 +5,10 @@ import models
 
 def create_book(db: Session, book: BookCreate, user_id: int):
     db_book = Book(
-        title=book.title,
-        description=book.description,
+        title=book.title, 
+        description=book.description, 
         type=book.type,
-        user_id=user_id 
+        user_id=user_id
     )
     db.add(db_book)
     db.commit()
@@ -25,12 +25,10 @@ def get_book_by_id(db: Session, book_id: int, user_id: int):
     Retrieves a single book by its ID, but only if it belongs to the specified user.
     This is a crucial security check.
     """
-
     return db.query(Book).filter(
-        Book.id == book_id,
+        Book.id == book_id, 
         Book.user_id == user_id
     ).first()
-
 
 def update_book(db: Session, book_id: int, book: BookUpdate, user_id: int):
     db_book = db.query(Book).filter(Book.id == book_id, Book.user_id == user_id).first()

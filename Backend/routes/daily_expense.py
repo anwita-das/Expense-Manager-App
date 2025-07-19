@@ -34,13 +34,15 @@ def read_daily_expenses(
     db: Session = Depends(get_db),
     token_data: UserOut = Depends(verify_token),
     search: Optional[str] = Query(None),
-    category: Optional[str] = Query(None)
+    category: Optional[str] = Query(None),
+    type: Optional[str] = Query(None),
+    payment_method: Optional[str] = Query(None)
 ):
-    print("testing")
-    print(f"search: {search}")
-    print(f"category: {category}")
-    print(f"skip: {skip}")
-    print(f"limit: {limit}")
+    # print("testing")
+    # print(f"search: {search}")
+    # print(f"category: {category}")
+    # print(f"skip: {skip}")
+    # print(f"limit: {limit}")
 
     expenses = get_daily_expenses(
         db,
@@ -49,7 +51,9 @@ def read_daily_expenses(
         skip=skip,
         limit=limit,
         search=search,
-        category=category
+        category=category,
+        type=type,
+        payment_method=payment_method
     )
     return expenses
 
@@ -73,13 +77,17 @@ def remove_expense(expense_id: int, db: Session = Depends(get_db), token_data: U
 def read_expense_summary(
     book_id: int, 
     db: Session = Depends(get_db), 
-    token_data: UserOut = Depends(verify_token)
+    token_data: UserOut = Depends(verify_token),
+    search: Optional[str] = Query(None),
+    category: Optional[str] = Query(None),
+    type: Optional[str] = Query(None),
+    payment_method: Optional[str] = Query(None),
 ):
     """
     Get a summary of total earnings (credit), total spending (debit),
     and the final balance for a specific book.
     """
-    summary_data = get_expense_summary(db=db, book_id=book_id, user_id=token_data.id)
+    summary_data = get_expense_summary(db=db, book_id=book_id, user_id=token_data.id, search=search, category=category, type=type, payment_method=payment_method)
     
     if summary_data is None:
         raise HTTPException(

@@ -7,8 +7,7 @@ class LoanEntry(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     book_id = Column(Integer, ForeignKey('books.id'))
-    user_id = Column(Integer, ForeignKey('users.id'))   
-    type = Column(String)
+    entry_type = Column(String)
     amount = Column(DECIMAL(10, 2))
     description = Column(String)
     date = Column(DateTime)
