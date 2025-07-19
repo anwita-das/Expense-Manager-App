@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-from schemas.loan_entries import LoanEntryCreate, LoanEntry, LoanEntryUpdate  # Import LoanEntryUpdate
+from schemas.loan_entries import LoanEntryCreate, LoanEntry, LoanEntryUpdate  
 from services.loan_entries_services import create_loan_entry, get_loan_entries, update_loan_entry, delete_loan_entry, get_loan_by_id # Import update and delete
 from services.auth_services import verify_token
 from schemas.user import UserOut

@@ -1,38 +1,21 @@
-# In services/loan_entry_services.py
-
 from sqlalchemy.orm import Session
 from models.loan_entries import LoanEntry
-from models.book import Book
+from decimal import Decimal
+from typing import Optional
+import models
 from schemas.loan_entries import LoanEntryCreate, LoanEntryUpdate
+from models.book import Book
+from sqlalchemy import func, case
 
-# --- CREATE ---
 def create_loan_entry(db: Session, entry: LoanEntryCreate, user_id: int):
-    """
-    Creates a new loan entry in the database for a book owned by the user.
-    """
-    book = db.query(Book).filter(Book.id == entry.book_id, Book.user_id == user_id).first()
-    if not book:
-        return None  # Prevent creating entry for someone else's book
-
-    db_loan_entry = LoanEntry(
-        book_id=entry.book_id,
-        entry_type=entry.entry_type,
-        amount=entry.amount,
-        description=entry.description,
-        date=entry.date,
-        category=entry.category
-    )
-    db.add(db_loan_entry)
+    db_entry = models.LoanEntry(**entry.model_dump())
+    db.add(db_entry)
     db.commit()
-    db.refresh(db_loan_entry)
-    return db_loan_entry
+    db.refresh(db_entry)
+    update_book_loanamount_DE(db, entry.book_id, user_id)
+    return db_entry
 
-
-# --- READ ---
 def get_loan_entries(db: Session, book_id: int, user_id: int, skip: int = 0, limit: int = 10):
-    """
-    Gets a paginated list of loan entries for a specific book owned by the user.
-    """
     return db.query(LoanEntry).join(Book).filter(
         LoanEntry.book_id == book_id,
         Book.user_id == user_id
@@ -44,40 +27,57 @@ def get_loan_by_id(db: Session, loan_id: int, user_id: int):
         Book.user_id == user_id
     ).first()
 
-# --- UPDATE ---
 def update_loan_entry(db: Session, loan_id: int, loan_update: LoanEntryUpdate, user_id: int):
-    """
-    Updates a loan entry, ensuring it is owned by the user (through the book).
-    """
     db_entry = db.query(LoanEntry).join(Book).filter(
         LoanEntry.id == loan_id,
         Book.user_id == user_id
     ).first()
 
     if db_entry:
+        book_id_to_update = db_entry.book_id
         update_data = loan_update.model_dump(exclude_unset=True)
         for key, value in update_data.items():
             setattr(db_entry, key, value)
-
         db.commit()
         db.refresh(db_entry)
+        update_book_loanamount_DE(db, book_id=book_id_to_update, user_id=user_id)
 
     return db_entry
 
-
-# --- DELETE ---
 def delete_loan_entry(db: Session, entry_id: int, user_id: int):
-    """
-    Deletes a loan entry, ensuring it is owned by the user (through the book).
-    """
     db_entry = db.query(LoanEntry).join(Book).filter(
         LoanEntry.id == entry_id,
         Book.user_id == user_id
     ).first()
 
     if db_entry:
+        book_id_to_update = db_entry.book_id
         db.delete(db_entry)
         db.commit()
+        update_book_loanamount_DE(db, book_id=book_id_to_update, user_id=user_id)
         return True
 
     return False
+
+def update_book_loanamount_DE(db: Session, book_id: int, user_id: int):
+    total_newloan = db.query(func.sum(LoanEntry.amount)).join(Book).filter(
+        LoanEntry.book_id == book_id,
+        Book.user_id == user_id,
+        LoanEntry.entry_type.in_(["newloan", "taking loan"])
+    ).scalar() or 0
+
+    total_emipayment = db.query(func.sum(LoanEntry.amount)).join(Book).filter(
+        LoanEntry.book_id == book_id,
+        Book.user_id == user_id,
+        LoanEntry.entry_type.in_(["emipayment", "repayment"])
+    ).scalar() or 0
+
+    final_loan_balance = Decimal(total_newloan) - Decimal(total_emipayment)
+
+    db_book = db.query(Book).filter(Book.id == book_id, Book.user_id == user_id).first()
+
+    if db_book and db_book.amount != final_loan_balance:
+        db_book.amount = final_loan_balance
+        db.commit()
+        
+    return

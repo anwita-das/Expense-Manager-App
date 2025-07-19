@@ -14,7 +14,7 @@ class Settings:
     MYSQL_HOST: str = os.getenv("MYSQL_HOST")
     MYSQL_PORT: str = os.getenv("MYSQL_PORT", "3306")
     DB_DRIVER: str = os.getenv("DB_DRIVER", "mysql")
- 
+
     @property
     def DATABASE_URL(self):
         return f"{self.DB_DRIVER}://{self.MYSQL_USER}:{self.MYSQL_PASSWORD}@{self.MYSQL_HOST}:{self.MYSQL_PORT}/{self.MYSQL_DB}"

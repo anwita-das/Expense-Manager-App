@@ -16,7 +16,9 @@ def create_book(db: Session, book: BookCreate, user_id: int):
     return db_book
 
 def get_books(db: Session, skip: int = 0, limit: int = 10, user_id: int = 0):
+
     return db.query(Book).filter(Book.user_id == user_id).offset(skip).limit(limit).all()
+
 
 def get_book_by_id(db: Session, book_id: int, user_id: int):
     """

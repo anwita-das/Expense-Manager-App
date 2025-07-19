@@ -20,7 +20,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=120))
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=180))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
@@ -31,7 +31,6 @@ def verify_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        # Step 1: Decode the token to get the payload (this part is the same)
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
@@ -40,12 +39,9 @@ def verify_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
     except JWTError:
         raise credentials_exception
 
-    # Step 2: Use the email from the token to find the user in the database
     user = db.query(User).filter(User.email == email).first()
 
-    # Step 3: If no user is found, the token is invalid
     if user is None:
         raise credentials_exception
         
-    # Step 4: Return the full User object from the database
     return user
