@@ -22,6 +22,21 @@ function BookCard({ book, onEdit, onDelete }) {
     };
     const { bg, icon } = getStyle();
 
+    const getAmountColor = () => {
+      if (book.amount == null) return "text-gray-600";
+
+      if (type === "Loan Status") {
+        // Always red for loan amount (remaining balance)
+        return "text-red-700";
+      } else if (type === "Savings" || type === "Daily Expense") {
+        // Green for positive (inflow/saved), red for negative (outflow/loss)
+        return book.amount >= 0 ? "text-green-700" : "text-red-700";
+      }
+
+      return "text-gray-600"; // Fallback
+    };
+
+
     return (
     
       <div className={`flex flex-row items-center w-119 ${bg} text-neutral-800 h-20 m-1 p-4 rounded-tr-4xl rounded-bl-4xl space-x-2`}>
@@ -34,7 +49,12 @@ function BookCard({ book, onEdit, onDelete }) {
             `/detailsde/${id}`}>
           <div className="flex flex-row justify-between">
             <div className="font-medium text-xl mt-1">{title}</div>
-            <div className="font-medium text-md mt-1 mr-2 text-neutral-700"><span><FontAwesomeIcon icon={faScaleBalanced} className="me-2" /></span>Rs. 3450</div>
+            <div className={`font-medium text-md mt-1 mr-2 ${getAmountColor()}`}>
+              <span><FontAwesomeIcon icon={faScaleBalanced} className="me-2" /></span>
+              {(type === "Savings" || type === "Daily Expense" || type ==="Loan Status") && book.amount != null
+              ? `Rs. ${Number(book.amount).toFixed(2)}`
+              : ""}
+            </div>
           </div> </Link>
           <div className="flex flex-row justify-between">
             <div className="text-sm mt-1">Created on {dayjs(created_at).format("MMMM D, YYYY")}</div>
